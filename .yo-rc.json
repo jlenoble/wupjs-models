@@ -1,0 +1,43 @@
+{
+  "generator-wupjs": {
+    "devDeps": {
+      "gulp": "git://github.com/gulpjs/gulp.git#4.0",
+      "plumb-gulp": "*",
+      "autoreload-gulp": "*",
+      "gulp-sourcemaps": "*",
+      "del": "*",
+      "gulp-rename": "*",
+      "gulp-replace": "*",
+      "gulp-wrap": "*",
+      "markdown-include": "*",
+      "chai": "*",
+      "gulp-eslint": "*",
+      "eslint-config-google": "*",
+      "gulp-mocha": "*",
+      "muter": "*"
+    },
+    "genVersion": "0.3.1",
+    "updated": "2018-07-29T20:46:03.835Z",
+    "created": "2018-07-29T20:46:03.835Z",
+    "version": "0.0.0",
+    "contributors": [],
+    "keywords": [],
+    "deps": {},
+    "peerDeps": {},
+    "name": "wupjs-models",
+    "description": "Models for Wup",
+    "author": "Jason Lenoble",
+    "email": "jason.lenoble@gmail.com",
+    "github": "jlenoble",
+    "preprocessors": [],
+    "license": "MIT",
+    "babel": "env",
+    "linters": [
+      "EsLint"
+    ],
+    "addons": [],
+    "testRunners": [
+      "Mocha"
+    ]
+  }
+}

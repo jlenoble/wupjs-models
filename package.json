@@ -1,0 +1,49 @@
+{
+  "name": "wupjs-models",
+  "description": "Models for Wup",
+  "version": "0.0.0",
+  "keywords": [],
+  "author": {
+    "name": "Jason Lenoble",
+    "email": "jason.lenoble@gmail.com"
+  },
+  "contributors": [],
+  "license": "MIT",
+  "engines": {
+    "node": ">=9.8.0"
+  },
+  "main": "lib/wupjs-models.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jlenoble/wupjs-models.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jlenoble/wupjs-models/issues"
+  },
+  "homepage": "https://github.com/jlenoble/wupjs-models#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "autoreload-gulp": "*",
+    "babel-core": "^6.26.3",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.7.0",
+    "chai": "*",
+    "del": "*",
+    "eslint-config-google": "*",
+    "gulp": "git://github.com/gulpjs/gulp.git#4.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-eslint": "*",
+    "gulp-mocha": "*",
+    "gulp-rename": "*",
+    "gulp-replace": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-wrap": "*",
+    "markdown-include": "*",
+    "muter": "*",
+    "plumb-gulp": "*"
+  },
+  "peerDependencies": {}
+}
