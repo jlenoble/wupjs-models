@@ -1,12 +1,12 @@
-import RefMap from './refmap';
+import RefMap, {ReferringMap} from './refmap';
 import Item from './item';
 import Selection from './selection';
 
 export default class UI {
   constructor ({itemId = uid, selectionId = uid} = {}) {
     const _items = new RefMap();
-    const _selections = new RefMap({
-      itemMap: _items,
+    const _selections = new ReferringMap({
+      refMap: _items,
       itemsProp: 'items',
       addProp: 'add',
       removeProp: 'remove',

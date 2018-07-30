@@ -1,25 +1,23 @@
 export default class RefMap {
-  constructor ({itemMap, itemsProp, addProp, removeProp} = {}) {
+  constructor () {
     const _map = new Map();
-    const _refs = !itemMap && new Map();
+    const _refs = new Map();
 
-    if (_refs) {
-      _refs.removeRef = key => {
-        const referands = _refs.get(key);
+    const removeRef = key => {
+      const referends = _refs.get(key);
 
-        if (referands) {
-          const item = _map.get(key);
+      if (referends) {
+        const item = _map.get(key);
 
-          Array.from(referands).forEach(([referand, removeProps]) => {
-            Array.from(removeProps).forEach(removeProp => {
-              referand[removeProp](item);
-            });
+        Array.from(referends).forEach(([referend, removeProps]) => {
+          Array.from(removeProps).forEach(removeProp => {
+            referend[removeProp](item);
           });
+        });
 
-          _refs.delete(key);
-        }
-      };
-    }
+        _refs.delete(key);
+      }
+    };
 
     Object.defineProperties(this, {
       get: {
@@ -27,68 +25,80 @@ export default class RefMap {
       },
 
       set: {
-        value: itemMap ? (key, value) => {
+        value: (key, value) => {
           _map.set(key, value);
-          itemMap.addRefs(value, value[itemsProp], removeProp);
-        } : (key, value) => {
-          _map.set(key, value);
-        },
-      },
-
-      add: {
-        value: itemMap ? (itemId, items) => {
-          const item = this.get(itemId);
-          items.forEach(_item => item[addProp](_item));
-          itemMap.addRefs(item, items, removeProp);
-        } : (itemId, items) => {
-          const item = this.get(itemId);
-          items.forEach(_item => item[addProp](_item));
-        },
-      },
-
-      remove: {
-        value: itemMap ? (itemId, items) => {
-          const item = this.get(itemId);
-          items.forEach(_item => item[removeProp](_item));
-          itemMap.removeRefs(items);
-        } : (itemId, items) => {
-          const item = this.get(itemId);
-          items.forEach(_item => item[removeProp](_item));
         },
       },
 
       delete: {
-        value: _refs ? key => {
-          _refs.removeRef(key);
-          _map.delete(key);
-        } : key => {
+        value: key => {
+          removeRef(key);
           _map.delete(key);
         },
       },
 
       addRefs: {
-        value: (referand, items, removeProp) => {
+        value: (referend, items, removeProp) => {
           items.forEach(({itemId}) => {
             if (!_refs.has(itemId)) {
               _refs.set(itemId, new Map());
             }
 
-            const referands = _refs.get(itemId);
+            const referends = _refs.get(itemId);
 
-            if (!referands.has(referand)) {
-              referands.set(referand, new Set());
+            if (!referends.has(referend)) {
+              referends.set(referend, new Set());
             }
 
-            referands.get(referand).add(removeProp);
+            referends.get(referend).add(removeProp);
           });
         },
       },
 
       removeRefs: {
         value: items => {
-          items.forEach(({itemId}) => {
-            _refs.removeRef(itemId);
-          });
+          items.forEach(({itemId}) => removeRef(itemId));
+        },
+      },
+    });
+  }
+}
+
+export class ReferringMap {
+  constructor ({refMap, itemsProp, addProp, removeProp} = {}) {
+    const _map = new Map();
+
+    Object.defineProperties(this, {
+      get: {
+        value: key => _map.get(key),
+      },
+
+      set: {
+        value: (key, elt) => {
+          _map.set(key, elt);
+          refMap.addRefs(elt, elt[itemsProp], removeProp);
+        },
+      },
+
+      add: {
+        value: (key, items) => {
+          const elt = this.get(key);
+          items.forEach(item => elt[addProp](item));
+          refMap.addRefs(elt, items, removeProp);
+        },
+      },
+
+      remove: {
+        value: (key, items) => {
+          const elt = this.get(key);
+          items.forEach(item => elt[removeProp](item));
+          refMap.removeRefs(items);
+        },
+      },
+
+      delete: {
+        value: key => {
+          _map.delete(key);
         },
       },
     });
