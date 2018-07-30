@@ -7,16 +7,15 @@ describe('Testing class Item', function () {
   beforeEach(function () {
     this.UI = new UI();
     this.title = 'ABC';
-    this.itemId = this.UI.newItem(this.title);
-    this.item = this.UI.getItem(this.itemId);
+    this.item = this.UI.newItem(this.title);
+    this.itemId = this.item.itemId;
   });
 
   it(`Creating an item`, function () {
-    const {UI, itemId, title, item} = this;
+    const {UI, title, item} = this;
     expect(item).not.to.be.undefined;
     expect(item.title).to.equal(title);
-    expect(item.itemId).to.equal(itemId);
-    expect(() => UI.itemId()).not.to.throw();
+    expect(item.itemId).not.to.be.undefined;
     expect(() => item.itemId = UI.itemId()).to.throw();
   });
 

@@ -1,10 +1,10 @@
 import Item from './item';
 
 export default class UI {
-  constructor ({itemId} = {}) {
+  constructor ({itemId = uid} = {}) {
     Object.defineProperties(this, {
       itemId: {
-        value: itemId || uid,
+        value: itemId,
         enumerable: true,
       },
 
@@ -22,7 +22,7 @@ export default class UI {
     this.items.set(itemId, item);
     item.itemId = itemId;
 
-    return itemId;
+    return item;
   }
 
   updateItem (itemId, title) {
