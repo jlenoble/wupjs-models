@@ -53,10 +53,14 @@ export default class UI {
     return this.items.get(itemId);
   }
 
-  newSelection ({title, items} = {}) {
+  getItems (itemIds = []) {
+    return itemIds.map(itemId => this.items.get(itemId));
+  }
+
+  newSelection ({title, itemIds} = {}) {
     const itemId = this.itemId();
     const selectionId = this.selectionId();
-    const selection = new Selection({title, items});
+    const selection = new Selection({title, items: this.getItems(itemIds)});
 
     this.items.set(itemId, selection);
     this.selections.set(selectionId, selection);

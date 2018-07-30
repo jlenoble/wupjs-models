@@ -20,7 +20,7 @@ describe('Testing class Selection', function () {
     this.title = 'Z';
     this.selection = this.UI.newSelection({
       title: this.title,
-      items: this.items.slice(...this.range),
+      itemIds: this.itemIds.slice(...this.range),
     });
     this.itemId = this.selection.itemId;
     this.selectionId = this.selection.selectionId;
