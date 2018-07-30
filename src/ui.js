@@ -88,19 +88,19 @@ export default class UI {
   }
 
   addItemToSelection (selectionId, itemId) {
-    this.selections.add(selectionId, this.getItem(itemId));
+    this.selections.add(selectionId, [this.getItem(itemId)]);
   }
 
   addItemsToSelection (selectionId, itemIds) {
-    this.selections.add(selectionId, ...this.getItems(itemIds));
+    this.selections.add(selectionId, this.getItems(itemIds));
   }
 
   removeItemFromSelection (selectionId, itemId) {
-    this.selections.remove(selectionId, this.getItem(itemId));
+    this.selections.remove(selectionId, [this.getItem(itemId)]);
   }
 
   removeItemsFromSelection (selectionId, itemIds) {
-    this.selections.remove(selectionId, ...this.getItems(itemIds));
+    this.selections.remove(selectionId, this.getItems(itemIds));
   }
 
   destroySelection (selectionId) {
