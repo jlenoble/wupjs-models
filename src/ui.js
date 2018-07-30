@@ -89,7 +89,7 @@ export default class UI {
     }
 
     if (itemIds) {
-      selection.items = this.getItems(itemIds);
+      this.selections.replace(selectionId, this.getItems(itemIds));
     }
   }
 

@@ -110,6 +110,14 @@ export class ReferringMap {
         },
       },
 
+      replace: {
+        value: (key, items) => {
+          const referend = this.get(key);
+          refMap.removeRefs(referend.items);
+          this.add(key, items);
+        },
+      },
+
       delete: {
         value: key => {
           const referend = this.get(key);

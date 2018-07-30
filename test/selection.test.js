@@ -16,6 +16,7 @@ describe('Testing class Selection', function () {
       this.itemIds.push(item.itemId);
     });
     this.range = [1, 4];
+    this.refCount = this.range[1] - this.range[0];
 
     this.title = 'Z';
     this.selection = this.UI.newSelection({
@@ -27,7 +28,7 @@ describe('Testing class Selection', function () {
   });
 
   it(`Creating a selection`, function () {
-    const {UI, selection, title, titles, range} = this;
+    const {UI, selection, title, titles, range, refCount} = this;
     expect(selection).not.to.be.undefined;
     expect(selection.title).to.equal(title);
     expect(selection.itemId).not.to.be.undefined;
@@ -36,7 +37,7 @@ describe('Testing class Selection', function () {
     expect(selection.getTitles()).to.eql(titles.slice(...range));
     expect(() => selection.itemId = UI.itemId()).to.throw();
     expect(() => selection.selectionId = UI.selectionId()).to.throw();
-    expect(UI.refCount).to.equal(3);
+    expect(UI.refCount).to.equal(refCount);
   });
 
   it(`Reading a selection`, function () {
@@ -48,12 +49,12 @@ describe('Testing class Selection', function () {
 
   describe(`Considering a selection as an item`, function () {
     it(`Updating its title`, function () {
-      const {UI, selection, itemId, title} = this;
+      const {UI, selection, itemId, title, refCount} = this;
       const title2 = 'XYZ';
       expect(selection.title).to.equal(title);
       UI.updateItem(itemId, title2);
       expect(selection.title).to.equal(title2);
-      expect(UI.refCount).to.equal(3);
+      expect(UI.refCount).to.equal(refCount);
     });
 
     it(`Deleting it`, function () {
@@ -70,26 +71,28 @@ describe('Testing class Selection', function () {
   describe(`Considering a selection as a selection`, function () {
     describe(`Updating`, function () {
       it(`its title`, function () {
-        const {UI, selection, selectionId, title} = this;
+        const {UI, selection, selectionId, title, refCount} = this;
         const title2 = 'XYZ';
         expect(selection.title).to.equal(title);
         UI.updateSelection(selectionId, {title: title2});
         expect(selection.title).to.equal(title2);
+        expect(UI.refCount).to.equal(refCount);
       });
 
       it(`its elements`, function () {
         const {UI, selection, selectionId, itemIds, range} = this;
-        const range2 = [0, 3];
+        const range2 = [2, 4];
         expect(range2).not.to.eql(range);
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.updateSelection(selectionId, {itemIds: itemIds.slice(...range2)});
         expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+        expect(UI.refCount).to.equal(range2[1] - range2[0]);
       });
 
       it(`both its title and elements`, function () {
         const {UI, selection, selectionId, itemIds, title, range} = this;
         const title2 = 'XYZ';
-        const range2 = [0, 3];
+        const range2 = [2, 4];
         expect(range2).not.to.eql(range);
         expect(selection.title).to.equal(title);
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
@@ -99,6 +102,7 @@ describe('Testing class Selection', function () {
         });
         expect(selection.title).to.equal(title2);
         expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+        expect(UI.refCount).to.equal(range2[1] - range2[0]);
       });
     });
 
