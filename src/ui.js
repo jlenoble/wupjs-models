@@ -6,22 +6,18 @@ export default class UI {
     Object.defineProperties(this, {
       itemId: {
         value: itemId,
-        enumerable: true,
       },
 
       selectionId: {
         value: selectionId,
-        enumerable: true,
       },
 
       items: {
         value: new Map(),
-        enumerable: true,
       },
 
       selections: {
         value: new Map(),
-        enumerable: true,
       },
     });
   }
