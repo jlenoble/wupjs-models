@@ -185,13 +185,24 @@ describe('Testing class Selection', function () {
       });
     });
 
-    it(`Deleting it`, function () {
-      const {UI, selection, itemId, selectionId} = this;
-      expect(UI.getItem(itemId)).to.equal(selection);
-      expect(UI.getSelection(selectionId)).to.equal(selection);
-      UI.destroySelection(selectionId);
-      expect(UI.getItem(itemId)).to.be.undefined;
-      expect(UI.getSelection(selectionId)).to.be.undefined;
+    describe(`Deleting`, function () {
+      it(`the selection itself`, function () {
+        const {UI, selection, itemId, selectionId} = this;
+        expect(UI.getItem(itemId)).to.equal(selection);
+        expect(UI.getSelection(selectionId)).to.equal(selection);
+        UI.destroySelection(selectionId);
+        expect(UI.getItem(itemId)).to.be.undefined;
+        expect(UI.getSelection(selectionId)).to.be.undefined;
+      });
+
+      it(`an element`, function () {
+        const {UI, selection, itemIds, range} = this;
+        const itemId = itemIds[range[0]];
+        const range2 = [range[0] + 1, range[1]];
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.destroyItem(itemId);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+      });
     });
   });
 });

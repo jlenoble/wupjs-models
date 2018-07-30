@@ -1,8 +1,110 @@
 import Item from './item';
 import Selection from './selection';
 
+class RefMap {
+  constructor ({itemMap, itemsProp, addProp, removeProp} = {}) {
+    const _map = new Map();
+    const _refs = !itemMap && new Map();
+
+    if (_refs) {
+      _refs.deleteRefs = key => {
+        const referands = _refs.get(key);
+
+        if (referands) {
+          const item = _map.get(key);
+
+          Array.from(referands).forEach(([referand, removeProps]) => {
+            Array.from(removeProps).forEach(removeProp => {
+              referand[removeProp](item);
+            });
+          });
+
+          _refs.delete(key);
+        }
+      };
+    }
+
+    Object.defineProperties(this, {
+      get: {
+        value: key => _map.get(key),
+      },
+
+      set: {
+        value: itemMap ? (key, value) => {
+          _map.set(key, value);
+          itemMap.addRefs(value, value[itemsProp], removeProp);
+        } : (key, value) => {
+          _map.set(key, value);
+        },
+      },
+
+      add: {
+        value: itemMap ? (itemId, ...items) => {
+          const item = this.get(itemId);
+          item[addProp](...items);
+          itemMap.addRefs(item, items, removeProp);
+        } : (itemId, ...items) => {
+          this.get(itemId)[addProp](...items);
+        },
+      },
+
+      remove: {
+        value: itemMap ? (itemId, ...items) => {
+          this.get(itemId)[removeProp](...items);
+          itemMap.removeRefs(items);
+        } : (itemId, ...items) => {
+          this.get(itemId)[removeProp](...items);
+        },
+      },
+
+      delete: {
+        value: _refs ? key => {
+          _refs.deleteRefs(key);
+          _map.delete(key);
+        } : key => {
+          _map.delete(key);
+        },
+      },
+
+      addRefs: {
+        value: (referand, items, removeProp) => {
+          items.forEach(({itemId}) => {
+            if (!_refs.has(itemId)) {
+              _refs.set(itemId, new Map());
+            }
+
+            const referands = _refs.get(itemId);
+
+            if (!referands.has(referand)) {
+              referands.set(referand, new Set());
+            }
+
+            referands.get(referand).add(removeProp);
+          });
+        },
+      },
+
+      removeRefs: {
+        value: items => {
+          items.forEach(({itemId}) => {
+            _refs.deleteRefs(itemId);
+          });
+        },
+      },
+    });
+  }
+}
+
 export default class UI {
   constructor ({itemId = uid, selectionId = uid} = {}) {
+    const _items = new RefMap();
+    const _selections = new RefMap({
+      itemMap: _items,
+      itemsProp: 'items',
+      addProp: 'add',
+      removeProp: 'remove',
+    });
+
     Object.defineProperties(this, {
       itemId: {
         value: itemId,
@@ -13,11 +115,11 @@ export default class UI {
       },
 
       items: {
-        value: new Map(),
+        value: _items,
       },
 
       selections: {
-        value: new Map(),
+        value: _selections,
       },
     });
   }
@@ -26,8 +128,8 @@ export default class UI {
     const itemId = this.itemId();
     const item = new Item(title);
 
-    this.items.set(itemId, item);
     item.itemId = itemId;
+    this.items.set(itemId, item);
 
     return item;
   }
@@ -37,7 +139,7 @@ export default class UI {
   }
 
   destroyItem (itemId) {
-    const {selectionId} = this.items.get(itemId);
+    const {selectionId} = this.getItem(itemId);
     this.items.delete(itemId);
 
     if (selectionId) {
@@ -58,10 +160,10 @@ export default class UI {
     const selectionId = this.selectionId();
     const selection = new Selection({title, items: this.getItems(itemIds)});
 
-    this.items.set(itemId, selection);
-    this.selections.set(selectionId, selection);
     selection.itemId = itemId;
     selection.selectionId = selectionId;
+    this.items.set(itemId, selection);
+    this.selections.set(selectionId, selection);
 
     return selection;
   }
@@ -79,19 +181,19 @@ export default class UI {
   }
 
   addItemToSelection (selectionId, itemId) {
-    this.getSelection(selectionId).add(this.getItem(itemId));
+    this.selections.add(selectionId, this.getItem(itemId));
   }
 
   addItemsToSelection (selectionId, itemIds) {
-    this.getSelection(selectionId).add(...this.getItems(itemIds));
+    this.selections.add(selectionId, ...this.getItems(itemIds));
   }
 
   removeItemFromSelection (selectionId, itemId) {
-    this.getSelection(selectionId).remove(this.getItem(itemId));
+    this.selections.remove(selectionId, this.getItem(itemId));
   }
 
   removeItemsFromSelection (selectionId, itemIds) {
-    this.getSelection(selectionId).remove(...this.getItems(itemIds));
+    this.selections.remove(selectionId, ...this.getItems(itemIds));
   }
 
   destroySelection (selectionId) {
