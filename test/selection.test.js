@@ -97,6 +97,41 @@ describe('Testing class Selection', function () {
       expect(selection.itemIds).to.eql(itemIds.slice(...range2));
     });
 
+    it(`Adding an element`, function () {
+      const {UI, selection, selectionId, itemIds, range} = this;
+      const itemId = UI.newItem('x').itemId;
+      expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      UI.addItemToSelection(selectionId, itemId);
+      expect(selection.itemIds).to.eql(itemIds.slice(...range).concat(itemId));
+    });
+
+    it(`Adding several elements`, function () {
+      const {UI, selection, selectionId, itemIds, range} = this;
+      const itemId1 = UI.newItem('x').itemId;
+      const itemId2 = UI.newItem('y').itemId;
+      expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      UI.addItemsToSelection(selectionId, [itemId1, itemId2]);
+      expect(selection.itemIds).to.eql(itemIds.slice(...range)
+        .concat(itemId1, itemId2));
+    });
+
+    it(`Adding a duplicate element`, function () {
+      const {UI, selection, selectionId, itemIds, range} = this;
+      const itemId = itemIds[range[0]];
+      expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      UI.addItemToSelection(selectionId, itemId);
+      expect(selection.itemIds).to.eql(itemIds.slice(...range));
+    });
+
+    it(`Adding duplicate elements`, function () {
+      const {UI, selection, selectionId, itemIds, range} = this;
+      const itemId1 = itemIds[range[0]];
+      const itemId2 = itemIds[range[0] + 1];
+      expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      UI.addItemsToSelection(selectionId, [itemId1, itemId2]);
+      expect(selection.itemIds).to.eql(itemIds.slice(...range));
+    });
+
     it(`Deleting it`, function () {
       const {UI, selection, itemId, selectionId} = this;
       expect(UI.getItem(itemId)).to.equal(selection);

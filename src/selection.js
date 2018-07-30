@@ -4,7 +4,7 @@ export default class Selection extends Item {
   constructor ({title, items} = {}) {
     super(title);
 
-    let _items = [...items];
+    let _items = new Set(items);
 
     Object.defineProperties(this, {
       selectionId: {
@@ -23,13 +23,17 @@ export default class Selection extends Item {
           return [..._items];
         },
         set (items) {
-          _items = [...items];
+          _items = new Set(items);
         },
+      },
+
+      add: {
+        value: (...items) => items.forEach(item => _items.add(item)),
       },
 
       itemIds: {
         get () {
-          return _items.map(item => item.itemId);
+          return this.items.map(item => item.itemId);
         },
         enumerable: true,
       },
