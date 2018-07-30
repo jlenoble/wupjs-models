@@ -65,71 +65,76 @@ describe('Testing class Selection', function () {
   });
 
   describe(`Considering a selection as a selection`, function () {
-    it(`Updating its title`, function () {
-      const {UI, selection, selectionId, title} = this;
-      const title2 = 'XYZ';
-      expect(selection.title).to.equal(title);
-      UI.updateSelection(selectionId, {title: title2});
-      expect(selection.title).to.equal(title2);
-    });
-
-    it(`Updating its elements`, function () {
-      const {UI, selection, selectionId, itemIds, range} = this;
-      const range2 = [0, 3];
-      expect(range2).not.to.eql(range);
-      expect(selection.itemIds).to.eql(itemIds.slice(...range));
-      UI.updateSelection(selectionId, {itemIds: itemIds.slice(...range2)});
-      expect(selection.itemIds).to.eql(itemIds.slice(...range2));
-    });
-
-    it(`Updating both its title and elements`, function () {
-      const {UI, selection, selectionId, itemIds, title, range} = this;
-      const title2 = 'XYZ';
-      const range2 = [0, 3];
-      expect(range2).not.to.eql(range);
-      expect(selection.title).to.equal(title);
-      expect(selection.itemIds).to.eql(itemIds.slice(...range));
-      UI.updateSelection(selectionId, {
-        title: title2,
-        itemIds: itemIds.slice(...range2),
+    describe(`Updating`, function () {
+      it(`its title`, function () {
+        const {UI, selection, selectionId, title} = this;
+        const title2 = 'XYZ';
+        expect(selection.title).to.equal(title);
+        UI.updateSelection(selectionId, {title: title2});
+        expect(selection.title).to.equal(title2);
       });
-      expect(selection.title).to.equal(title2);
-      expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+
+      it(`its elements`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const range2 = [0, 3];
+        expect(range2).not.to.eql(range);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.updateSelection(selectionId, {itemIds: itemIds.slice(...range2)});
+        expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+      });
+
+      it(`both its title and elements`, function () {
+        const {UI, selection, selectionId, itemIds, title, range} = this;
+        const title2 = 'XYZ';
+        const range2 = [0, 3];
+        expect(range2).not.to.eql(range);
+        expect(selection.title).to.equal(title);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.updateSelection(selectionId, {
+          title: title2,
+          itemIds: itemIds.slice(...range2),
+        });
+        expect(selection.title).to.equal(title2);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+      });
     });
 
-    it(`Adding an element`, function () {
-      const {UI, selection, selectionId, itemIds, range} = this;
-      const itemId = UI.newItem('x').itemId;
-      expect(selection.itemIds).to.eql(itemIds.slice(...range));
-      UI.addItemToSelection(selectionId, itemId);
-      expect(selection.itemIds).to.eql(itemIds.slice(...range).concat(itemId));
-    });
+    describe(`Adding`, function () {
+      it(`an element`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId = UI.newItem('x').itemId;
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.addItemToSelection(selectionId, itemId);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range)
+          .concat(itemId));
+      });
 
-    it(`Adding several elements`, function () {
-      const {UI, selection, selectionId, itemIds, range} = this;
-      const itemId1 = UI.newItem('x').itemId;
-      const itemId2 = UI.newItem('y').itemId;
-      expect(selection.itemIds).to.eql(itemIds.slice(...range));
-      UI.addItemsToSelection(selectionId, [itemId1, itemId2]);
-      expect(selection.itemIds).to.eql(itemIds.slice(...range)
-        .concat(itemId1, itemId2));
-    });
+      it(`several elements`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId1 = UI.newItem('x').itemId;
+        const itemId2 = UI.newItem('y').itemId;
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.addItemsToSelection(selectionId, [itemId1, itemId2]);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range)
+          .concat(itemId1, itemId2));
+      });
 
-    it(`Adding a duplicate element`, function () {
-      const {UI, selection, selectionId, itemIds, range} = this;
-      const itemId = itemIds[range[0]];
-      expect(selection.itemIds).to.eql(itemIds.slice(...range));
-      UI.addItemToSelection(selectionId, itemId);
-      expect(selection.itemIds).to.eql(itemIds.slice(...range));
-    });
+      it(`a duplicate element`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId = itemIds[range[0]];
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.addItemToSelection(selectionId, itemId);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      });
 
-    it(`Adding duplicate elements`, function () {
-      const {UI, selection, selectionId, itemIds, range} = this;
-      const itemId1 = itemIds[range[0]];
-      const itemId2 = itemIds[range[0] + 1];
-      expect(selection.itemIds).to.eql(itemIds.slice(...range));
-      UI.addItemsToSelection(selectionId, [itemId1, itemId2]);
-      expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      it(`duplicate elements`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId1 = itemIds[range[0]];
+        const itemId2 = itemIds[range[0] + 1];
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.addItemsToSelection(selectionId, [itemId1, itemId2]);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      });
     });
 
     it(`Deleting it`, function () {
