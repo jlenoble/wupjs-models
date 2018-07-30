@@ -70,15 +70,15 @@ export default class UI {
     return selection;
   }
 
-  updateSelection (selectionId, {title, items} = {}) {
+  updateSelection (selectionId, {title, itemIds} = {}) {
     const selection = this.getSelection(selectionId);
 
     if (title) {
       this.updateItem(selection.itemId, title);
     }
 
-    if (items) {
-      selection.items = items;
+    if (itemIds) {
+      selection.items = this.getItems(itemIds);
     }
   }
 

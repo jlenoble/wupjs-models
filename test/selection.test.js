@@ -74,16 +74,16 @@ describe('Testing class Selection', function () {
     });
 
     it(`Updating its elements`, function () {
-      const {UI, selection, selectionId, items, itemIds, range} = this;
+      const {UI, selection, selectionId, itemIds, range} = this;
       const range2 = [0, 3];
       expect(range2).not.to.eql(range);
       expect(selection.itemIds).to.eql(itemIds.slice(...range));
-      UI.updateSelection(selectionId, {items: items.slice(...range2)});
+      UI.updateSelection(selectionId, {itemIds: itemIds.slice(...range2)});
       expect(selection.itemIds).to.eql(itemIds.slice(...range2));
     });
 
     it(`Updating both its title and elements`, function () {
-      const {UI, selection, selectionId, items, itemIds, title, range} = this;
+      const {UI, selection, selectionId, itemIds, title, range} = this;
       const title2 = 'XYZ';
       const range2 = [0, 3];
       expect(range2).not.to.eql(range);
@@ -91,7 +91,7 @@ describe('Testing class Selection', function () {
       expect(selection.itemIds).to.eql(itemIds.slice(...range));
       UI.updateSelection(selectionId, {
         title: title2,
-        items: items.slice(...range2),
+        itemIds: itemIds.slice(...range2),
       });
       expect(selection.title).to.equal(title2);
       expect(selection.itemIds).to.eql(itemIds.slice(...range2));
