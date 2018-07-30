@@ -28,6 +28,12 @@ export default class UI {
       selections: {
         value: _selections,
       },
+
+      refCount: {
+        get () {
+          return _items.refCount;
+        },
+      },
     });
   }
 

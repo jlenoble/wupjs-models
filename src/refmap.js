@@ -60,6 +60,20 @@ export default class RefMap {
           items.forEach(({itemId}) => removeRef(itemId));
         },
       },
+
+      refCount: {
+        get () {
+          let n = 0;
+
+          for (let referends of _refs.values()) {
+            for (let removeProps of referends.values()) {
+              n += removeProps.size;
+            }
+          }
+
+          return n;
+        },
+      },
     });
   }
 }
