@@ -4,7 +4,7 @@ export default class RefMap {
     const _refs = !itemMap && new Map();
 
     if (_refs) {
-      _refs.deleteRefs = key => {
+      _refs.removeRef = key => {
         const referands = _refs.get(key);
 
         if (referands) {
@@ -56,7 +56,7 @@ export default class RefMap {
 
       delete: {
         value: _refs ? key => {
-          _refs.deleteRefs(key);
+          _refs.removeRef(key);
           _map.delete(key);
         } : key => {
           _map.delete(key);
@@ -84,7 +84,7 @@ export default class RefMap {
       removeRefs: {
         value: items => {
           items.forEach(({itemId}) => {
-            _refs.deleteRefs(itemId);
+            _refs.removeRef(itemId);
           });
         },
       },
