@@ -16,25 +16,25 @@ export default class UI {
   }
 
   newItem (title) {
-    const uid = this.itemId();
+    const itemId = this.itemId();
     const item = new Item(title);
 
-    this.items.set(uid, item);
-    item.uid = uid;
+    this.items.set(itemId, item);
+    item.itemId = itemId;
 
-    return uid;
+    return itemId;
   }
 
-  updateItem (uid, title) {
-    this.getItem(uid).title = title;
+  updateItem (itemId, title) {
+    this.getItem(itemId).title = title;
   }
 
-  destroyItem (uid) {
-    this.items.delete(uid);
+  destroyItem (itemId) {
+    this.items.delete(itemId);
   }
 
-  getItem (uid) {
-    return this.items.get(uid);
+  getItem (itemId) {
+    return this.items.get(itemId);
   }
 }
 

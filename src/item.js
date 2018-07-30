@@ -7,10 +7,10 @@ export default class Item {
         writable: true,
       },
 
-      uid: {
-        set (uid) {
-          Object.defineProperty(this, 'uid', {
-            value: uid,
+      itemId: {
+        set (itemId) {
+          Object.defineProperty(this, 'itemId', {
+            value: itemId,
             enumerable: true,
             configurable: false,
           });
