@@ -38,19 +38,22 @@ export default class RefMap {
       add: {
         value: itemMap ? (itemId, ...items) => {
           const item = this.get(itemId);
-          item[addProp](...items);
+          items.forEach(_item => item[addProp](_item));
           itemMap.addRefs(item, items, removeProp);
         } : (itemId, ...items) => {
-          this.get(itemId)[addProp](...items);
+          const item = this.get(itemId);
+          items.forEach(_item => item[addProp](_item));
         },
       },
 
       remove: {
         value: itemMap ? (itemId, ...items) => {
-          this.get(itemId)[removeProp](...items);
+          const item = this.get(itemId);
+          items.forEach(_item => item[removeProp](_item));
           itemMap.removeRefs(items);
         } : (itemId, ...items) => {
-          this.get(itemId)[removeProp](...items);
+          const item = this.get(itemId);
+          items.forEach(_item => item[removeProp](_item));
         },
       },
 

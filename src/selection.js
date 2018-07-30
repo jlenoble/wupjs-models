@@ -28,11 +28,11 @@ export default class Selection extends Item {
       },
 
       add: {
-        value: (...items) => items.forEach(item => _items.add(item)),
+        value: item => _items.add(item),
       },
 
       remove: {
-        value: (...items) => items.forEach(item => _items.delete(item)),
+        value: item => _items.delete(item),
       },
 
       itemIds: {
