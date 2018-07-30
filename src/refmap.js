@@ -96,22 +96,24 @@ export class ReferringMap {
 
       add: {
         value: (key, items) => {
-          const elt = this.get(key);
-          items.forEach(item => elt[addProp](item));
-          refMap.addRefs(elt, items, removeProp);
+          const referend = this.get(key);
+          items.forEach(item => referend[addProp](item));
+          refMap.addRefs(referend, items, removeProp);
         },
       },
 
       remove: {
         value: (key, items) => {
-          const elt = this.get(key);
-          items.forEach(item => elt[removeProp](item));
+          const referend = this.get(key);
+          items.forEach(item => referend[removeProp](item));
           refMap.removeRefs(items);
         },
       },
 
       delete: {
         value: key => {
+          const referend = this.get(key);
+          refMap.removeRefs(referend.items);
           _map.delete(key);
         },
       },

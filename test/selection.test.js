@@ -36,6 +36,7 @@ describe('Testing class Selection', function () {
     expect(selection.getTitles()).to.eql(titles.slice(...range));
     expect(() => selection.itemId = UI.itemId()).to.throw();
     expect(() => selection.selectionId = UI.selectionId()).to.throw();
+    expect(UI.refCount).to.equal(3);
   });
 
   it(`Reading a selection`, function () {
@@ -52,6 +53,7 @@ describe('Testing class Selection', function () {
       expect(selection.title).to.equal(title);
       UI.updateItem(itemId, title2);
       expect(selection.title).to.equal(title2);
+      expect(UI.refCount).to.equal(3);
     });
 
     it(`Deleting it`, function () {
@@ -61,6 +63,7 @@ describe('Testing class Selection', function () {
       UI.destroyItem(itemId);
       expect(UI.getItem(itemId)).to.be.undefined;
       expect(UI.getSelection(selectionId)).to.be.undefined;
+      expect(UI.refCount).to.equal(0);
     });
   });
 
