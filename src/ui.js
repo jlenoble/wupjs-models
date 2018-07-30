@@ -90,6 +90,14 @@ export default class UI {
     this.getSelection(selectionId).add(...this.getItems(itemIds));
   }
 
+  removeItemFromSelection (selectionId, itemId) {
+    this.getSelection(selectionId).remove(this.getItem(itemId));
+  }
+
+  removeItemsFromSelection (selectionId, itemIds) {
+    this.getSelection(selectionId).remove(...this.getItems(itemIds));
+  }
+
   destroySelection (selectionId) {
     this.destroyItem(this.getSelection(selectionId).itemId);
   }

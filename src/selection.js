@@ -31,6 +31,10 @@ export default class Selection extends Item {
         value: (...items) => items.forEach(item => _items.add(item)),
       },
 
+      remove: {
+        value: (...items) => items.forEach(item => _items.delete(item)),
+      },
+
       itemIds: {
         get () {
           return this.items.map(item => item.itemId);

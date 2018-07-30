@@ -137,6 +137,54 @@ describe('Testing class Selection', function () {
       });
     });
 
+    describe(`Removing`, function () {
+      it(`an element`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId = itemIds[range[0]];
+        const range2 = [range[0] + 1, range[1]];
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.removeItemFromSelection(selectionId, itemId);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+      });
+
+      it(`several elements`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId1 = itemIds[range[0]];
+        const itemId2 = itemIds[range[0] + 1];
+        const range2 = [range[0] + 2, range[1]];
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.removeItemsFromSelection(selectionId, [itemId1, itemId2]);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+      });
+
+      it(`a non-element`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId = UI.newItem('x').itemId;
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.removeItemFromSelection(selectionId, itemId);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      });
+
+      it(`several non-elements`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId1 = UI.newItem('x').itemId;
+        const itemId2 = UI.newItem('y').itemId;
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.removeItemsFromSelection(selectionId, [itemId1, itemId2]);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+      });
+
+      it(`both an element and a non-element`, function () {
+        const {UI, selection, selectionId, itemIds, range} = this;
+        const itemId1 = UI.newItem('x').itemId;
+        const itemId2 = itemIds[range[0]];
+        const range2 = [range[0] + 1, range[1]];
+        expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        UI.removeItemsFromSelection(selectionId, [itemId1, itemId2]);
+        expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+      });
+    });
+
     it(`Deleting it`, function () {
       const {UI, selection, itemId, selectionId} = this;
       expect(UI.getItem(itemId)).to.equal(selection);
