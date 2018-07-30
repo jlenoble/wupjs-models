@@ -54,7 +54,7 @@ export default class UI {
   }
 
   getItems (itemIds = []) {
-    return itemIds.map(itemId => this.items.get(itemId));
+    return itemIds.map(itemId => this.getItem(itemId));
   }
 
   newSelection ({title, itemIds} = {}) {
@@ -71,18 +71,19 @@ export default class UI {
   }
 
   updateSelection (selectionId, {title, items} = {}) {
+    const selection = this.getSelection(selectionId);
+
     if (title) {
-      const {itemId} = this.selections.get(selectionId);
-      this.updateItem(itemId, title);
+      this.updateItem(selection.itemId, title);
     }
 
     if (items) {
-      this.getSelection(selectionId).items = items;
+      selection.items = items;
     }
   }
 
   destroySelection (selectionId) {
-    this.destroyItem(this.selections.get(selectionId).itemId);
+    this.destroyItem(this.getSelection(selectionId).itemId);
   }
 
   getSelection (selectionId) {
