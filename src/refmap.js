@@ -1,3 +1,7 @@
+const diff = (a1, a2) => {
+  return a1.filter(e => !a2.includes(e));
+};
+
 export default class RefMap {
   constructor () {
     const _map = new Map();
@@ -113,8 +117,8 @@ export class ReferringMap {
       replace: {
         value: (key, items) => {
           const referend = this.get(key);
-          refMap.removeRefs(referend.items);
-          this.add(key, items);
+          refMap.removeRefs(diff(referend.items, items));
+          this.add(key, diff(items, referend.items));
         },
       },
 
