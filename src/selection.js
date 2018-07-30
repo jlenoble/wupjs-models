@@ -22,9 +22,6 @@ export default class Selection extends Item {
         get () {
           return Array.from(_items);
         },
-        set (items) {
-          _items = new Set(items);
-        },
       },
 
       add: {
