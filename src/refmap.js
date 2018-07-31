@@ -129,7 +129,7 @@ export class ReferringMap {
       replace: {
         value: (key, items) => {
           const referend = this.get(key);
-          refMap.removeRefs(diff(referend.items, items));
+          refMap.removeRefs(diff(referend.items, items), referend);
           this.add(key, diff(items, referend.items));
         },
       },
