@@ -3,15 +3,15 @@ import aggregation from './aggregation';
 
 export default class Collection extends aggregation(Set, EventEmitter) {
   delete (obj) {
-    this.emit('delete', obj);
-    return super.delete(obj);
+    if (this.has(obj)) { // Don't propagate if missing obj
+      this.emit('delete', obj);
+      return super.delete(obj);
+    } else {
+      return false;
+    }
   }
 
   connect (collection) {
-    collection.on('delete', obj => {
-      if (this.has(obj)) { // No point in propagating an event if missing obj
-        this.delete(obj);
-      }
-    });
+    collection.on('delete', obj => this.delete(obj));
   }
 }

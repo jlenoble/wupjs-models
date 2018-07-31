@@ -53,6 +53,12 @@ describe(`Class Collection`, function () {
       expect(Array.from(store)).to.eql([]);
       expect(Array.from(col)).to.eql([]);
       expect(Array.from(col2)).to.eql([o2]); // Deletion not propagated by col
+
+      col.delete(o2);
+
+      expect(Array.from(store)).to.eql([]);
+      expect(Array.from(col)).to.eql([]);
+      expect(Array.from(col2)).to.eql([o2]); // Ignore explicit deletion by col
     });
   });
 });
