@@ -3,6 +3,29 @@
 import {expect} from 'chai';
 import UI from '../src/ui';
 
+function setUp (UI, itemIds) {
+  const [id1, id2, id3, id4, id5] = itemIds;
+
+  const sel1 = UI.newSelection({
+    title: 'A',
+    itemIds: [id1, id4],
+  });
+
+  const sel2 = UI.newSelection({
+    title: 'B',
+    itemIds: [id1, id5, id2],
+  });
+
+  const sel3 = UI.newSelection({
+    title: 'C',
+    itemIds: [id3, id1, id5, id4],
+  });
+
+  expect(UI.refCount).to.equal(9);
+
+  return [sel1, sel2, sel3];
+}
+
 describe('Testing several selections', function () {
   beforeEach(function () {
     this.UI = new UI();
@@ -85,22 +108,7 @@ describe('Testing several selections', function () {
     const id7 = it7.itemId;
     const id8 = it8.itemId;
 
-    const sel1 = UI.newSelection({
-      title: 'A',
-      itemIds: [id1, id4],
-    });
-
-    const sel2 = UI.newSelection({
-      title: 'B',
-      itemIds: [id1, id5, id2],
-    });
-
-    const sel3 = UI.newSelection({
-      title: 'C',
-      itemIds: [id3, id1, id5, id4],
-    });
-
-    expect(UI.refCount).to.equal(9);
+    const [sel1, sel2, sel3] = setUp(UI, itemIds);
 
     UI.updateSelection(sel1.selectionId, {
       itemIds: [id6, id7, id8],
@@ -140,22 +148,7 @@ describe('Testing several selections', function () {
     const id7 = it7.itemId;
     const id8 = it8.itemId;
 
-    const sel1 = UI.newSelection({
-      title: 'A',
-      itemIds: [id1, id4],
-    });
-
-    const sel2 = UI.newSelection({
-      title: 'B',
-      itemIds: [id1, id5, id2],
-    });
-
-    const sel3 = UI.newSelection({
-      title: 'C',
-      itemIds: [id3, id1, id5, id4],
-    });
-
-    expect(UI.refCount).to.equal(9);
+    const [sel1, sel2, sel3] = setUp(UI, itemIds);
 
     UI.addItemToSelection(sel2.selectionId, id6);
 
@@ -183,22 +176,7 @@ describe('Testing several selections', function () {
     const {UI, itemIds} = this;
     const [id1, id2, id3, id4, id5] = itemIds;
 
-    const sel1 = UI.newSelection({
-      title: 'A',
-      itemIds: [id1, id4],
-    });
-
-    const sel2 = UI.newSelection({
-      title: 'B',
-      itemIds: [id1, id5, id2],
-    });
-
-    const sel3 = UI.newSelection({
-      title: 'C',
-      itemIds: [id3, id1, id5, id4],
-    });
-
-    expect(UI.refCount).to.equal(9);
+    const [sel1, sel2, sel3] = setUp(UI, itemIds);
 
     UI.removeItemFromSelection(sel2.selectionId, id5);
 
@@ -219,22 +197,7 @@ describe('Testing several selections', function () {
     const {UI, itemIds} = this;
     const [id1, id2, id3, id4, id5] = itemIds;
 
-    const sel1 = UI.newSelection({
-      title: 'A',
-      itemIds: [id1, id4],
-    });
-
-    const sel2 = UI.newSelection({
-      title: 'B',
-      itemIds: [id1, id5, id2],
-    });
-
-    const sel3 = UI.newSelection({
-      title: 'C',
-      itemIds: [id3, id1, id5, id4],
-    });
-
-    expect(UI.refCount).to.equal(9);
+    const [sel1, sel2, sel3] = setUp(UI, itemIds);
 
     UI.destroyItem(id5);
 
@@ -255,22 +218,7 @@ describe('Testing several selections', function () {
     const {UI, itemIds} = this;
     const [id1, id2, id3, id4, id5] = itemIds;
 
-    const sel1 = UI.newSelection({
-      title: 'A',
-      itemIds: [id1, id4],
-    });
-
-    const sel2 = UI.newSelection({
-      title: 'B',
-      itemIds: [id1, id5, id2],
-    });
-
-    const sel3 = UI.newSelection({
-      title: 'C',
-      itemIds: [id3, id1, id5, id4],
-    });
-
-    expect(UI.refCount).to.equal(9);
+    const [sel1, sel2, sel3] = setUp(UI, itemIds);
 
     UI.destroySelection(sel1.selectionId);
 
