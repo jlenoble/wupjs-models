@@ -162,15 +162,15 @@ export class ReferringMap {
       replace: {
         value: (key, items) => {
           const referend = this.get(key);
-          refMap.removeRefs(diff(referend.items, items), referend);
-          this.add(key, diff(items, referend.items));
+          refMap.removeRefs(diff(referend[itemsProp], items), referend);
+          this.add(key, diff(items, referend[itemsProp]));
         },
       },
 
       delete: {
         value: key => {
           const referend = this.get(key);
-          refMap.removeRefs(referend.items, referend);
+          refMap.removeRefs(referend[itemsProp], referend);
           _map.delete(key);
         },
       },
