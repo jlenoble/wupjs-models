@@ -137,7 +137,7 @@ export class ReferringMap {
       delete: {
         value: key => {
           const referend = this.get(key);
-          refMap.removeRefs(referend.items);
+          refMap.removeRefs(referend.items, referend);
           _map.delete(key);
         },
       },
