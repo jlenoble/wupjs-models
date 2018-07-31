@@ -31,5 +31,28 @@ describe(`Class Collection`, function () {
       store.delete(o1);
       expect(Array.from(col)).to.eql([]);
     });
+
+    it(`Deleting with deep connection`, function () {
+      const {store, col, o1, o2} = this;
+      col.connect(store);
+      const col2 = new Collection([o1, o2]);
+      col2.connect(col);
+
+      expect(Array.from(store)).to.eql([o1, o2]);
+      expect(Array.from(col)).to.eql([o1]);
+      expect(Array.from(col2)).to.eql([o1, o2]);
+
+      store.delete(o1);
+
+      expect(Array.from(store)).to.eql([o2]);
+      expect(Array.from(col)).to.eql([]);
+      expect(Array.from(col2)).to.eql([o2]); // Deletion propagated by col
+
+      store.delete(o2);
+
+      expect(Array.from(store)).to.eql([]);
+      expect(Array.from(col)).to.eql([]);
+      expect(Array.from(col2)).to.eql([o2]); // Deletion not propagated by col
+    });
   });
 });
