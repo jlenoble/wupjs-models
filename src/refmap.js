@@ -36,6 +36,12 @@ export default class RefMap {
     };
 
     Object.defineProperties(this, {
+      size: {
+        get () {
+          return _map.size;
+        },
+      },
+
       get: {
         value: key => _map.get(key),
       },
@@ -99,6 +105,12 @@ export class ReferringMap {
     const _map = new Map();
 
     Object.defineProperties(this, {
+      size: {
+        get () {
+          return _map.size;
+        },
+      },
+
       get: {
         value: key => _map.get(key),
       },
