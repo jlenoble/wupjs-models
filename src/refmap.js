@@ -7,19 +7,31 @@ export default class RefMap {
     const _map = new Map();
     const _refs = new Map();
 
-    const removeRef = key => {
+    const removeRef = (key, referend) => {
       const referends = _refs.get(key);
 
       if (referends) {
         const item = _map.get(key);
 
-        Array.from(referends).forEach(([referend, removeProps]) => {
-          Array.from(removeProps).forEach(removeProp => {
+        if (referend) {
+          Array.from(referends.get(referend)).forEach(removeProp => {
             referend[removeProp](item);
           });
-        });
 
-        _refs.delete(key);
+          referends.delete(referend);
+
+          if (!referends.size) {
+            _refs.delete(key);
+          }
+        } else {
+          Array.from(referends).forEach(([referend, removeProps]) => {
+            Array.from(removeProps).forEach(removeProp => {
+              referend[removeProp](item);
+            });
+          });
+
+          _refs.delete(key);
+        }
       }
     };
 
@@ -60,8 +72,8 @@ export default class RefMap {
       },
 
       removeRefs: {
-        value: items => {
-          items.forEach(({itemId}) => removeRef(itemId));
+        value: (items, referend) => {
+          items.forEach(({itemId}) => removeRef(itemId, referend));
         },
       },
 
@@ -110,7 +122,7 @@ export class ReferringMap {
         value: (key, items) => {
           const referend = this.get(key);
           items.forEach(item => referend[removeProp](item));
-          refMap.removeRefs(items);
+          refMap.removeRefs(items, referend);
         },
       },
 

@@ -73,6 +73,42 @@ describe('Testing several selections', function () {
     expect(UI.refCount).to.equal(9);
   });
 
+  it(`Removing a shared item`, function () {
+    const {UI, itemIds} = this;
+    const [id1, id2, id3, id4, id5] = itemIds;
+
+    const sel1 = UI.newSelection({
+      title: 'A',
+      itemIds: [id1, id4],
+    });
+
+    const sel2 = UI.newSelection({
+      title: 'B',
+      itemIds: [id1, id5, id2],
+    });
+
+    const sel3 = UI.newSelection({
+      title: 'C',
+      itemIds: [id3, id1, id5, id4],
+    });
+
+    expect(UI.refCount).to.equal(9);
+
+    UI.removeItemFromSelection(sel2.selectionId, id5);
+
+    expect(UI.refCount).to.equal(8);
+    expect(sel1.itemIds).to.eql([id1, id4]);
+    expect(sel2.itemIds).to.eql([id1, id2]);
+    expect(sel3.itemIds).to.eql([id3, id1, id5, id4]);
+
+    UI.removeItemsFromSelection(sel3.selectionId, [id4, id1]);
+
+    expect(UI.refCount).to.equal(6);
+    expect(sel1.itemIds).to.eql([id1, id4]);
+    expect(sel2.itemIds).to.eql([id1, id2]);
+    expect(sel3.itemIds).to.eql([id3, id5]);
+  });
+
   it(`Deleting a shared item`, function () {
     const {UI, itemIds} = this;
     const [id1, id2, id3, id4, id5] = itemIds;
