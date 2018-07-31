@@ -226,4 +226,69 @@ describe('Testing several selections', function () {
     expect(sel2.itemIds).to.eql([id1, id5, id2]);
     expect(sel3.itemIds).to.eql([id3, id1, id5, id4]);
   });
+
+  it(`Gradually emptying a selection with shared items`, function () {
+    const {UI, itemIds} = this;
+    const [id1, id2, id3, id4, id5] = itemIds;
+
+    const [sel1, sel2, sel3] = setUp(UI, itemIds);
+
+    UI.removeItemFromSelection(sel1.selectionId, id1);
+
+    expect(UI.refCount).to.equal(8);
+    expect(sel1.itemIds).to.eql([id4]);
+    expect(sel2.itemIds).to.eql([id1, id5, id2]);
+    expect(sel3.itemIds).to.eql([id3, id1, id5, id4]);
+
+    UI.removeItemFromSelection(sel1.selectionId, id4);
+
+    expect(UI.refCount).to.equal(7);
+    expect(sel1.itemIds).to.eql([]);
+    expect(sel2.itemIds).to.eql([id1, id5, id2]);
+    expect(sel3.itemIds).to.eql([id3, id1, id5, id4]);
+  });
+
+  it(`Gradually removing an item from all selections`, function () {
+    const {UI, itemIds} = this;
+    const [id1, id2, id3, id4, id5] = itemIds;
+
+    const [sel1, sel2, sel3] = setUp(UI, itemIds);
+
+    expect(UI.items.isReferenced(id1)).to.be.true;
+    expect(UI.items.countRefs(id1)).to.equal(3);
+    expect(UI.getItem(id1)).not.to.be.undefined;
+
+    UI.removeItemFromSelection(sel1.selectionId, id1);
+
+    expect(UI.refCount).to.equal(8);
+    expect(sel1.itemIds).to.eql([id4]);
+    expect(sel2.itemIds).to.eql([id1, id5, id2]);
+    expect(sel3.itemIds).to.eql([id3, id1, id5, id4]);
+
+    expect(UI.items.isReferenced(id1)).to.be.true;
+    expect(UI.items.countRefs(id1)).to.equal(2);
+    expect(UI.getItem(id1)).not.to.be.undefined;
+
+    UI.removeItemFromSelection(sel2.selectionId, id1);
+
+    expect(UI.refCount).to.equal(7);
+    expect(sel1.itemIds).to.eql([id4]);
+    expect(sel2.itemIds).to.eql([id5, id2]);
+    expect(sel3.itemIds).to.eql([id3, id1, id5, id4]);
+
+    expect(UI.items.isReferenced(id1)).to.be.true;
+    expect(UI.items.countRefs(id1)).to.equal(1);
+    expect(UI.getItem(id1)).not.to.be.undefined;
+
+    UI.removeItemFromSelection(sel3.selectionId, id1);
+
+    expect(UI.refCount).to.equal(6);
+    expect(sel1.itemIds).to.eql([id4]);
+    expect(sel2.itemIds).to.eql([id5, id2]);
+    expect(sel3.itemIds).to.eql([id3, id5, id4]);
+
+    expect(UI.items.isReferenced(id1)).to.be.false;
+    expect(UI.items.countRefs(id1)).to.be.NaN;
+    expect(UI.getItem(id1)).not.to.be.undefined;
+  });
 });
