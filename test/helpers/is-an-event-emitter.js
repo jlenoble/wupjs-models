@@ -4,7 +4,7 @@ import {expect} from 'chai';
 
 export const isAnEventEmitter = Type => {
   describe(`is an EventEmitter`, function () {
-    it(`emit('event', cb)`, function () {
+    it(`emit('event', o1, o2)`, function () {
       const emit = new Type();
       const o1 = {title: 'a'};
       const o2 = {title: 'b'};
