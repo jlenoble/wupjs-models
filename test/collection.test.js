@@ -26,7 +26,7 @@ describe(`Class Collection`, function () {
 
     it(`Deleting an item - with connection`, function () {
       const {store, col, o1} = this;
-      col.connect(store);
+      col.connectOnDelete(store);
       expect(Array.from(col)).to.eql([o1]);
       store.delete(o1);
       expect(Array.from(col)).to.eql([]);
@@ -34,9 +34,9 @@ describe(`Class Collection`, function () {
 
     it(`Deleting with deep connection`, function () {
       const {store, col, o1, o2} = this;
-      col.connect(store);
+      col.connectOnDelete(store);
       const col2 = new Collection([o1, o2]);
-      col2.connect(col);
+      col2.connectOnDelete(col);
 
       expect(Array.from(store)).to.eql([o1, o2]);
       expect(Array.from(col)).to.eql([o1]);
