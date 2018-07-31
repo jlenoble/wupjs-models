@@ -4,7 +4,7 @@ export default class Selection extends Item {
   constructor ({title, items} = {}) {
     super(title);
 
-    let _items = new Set(items);
+    const _items = new Set(items);
 
     Object.defineProperties(this, {
       selectionId: {
