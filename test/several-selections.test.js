@@ -45,6 +45,34 @@ describe('Testing several selections', function () {
     expect(UI.refCount).to.equal(9);
   });
 
+  it(`Creating selections of duplicate items`, function () {
+    const {UI, itemIds} = this;
+    const [id1, id2, id3, id4, id5] = itemIds;
+
+    expect(UI.refCount).to.equal(0);
+
+    expect(UI.newSelection({
+      title: 'A',
+      itemIds: [id1, id4],
+    }).itemIds).to.eql([id1, id4]);
+
+    expect(UI.refCount).to.equal(2);
+
+    expect(UI.newSelection({
+      title: 'B',
+      itemIds: [id1, id5, id2, id5, id5],
+    }).itemIds).to.eql([id1, id5, id2]);
+
+    expect(UI.refCount).to.equal(5);
+
+    expect(UI.newSelection({
+      title: 'C',
+      itemIds: [id3, id1, id5, id4, id3, id5, id1, id3],
+    }).itemIds).to.eql([id3, id1, id5, id4]);
+
+    expect(UI.refCount).to.equal(9);
+  });
+
   it(`Deleting a shared item`, function () {
     const {UI, itemIds} = this;
     const [id1, id2, id3, id4, id5] = itemIds;
