@@ -3,15 +3,15 @@
 import {expect} from 'chai';
 
 export const isASet = Type => {
-  beforeEach(function () {
-    const o1 = {title: 'a'};
-    const o2 = {title: 'b'};
-    const set = new Type([o1, o2]);
-
-    Object.assign(this, {set, o1, o2});
-  });
-
   describe(`is a Set`, function () {
+    beforeEach(function () {
+      const o1 = {title: 'a'};
+      const o2 = {title: 'b'};
+      const set = new Type([o1, o2]);
+
+      Object.assign(this, {set, o1, o2});
+    });
+
     it(`ctor()`, function () {
       const set = new Type();
       expect(set.size).to.equal(0);
