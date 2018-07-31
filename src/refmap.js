@@ -96,6 +96,27 @@ export default class RefMap {
           return n;
         },
       },
+
+      isReferenced: {
+        value: itemId => _refs.has(itemId),
+      },
+
+      countRefs: {
+        value: itemId => {
+          if (!this.isReferenced(itemId)) {
+            return NaN;
+          }
+
+          let n = 0;
+          const referends = _refs.get(itemId);
+
+          for (let removeProps of referends.values()) {
+            n += removeProps.size;
+          }
+
+          return n;
+        },
+      },
     });
   }
 }
