@@ -73,6 +73,57 @@ describe('Testing several selections', function () {
     expect(UI.refCount).to.equal(9);
   });
 
+  it(`Adding a shared item`, function () {
+    const {UI, itemIds} = this;
+    const [id1, id2, id3, id4, id5] = itemIds;
+
+    const it6 = UI.newItem('x');
+    const it7 = UI.newItem('Y');
+    const it8 = UI.newItem('Z');
+
+    const id6 = it6.itemId;
+    const id7 = it7.itemId;
+    const id8 = it8.itemId;
+
+    const sel1 = UI.newSelection({
+      title: 'A',
+      itemIds: [id1, id4],
+    });
+
+    const sel2 = UI.newSelection({
+      title: 'B',
+      itemIds: [id1, id5, id2],
+    });
+
+    const sel3 = UI.newSelection({
+      title: 'C',
+      itemIds: [id3, id1, id5, id4],
+    });
+
+    expect(UI.refCount).to.equal(9);
+
+    UI.addItemToSelection(sel2.selectionId, id6);
+
+    expect(UI.refCount).to.equal(10);
+    expect(sel1.itemIds).to.eql([id1, id4]);
+    expect(sel2.itemIds).to.eql([id1, id5, id2, id6]);
+    expect(sel3.itemIds).to.eql([id3, id1, id5, id4]);
+
+    UI.addItemsToSelection(sel3.selectionId, [id7, id8]);
+
+    expect(UI.refCount).to.equal(12);
+    expect(sel1.itemIds).to.eql([id1, id4]);
+    expect(sel2.itemIds).to.eql([id1, id5, id2, id6]);
+    expect(sel3.itemIds).to.eql([id3, id1, id5, id4, id7, id8]);
+
+    UI.addItemsToSelection(sel1.selectionId, [id4, id1]);
+
+    expect(UI.refCount).to.equal(12);
+    expect(sel1.itemIds).to.eql([id1, id4]);
+    expect(sel2.itemIds).to.eql([id1, id5, id2, id6]);
+    expect(sel3.itemIds).to.eql([id3, id1, id5, id4, id7, id8]);
+  });
+
   it(`Removing a shared item`, function () {
     const {UI, itemIds} = this;
     const [id1, id2, id3, id4, id5] = itemIds;
