@@ -108,87 +108,96 @@ describe('Testing class Selection', function () {
 
     describe(`Adding`, function () {
       it(`an element`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId = UI.newItem('x').itemId;
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.addItemToSelection(selectionId, itemId);
         expect(selection.itemIds).to.eql(itemIds.slice(...range)
           .concat(itemId));
+        expect(UI.refCount).to.equal(refCount + 1);
       });
 
       it(`several elements`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId1 = UI.newItem('x').itemId;
         const itemId2 = UI.newItem('y').itemId;
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.addItemsToSelection(selectionId, [itemId1, itemId2]);
         expect(selection.itemIds).to.eql(itemIds.slice(...range)
           .concat(itemId1, itemId2));
+        expect(UI.refCount).to.equal(refCount + 2);
       });
 
       it(`a duplicate element`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId = itemIds[range[0]];
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.addItemToSelection(selectionId, itemId);
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        expect(UI.refCount).to.equal(refCount);
       });
 
       it(`duplicate elements`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId1 = itemIds[range[0]];
         const itemId2 = itemIds[range[0] + 1];
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.addItemsToSelection(selectionId, [itemId1, itemId2]);
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        expect(UI.refCount).to.equal(refCount);
       });
     });
 
     describe(`Removing`, function () {
       it(`an element`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId = itemIds[range[0]];
         const range2 = [range[0] + 1, range[1]];
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.removeItemFromSelection(selectionId, itemId);
         expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+        expect(UI.refCount).to.equal(refCount - 1);
       });
 
       it(`several elements`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId1 = itemIds[range[0]];
         const itemId2 = itemIds[range[0] + 1];
         const range2 = [range[0] + 2, range[1]];
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.removeItemsFromSelection(selectionId, [itemId1, itemId2]);
         expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+        expect(UI.refCount).to.equal(refCount - 2);
       });
 
       it(`a non-element`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId = UI.newItem('x').itemId;
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.removeItemFromSelection(selectionId, itemId);
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        expect(UI.refCount).to.equal(refCount);
       });
 
       it(`several non-elements`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId1 = UI.newItem('x').itemId;
         const itemId2 = UI.newItem('y').itemId;
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.removeItemsFromSelection(selectionId, [itemId1, itemId2]);
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        expect(UI.refCount).to.equal(refCount);
       });
 
       it(`both an element and a non-element`, function () {
-        const {UI, selection, selectionId, itemIds, range} = this;
+        const {UI, selection, selectionId, itemIds, range, refCount} = this;
         const itemId1 = UI.newItem('x').itemId;
         const itemId2 = itemIds[range[0]];
         const range2 = [range[0] + 1, range[1]];
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.removeItemsFromSelection(selectionId, [itemId1, itemId2]);
         expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+        expect(UI.refCount).to.equal(refCount - 1);
       });
     });
 
@@ -200,19 +209,21 @@ describe('Testing class Selection', function () {
         UI.destroySelection(selectionId);
         expect(UI.getItem(itemId)).to.be.undefined;
         expect(UI.getSelection(selectionId)).to.be.undefined;
+        expect(UI.refCount).to.equal(0);
       });
 
       it(`an element`, function () {
-        const {UI, selection, itemIds, range} = this;
+        const {UI, selection, itemIds, range, refCount} = this;
         const itemId = itemIds[range[0]];
         const range2 = [range[0] + 1, range[1]];
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.destroyItem(itemId);
         expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+        expect(UI.refCount).to.equal(refCount - 1);
       });
 
       it(`several elements`, function () {
-        const {UI, selection, itemIds, range} = this;
+        const {UI, selection, itemIds, range, refCount} = this;
         const itemId1 = itemIds[range[0]];
         const itemId2 = itemIds[range[0] + 1];
         const range2 = [range[0] + 2, range[1]];
@@ -220,28 +231,31 @@ describe('Testing class Selection', function () {
         UI.destroyItem(itemId1);
         UI.destroyItem(itemId2);
         expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+        expect(UI.refCount).to.equal(refCount - 2);
       });
 
       it(`a non-element`, function () {
-        const {UI, selection, itemIds, range} = this;
+        const {UI, selection, itemIds, range, refCount} = this;
         const itemId = UI.newItem('x').itemId;
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.destroyItem(itemId);
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        expect(UI.refCount).to.equal(refCount);
       });
 
       it(`several non-elements`, function () {
-        const {UI, selection, itemIds, range} = this;
+        const {UI, selection, itemIds, range, refCount} = this;
         const itemId1 = UI.newItem('x').itemId;
         const itemId2 = UI.newItem('y').itemId;
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
         UI.destroyItem(itemId1);
         UI.destroyItem(itemId2);
         expect(selection.itemIds).to.eql(itemIds.slice(...range));
+        expect(UI.refCount).to.equal(refCount);
       });
 
       it(`both an element and a non-element`, function () {
-        const {UI, selection, itemIds, range} = this;
+        const {UI, selection, itemIds, range, refCount} = this;
         const itemId1 = UI.newItem('x').itemId;
         const itemId2 = itemIds[range[0]];
         const range2 = [range[0] + 1, range[1]];
@@ -249,6 +263,7 @@ describe('Testing class Selection', function () {
         UI.destroyItem(itemId1);
         UI.destroyItem(itemId2);
         expect(selection.itemIds).to.eql(itemIds.slice(...range2));
+        expect(UI.refCount).to.equal(refCount - 1);
       });
     });
   });
