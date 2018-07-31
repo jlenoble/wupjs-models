@@ -14,9 +14,9 @@ export default class RefMap {
         const item = _map.get(key);
 
         if (referend) {
-          Array.from(referends.get(referend)).forEach(removeProp => {
+          for (let removeProp of referends.get(referend).values()) {
             referend[removeProp](item);
-          });
+          }
 
           referends.delete(referend);
 
@@ -24,11 +24,11 @@ export default class RefMap {
             _refs.delete(key);
           }
         } else {
-          Array.from(referends).forEach(([referend, removeProps]) => {
-            Array.from(removeProps).forEach(removeProp => {
+          for (let [referend, removeProps] of referends.entries()) {
+            for (let removeProp of removeProps) {
               referend[removeProp](item);
-            });
-          });
+            }
+          }
 
           _refs.delete(key);
         }
