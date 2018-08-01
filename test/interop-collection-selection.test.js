@@ -4,7 +4,7 @@ import {expect} from 'chai';
 import Collection from '../src/collection';
 import Selection from '../src/selection';
 
-describe(`Interoperatbility between Collection and Selection`, function () {
+describe(`Interoperability between Collection and Selection`, function () {
   beforeEach(function () {
     const o1 = {title: 'a'};
     const o2 = {title: 'b'};
