@@ -34,7 +34,6 @@ describe(`Class InputList`, function () {
 
     inputList.add(o4.title);
 
-    expect(Array.from(inputList)).to.eql(objs.concat(o4));
     expect(Array.from(selection.values())).to.eql(objs.concat(o4));
   });
 
@@ -43,7 +42,6 @@ describe(`Class InputList`, function () {
 
     inputList.delete(o1.id);
 
-    expect(Array.from(inputList)).to.eql(objs.slice(1));
     expect(Array.from(selection.values())).to.eql(objs.slice(1));
   });
 
@@ -53,7 +51,6 @@ describe(`Class InputList`, function () {
 
     inputList.edit(o1.id, O1.title);
 
-    expect(Array.from(inputList)).to.eql([O1, o2, o3]);
     expect(Array.from(selection.values())).to.eql([O1, o2, o3]);
   });
 });

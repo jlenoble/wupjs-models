@@ -19,10 +19,6 @@ export class InputList {
           return this;
         },
       },
-
-      [Symbol.iterator]: {
-        value: () => selection.values(),
-      },
     });
   }
 }
