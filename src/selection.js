@@ -4,7 +4,7 @@ import aggregation from './aggregation';
 export default class Selection extends aggregation(Map, EventEmitter) {
   set (key, obj) {
     if (!this.has(key)) { // Don't propagate if already present obj
-      this.emit('set', key, obj);
+      this.emit('set', obj, key);
       return super.set(key, obj);
     } else {
       return this;
@@ -13,7 +13,7 @@ export default class Selection extends aggregation(Map, EventEmitter) {
 
   delete (key) {
     if (this.has(key)) { // Don't propagate if missing obj
-      this.emit('delete', key);
+      this.emit('delete', this.get(key), key);
       return super.delete(key);
     } else {
       return false;
@@ -21,10 +21,18 @@ export default class Selection extends aggregation(Map, EventEmitter) {
   }
 
   connectOnSet (selection) {
-    selection.on('set', (key, obj) => this.set(key, obj));
+    selection.on('set', (obj, key) => this.set(key, obj));
   }
 
   connectOnDelete (selection) {
-    selection.on('delete', key => this.delete(key));
+    selection.on('delete', (obj, key) => this.delete(key));
+  }
+
+  connectOnAdd (collection, idProperty) {
+    collection.on('add', obj => this.set(obj[idProperty], obj));
+  }
+
+  connectOnDeleteInCollection (collection, idProperty) {
+    collection.on('delete', obj => this.delete(obj[idProperty]));
   }
 }

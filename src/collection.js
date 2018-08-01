@@ -27,4 +27,8 @@ export default class Collection extends aggregation(Set, EventEmitter) {
   connectOnDelete (collection) {
     collection.on('delete', obj => this.delete(obj));
   }
+
+  connectOnSet (selection) {
+    selection.on('set', obj => this.add(obj));
+  }
 }
