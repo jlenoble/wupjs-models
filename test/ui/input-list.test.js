@@ -1,8 +1,8 @@
 /* eslint-disable no-invalid-this */
 
 import {expect} from 'chai';
-import Selection from '../../src/selection';
-import InputList from '../../src/ui/input-list';
+import {Selection} from '../../src';
+import {InputList} from '../../src/ui';
 
 describe(`Class InputList`, function () {
   beforeEach(function () {

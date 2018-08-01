@@ -1,7 +1,7 @@
 /* eslint-disable no-invalid-this */
 
 import {expect} from 'chai';
-import Collection from '../src/collection';
+import {Collection} from '../src';
 import {isASet, isAnEventEmitter} from './helpers';
 
 describe(`Class Collection`, function () {

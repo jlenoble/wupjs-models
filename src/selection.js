@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 import aggregation from './aggregation';
 
-export default class Selection extends aggregation(Map, EventEmitter) {
+export class Selection extends aggregation(Map, EventEmitter) {
   set (key, obj) {
     if (!this.has(key)) { // Don't propagate if already present obj
       this.emit('set', obj, key);

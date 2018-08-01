@@ -1,7 +1,7 @@
 /* eslint-disable no-invalid-this */
 
 import {expect} from 'chai';
-import Selection from '../src/selection';
+import {Selection} from '../src';
 import {isAMap, isAnEventEmitter} from './helpers';
 
 describe(`Class Selection`, function () {

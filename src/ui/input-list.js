@@ -1,4 +1,4 @@
-export default class InputList {
+export class InputList {
   constructor ({Model, idProperty, textProperty, selection}) {
     Object.defineProperties(this, {
       add: {

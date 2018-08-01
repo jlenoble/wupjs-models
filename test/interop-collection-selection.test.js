@@ -1,8 +1,7 @@
 /* eslint-disable no-invalid-this */
 
 import {expect} from 'chai';
-import Collection from '../src/collection';
-import Selection from '../src/selection';
+import {Collection, Selection} from '../src';
 
 describe(`Interoperability between Collection and Selection`, function () {
   beforeEach(function () {

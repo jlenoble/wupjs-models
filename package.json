@@ -12,7 +12,7 @@
   "engines": {
     "node": ">=9.8.0"
   },
-  "main": "lib/wupjs-models.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "gulp test"
   },

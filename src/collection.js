@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 import aggregation from './aggregation';
 
-export default class Collection extends aggregation(Set, EventEmitter) {
+export class Collection extends aggregation(Set, EventEmitter) {
   add (obj) {
     if (!this.has(obj)) { // Don't propagate if already present obj
       this.emit('add', obj);
