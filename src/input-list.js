@@ -15,6 +15,14 @@ export default class InputList extends Selection {
       remove: {
         value: id => selection.delete(id),
       },
+
+      edit: {
+        value: (id, title) => {
+          const model = selection.get(id);
+          model[textProperty] = title;
+          return this;
+        },
+      },
     });
 
     this.connectOnSet(selection);

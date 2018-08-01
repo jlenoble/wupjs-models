@@ -29,8 +29,8 @@ describe(`Class InputList`, function () {
   });
 
   it(`Input a text`, function () {
-    const {objs, selection, inputList} = this;
-    const o4 = {id: 4, title: 'd'};
+    const {o3, objs, selection, inputList} = this;
+    const o4 = {id: o3.id + 1, title: 'd'};
 
     inputList.add(o4.title);
 
@@ -45,5 +45,15 @@ describe(`Class InputList`, function () {
 
     expect(Array.from(inputList.values())).to.eql(objs.slice(1));
     expect(Array.from(selection.values())).to.eql(objs.slice(1));
+  });
+
+  it(`Edit an item`, function () {
+    const {o1, o2, o3, selection, inputList} = this;
+    const O1 = {id: o1.id, title: 'A'};
+
+    inputList.edit(o1.id, O1.title);
+
+    expect(Array.from(inputList.values())).to.eql([O1, o2, o3]);
+    expect(Array.from(selection.values())).to.eql([O1, o2, o3]);
   });
 });
