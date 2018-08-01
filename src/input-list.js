@@ -1,8 +1,8 @@
 import Selection from './selection';
 
-export default class InputList extends Selection {
+export default class InputList {
   constructor ({Model, idProperty, textProperty, selection}) {
-    super(selection);
+    // super(selection);
 
     Object.defineProperties(this, {
       add: {
@@ -23,9 +23,13 @@ export default class InputList extends Selection {
           return this;
         },
       },
+
+      values: {
+        value: selection.values.bind(selection),
+      },
     });
 
-    this.connectOnSet(selection);
-    this.connectOnDelete(selection);
+    // this.connectOnSet(selection);
+    // this.connectOnDelete(selection);
   }
 }
