@@ -38,10 +38,10 @@ describe(`Class InputList`, function () {
     expect(Array.from(selection.values())).to.eql(objs.concat(o4));
   });
 
-  it(`Remove an item`, function () {
+  it(`Delete an item`, function () {
     const {o1, objs, selection, inputList} = this;
 
-    inputList.remove(o1.id);
+    inputList.delete(o1.id);
 
     expect(Array.from(inputList)).to.eql(objs.slice(1));
     expect(Array.from(selection.values())).to.eql(objs.slice(1));

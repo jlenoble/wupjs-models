@@ -8,7 +8,7 @@ export class InputList {
         },
       },
 
-      remove: {
+      delete: {
         value: id => selection.delete(id),
       },
 
