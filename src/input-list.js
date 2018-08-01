@@ -1,9 +1,5 @@
-import Selection from './selection';
-
 export default class InputList {
   constructor ({Model, idProperty, textProperty, selection}) {
-    // super(selection);
-
     Object.defineProperties(this, {
       add: {
         value: text => {
@@ -24,12 +20,9 @@ export default class InputList {
         },
       },
 
-      values: {
-        value: selection.values.bind(selection),
+      [Symbol.iterator]: {
+        value: () => selection.values(),
       },
     });
-
-    // this.connectOnSet(selection);
-    // this.connectOnDelete(selection);
   }
 }
