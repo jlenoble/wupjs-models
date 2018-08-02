@@ -1,8 +1,8 @@
 /* eslint-disable no-invalid-this */
 
 import {expect} from 'chai';
-import {Input} from '../../src/ui';
-import {setup} from './setup';
+import {Input} from '../../../src/ui';
+import {setup} from '../setup';
 
 export function inputTestSuite (Selection = Map, idProperty = '_id',
   inputProperty = 'title') {
