@@ -22,7 +22,7 @@ describe(`Class InputList`, function () {
 
     const selection = new Selection(objs.map(o => [o.id, o]));
     const inputList = new InputList({
-      Model, idProperty: 'id', textProperty: 'title', selection,
+      Model, idProperty: 'id', inputProperty: 'title', selection,
     });
 
     Object.assign(this, {Model, o1, o2, o3, objs, selection, inputList});

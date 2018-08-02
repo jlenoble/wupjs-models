@@ -1,17 +1,17 @@
 export class InputList {
-  constructor ({Model, idProperty, textProperty, selection}) {
+  constructor ({Model, idProperty, inputProperty, selection}) {
     Object.defineProperties(this, {
       create: {
-        value: text => {
-          const model = new Model({[textProperty]: text});
+        value: input => {
+          const model = new Model({[inputProperty]: input});
           return selection.set(model[idProperty], model);
         },
       },
 
       update: {
-        value: (id, title) => {
+        value: (id, input) => {
           const model = selection.get(id);
-          model[textProperty] = title;
+          model[inputProperty] = input;
           return this;
         },
       },
