@@ -18,43 +18,47 @@ describe(`Interoperability between Collection and Selection`, function () {
     Object.assign(this, {o1, o2, o3, o4, objs, col, sel});
   });
 
-  it(`col connected to sel - adding`, function () {
-    const {o4, objs, col, sel} = this;
+  describe(`col connected to sel`, function () {
+    it(`Adding`, function () {
+      const {o4, objs, col, sel} = this;
 
-    col.connectOnSet(sel);
-    sel.set(o4.title, o4);
+      col.connectOnSet(sel);
+      sel.set(o4.title, o4);
 
-    expect(Array.from(sel.values())).to.eql(objs.concat(o4));
-    expect(Array.from(col)).to.eql(objs.concat(o4));
+      expect(Array.from(sel.values())).to.eql(objs.concat(o4));
+      expect(Array.from(col)).to.eql(objs.concat(o4));
+    });
+
+    it(`Deleting`, function () {
+      const {o1, objs, col, sel} = this;
+
+      col.connectOnDelete(sel);
+      sel.delete(o1.title);
+
+      expect(Array.from(sel.values())).to.eql(objs.slice(1));
+      expect(Array.from(col)).to.eql(objs.slice(1));
+    });
   });
 
-  it(`sel connected to col - adding`, function () {
-    const {o4, objs, col, sel} = this;
+  describe(`sel connected to col`, function () {
+    it(`Adding`, function () {
+      const {o4, objs, col, sel} = this;
 
-    sel.connectOnAdd(col, 'title');
-    col.add(o4);
+      sel.connectOnAdd(col, 'title');
+      col.add(o4);
 
-    expect(Array.from(col)).to.eql(objs.concat(o4));
-    expect(Array.from(sel.values())).to.eql(objs.concat(o4));
-  });
+      expect(Array.from(col)).to.eql(objs.concat(o4));
+      expect(Array.from(sel.values())).to.eql(objs.concat(o4));
+    });
 
-  it(`col connected to sel - deleting`, function () {
-    const {o1, objs, col, sel} = this;
+    it(`Deleting`, function () {
+      const {o1, objs, col, sel} = this;
 
-    col.connectOnDelete(sel);
-    sel.delete(o1.title);
+      sel.connectOnDeleteInCollection(col, 'title');
+      col.delete(o1);
 
-    expect(Array.from(sel.values())).to.eql(objs.slice(1));
-    expect(Array.from(col)).to.eql(objs.slice(1));
-  });
-
-  it(`sel connected to col - deleting`, function () {
-    const {o1, objs, col, sel} = this;
-
-    sel.connectOnDeleteInCollection(col, 'title');
-    col.delete(o1);
-
-    expect(Array.from(col)).to.eql(objs.slice(1));
-    expect(Array.from(sel.values())).to.eql(objs.slice(1));
+      expect(Array.from(col)).to.eql(objs.slice(1));
+      expect(Array.from(sel.values())).to.eql(objs.slice(1));
+    });
   });
 });
