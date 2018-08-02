@@ -7,7 +7,7 @@ import {setup} from '../setup';
 export function selectTestSuite (Selection = Map, idProperty = '_id',
   UI = Select) {
   beforeEach(function () {
-    setup.call(this, Selection, idProperty);
+    setup.call(this, {Selection, idProperty});
 
     const source = this.selection;
     const selection = new Selection();

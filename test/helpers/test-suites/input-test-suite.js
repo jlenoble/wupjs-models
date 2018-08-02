@@ -7,7 +7,7 @@ import {setup} from '../setup';
 export function inputTestSuite (Selection = Map, idProperty = '_id',
   inputProperty = 'title') {
   beforeEach(function () {
-    setup.call(this, Selection, idProperty, inputProperty);
+    setup.call(this, {Selection, idProperty, inputProperty});
     const {Model, selection} = this;
 
     this.input = new Input({Model, idProperty, inputProperty, selection});
