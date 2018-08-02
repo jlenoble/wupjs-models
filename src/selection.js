@@ -26,6 +26,13 @@ export class Selection extends aggregation(Map, EventEmitter) {
     }
   }
 
+  reset (map) {
+    this.clear();
+    map.forEach((obj, key) => {
+      this.set(key, obj);
+    });
+  }
+
   connectOnSet (selection) {
     selection.on('set', (obj, key) => this.set(key, obj));
   }

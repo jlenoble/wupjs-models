@@ -39,6 +39,13 @@ describe(`Class Selection`, function () {
         store.clear();
         expect(Array.from(sel.values())).to.eql([o1]);
       });
+
+      it(`Resetting`, function () {
+        const {store, sel, o1, o2, o3} = this;
+        expect(Array.from(sel.values())).to.eql([o1]);
+        store.reset(new Map([[o2.title, o2], [o3.title, o3]]));
+        expect(Array.from(sel.values())).to.eql([o1]);
+      });
     });
 
     describe('Connecting', function () {
@@ -64,6 +71,15 @@ describe(`Class Selection`, function () {
         expect(Array.from(sel.values())).to.eql([o1]);
         store.clear();
         expect(Array.from(sel.values())).to.eql([]);
+      });
+
+      it(`Resetting`, function () {
+        const {store, sel, o1, o2, o3} = this;
+        sel.connectOnSet(store);
+        sel.connectOnDelete(store);
+        expect(Array.from(sel.values())).to.eql([o1]);
+        store.reset(new Map([[o2.title, o2], [o3.title, o3]]));
+        expect(Array.from(sel.values())).to.eql([o2, o3]);
       });
     });
 
@@ -156,6 +172,31 @@ describe(`Class Selection`, function () {
         expect(Array.from(store.values())).to.eql([]);
         expect(Array.from(sel.values())).to.eql([]);
         expect(Array.from(sel2.values())).to.eql([o2]);
+      });
+
+      it(`Resetting`, function () {
+        const {store, sel, o1, o2, o3} = this;
+        sel.connectOnSet(store);
+        sel.connectOnDelete(store);
+        const sel2 = new Selection([[o1.title, o1], [o2.title, o2]]);
+        sel2.connectOnSet(sel);
+        sel2.connectOnDelete(sel);
+
+        expect(Array.from(store.values())).to.eql([o1, o2]);
+        expect(Array.from(sel.values())).to.eql([o1]);
+        expect(Array.from(sel2.values())).to.eql([o1, o2]);
+
+        sel.reset(new Map([[o1.title, o1], [o3.title, o3]]));
+
+        expect(Array.from(store.values())).to.eql([o1, o2]);
+        expect(Array.from(sel.values())).to.eql([o1, o3]);
+        expect(Array.from(sel2.values())).to.eql([o2, o1, o3]);
+
+        store.reset(new Map([[o2.title, o2], [o1.title, o1]]));
+
+        expect(Array.from(store.values())).to.eql([o2, o1]);
+        expect(Array.from(sel.values())).to.eql([o3, o2, o1]);
+        expect(Array.from(sel2.values())).to.eql([o2, o3, o1]);
       });
     });
   });
