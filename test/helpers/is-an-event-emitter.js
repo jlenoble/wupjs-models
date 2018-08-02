@@ -4,7 +4,7 @@ import {expect} from 'chai';
 
 export const isAnEventEmitter = Type => {
   describe(`is an EventEmitter`, function () {
-    it(`emit('event', o1, o2)`, function () {
+    it(`addListener() & emit()`, function () {
       const emit = new Type();
       const o1 = {title: 'a'};
       const o2 = {title: 'b'};
@@ -20,7 +20,7 @@ export const isAnEventEmitter = Type => {
       expect(cb).to.be.true;
     });
 
-    it(`removeListener('event', cb)`, function () {
+    it(`removeListener()`, function () {
       const emit = new Type();
       const o1 = {title: 'a'};
       const o2 = {title: 'b'};
