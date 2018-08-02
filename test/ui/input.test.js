@@ -5,10 +5,10 @@ import {inputTestSuite} from '../helpers';
 
 describe(`Class Input`, function () {
   describe(`Wrapping a vanilla Map`, function () {
-    inputTestSuite('id', 'title', Map);
+    inputTestSuite(Map, 'id', 'title');
   });
 
   describe(`Wrapping a Selection`, function () {
-    inputTestSuite('uid', 'name', Selection);
+    inputTestSuite(Selection, 'uid', 'name');
   });
 });

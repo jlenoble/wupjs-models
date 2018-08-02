@@ -4,10 +4,10 @@ import {expect} from 'chai';
 import {Input} from '../../src/ui';
 import {setup} from './setup';
 
-export function inputTestSuite (idProperty = '_id', inputProperty = 'title',
-  Selection = Map) {
+export function inputTestSuite (Selection = Map, idProperty = '_id',
+  inputProperty = 'title') {
   beforeEach(function () {
-    setup.call(this, idProperty, inputProperty, Selection);
+    setup.call(this, Selection, idProperty, inputProperty);
     const {Model, selection} = this;
 
     this.input = new Input({Model, idProperty, inputProperty, selection});
