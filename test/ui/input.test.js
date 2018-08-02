@@ -2,9 +2,9 @@
 
 import {expect} from 'chai';
 import {Selection} from '../../src';
-import {InputList} from '../../src/ui';
+import {Input} from '../../src/ui';
 
-describe(`Class InputList`, function () {
+describe(`Class Input`, function () {
   beforeEach(function () {
     let id = 0;
     const Model = class {
@@ -21,35 +21,35 @@ describe(`Class InputList`, function () {
     const objs = [o1, o2, o3];
 
     const selection = new Selection(objs.map(o => [o.id, o]));
-    const inputList = new InputList({
+    const input = new Input({
       Model, idProperty: 'id', inputProperty: 'title', selection,
     });
 
-    Object.assign(this, {Model, o1, o2, o3, objs, selection, inputList});
+    Object.assign(this, {Model, o1, o2, o3, objs, selection, input});
   });
 
   it(`Input a text`, function () {
-    const {o3, objs, selection, inputList} = this;
+    const {o3, objs, selection, input} = this;
     const o4 = {id: o3.id + 1, title: 'd'};
 
-    inputList.create(o4.title);
+    input.create(o4.title);
 
     expect(Array.from(selection.values())).to.eql(objs.concat(o4));
   });
 
   it(`Delete an item`, function () {
-    const {o1, objs, selection, inputList} = this;
+    const {o1, objs, selection, input} = this;
 
-    inputList.delete(o1.id);
+    input.delete(o1.id);
 
     expect(Array.from(selection.values())).to.eql(objs.slice(1));
   });
 
   it(`Edit an item`, function () {
-    const {o1, o2, o3, selection, inputList} = this;
+    const {o1, o2, o3, selection, input} = this;
     const O1 = {id: o1.id, title: 'A'};
 
-    inputList.update(o1.id, O1.title);
+    input.update(o1.id, O1.title);
 
     expect(Array.from(selection.values())).to.eql([O1, o2, o3]);
   });
