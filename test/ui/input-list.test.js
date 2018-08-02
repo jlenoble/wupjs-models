@@ -32,7 +32,7 @@ describe(`Class InputList`, function () {
     const {o3, objs, selection, inputList} = this;
     const o4 = {id: o3.id + 1, title: 'd'};
 
-    inputList.add(o4.title);
+    inputList.create(o4.title);
 
     expect(Array.from(selection.values())).to.eql(objs.concat(o4));
   });
