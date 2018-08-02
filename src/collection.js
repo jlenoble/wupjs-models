@@ -20,6 +20,17 @@ export class Collection extends aggregation(Set, EventEmitter) {
     }
   }
 
+  clear () {
+    this.forEach(obj => this.delete(obj));
+  }
+
+  reset (iterable) {
+    this.clear();
+    for (let obj of iterable) {
+      this.add(obj);
+    }
+  }
+
   connectOnAdd (collection) {
     collection.on('add', obj => this.add(obj));
   }

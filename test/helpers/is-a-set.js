@@ -70,5 +70,12 @@ export const isASet = Type => {
       expect(set.has(o1)).to.be.true;
       expect(set.has(o3)).to.be.false;
     });
+
+    it(`clear()`, function () {
+      const {set} = this;
+      expect(set.size).to.equal(2);
+      set.clear();
+      expect(set.size).to.equal(0);
+    });
   });
 };
