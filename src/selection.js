@@ -40,12 +40,4 @@ export class Selection extends aggregation(Map, EventEmitter) {
   connectOnDelete (selection) {
     selection.on('delete', (obj, key) => this.delete(key));
   }
-
-  connectOnAdd (collection, idProperty) {
-    collection.on('add', obj => this.set(obj[idProperty], obj));
-  }
-
-  connectOnDeleteInCollection (collection, idProperty) {
-    collection.on('delete', obj => this.delete(obj[idProperty]));
-  }
 }
