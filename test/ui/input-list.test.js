@@ -49,7 +49,7 @@ describe(`Class InputList`, function () {
     const {o1, o2, o3, selection, inputList} = this;
     const O1 = {id: o1.id, title: 'A'};
 
-    inputList.edit(o1.id, O1.title);
+    inputList.update(o1.id, O1.title);
 
     expect(Array.from(selection.values())).to.eql([O1, o2, o3]);
   });

@@ -8,16 +8,16 @@ export class InputList {
         },
       },
 
-      delete: {
-        value: id => selection.delete(id),
-      },
-
-      edit: {
+      update: {
         value: (id, title) => {
           const model = selection.get(id);
           model[textProperty] = title;
           return this;
         },
+      },
+
+      delete: {
+        value: id => selection.delete(id),
       },
     });
   }
