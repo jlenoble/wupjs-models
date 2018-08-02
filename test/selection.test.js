@@ -32,6 +32,13 @@ describe(`Class Selection`, function () {
         store.delete(o1.title);
         expect(Array.from(sel.values())).to.eql([o1]);
       });
+
+      it(`Clearing`, function () {
+        const {store, sel, o1} = this;
+        expect(Array.from(sel.values())).to.eql([o1]);
+        store.clear();
+        expect(Array.from(sel.values())).to.eql([o1]);
+      });
     });
 
     describe('Connecting', function () {
@@ -48,6 +55,14 @@ describe(`Class Selection`, function () {
         sel.connectOnDelete(store);
         expect(Array.from(sel.values())).to.eql([o1]);
         store.delete(o1.title);
+        expect(Array.from(sel.values())).to.eql([]);
+      });
+
+      it(`Clearing`, function () {
+        const {store, sel, o1} = this;
+        sel.connectOnDelete(store);
+        expect(Array.from(sel.values())).to.eql([o1]);
+        store.clear();
         expect(Array.from(sel.values())).to.eql([]);
       });
     });
@@ -118,6 +133,29 @@ describe(`Class Selection`, function () {
         expect(Array.from(sel.values())).to.eql([]);
         expect(Array.from(sel2.values())).to.eql([o2]);
         // Ignore explicit deletion by sel
+      });
+
+      it(`Clearing`, function () {
+        const {store, sel, o1, o2} = this;
+        sel.connectOnDelete(store);
+        const sel2 = new Selection([[o1.title, o1], [o2.title, o2]]);
+        sel2.connectOnDelete(sel);
+
+        expect(Array.from(store.values())).to.eql([o1, o2]);
+        expect(Array.from(sel.values())).to.eql([o1]);
+        expect(Array.from(sel2.values())).to.eql([o1, o2]);
+
+        store.clear();
+
+        expect(Array.from(store.values())).to.eql([]);
+        expect(Array.from(sel.values())).to.eql([]);
+        expect(Array.from(sel2.values())).to.eql([o2]);
+
+        sel.clear();
+
+        expect(Array.from(store.values())).to.eql([]);
+        expect(Array.from(sel.values())).to.eql([]);
+        expect(Array.from(sel2.values())).to.eql([o2]);
       });
     });
   });

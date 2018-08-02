@@ -70,5 +70,11 @@ export const isAMap = Type => {
       expect(map.has(o1.title)).to.be.true;
       expect(map.has(o3.title)).to.be.false;
     });
+
+    it(`clear()`, function () {
+      const {map} = this;
+      map.clear();
+      expect(map.size).to.equal(0);
+    });
   });
 };
