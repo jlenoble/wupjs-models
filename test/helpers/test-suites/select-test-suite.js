@@ -4,8 +4,7 @@ import {expect} from 'chai';
 import {Select} from '../../../src/ui';
 import {setup} from '../setup';
 
-export function selectTestSuite (Selection = Map, idProperty = '_id',
-  UI = Select) {
+export function selectTestSuite ({Selection, idProperty, UI = Select} = {}) {
   beforeEach(function () {
     setup.call(this, {Selection, idProperty});
 

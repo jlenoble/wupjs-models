@@ -1,7 +1,6 @@
 /* eslint-disable no-invalid-this */
 
-export function setup ({Selection = Map, idProperty = '_id',
-  inputProperty = 'title'} = {}) {
+export function setup ({Selection, idProperty, inputProperty} = {}) {
   let id = 0;
 
   const Model = class {

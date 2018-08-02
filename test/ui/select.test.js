@@ -5,10 +5,10 @@ import {selectTestSuite} from '../helpers';
 
 describe(`Class Select`, function () {
   describe(`Wrapping a vanilla Map`, function () {
-    selectTestSuite(Map, 'id');
+    selectTestSuite({Selection: Map, idProperty: 'id'});
   });
 
   describe(`Wrapping a Selection`, function () {
-    selectTestSuite(Selection, 'uid');
+    selectTestSuite({Selection, idProperty: 'uid'});
   });
 });
