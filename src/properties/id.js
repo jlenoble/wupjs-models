@@ -5,7 +5,7 @@ const name = 'id';
 const validator = new IdValidator(name);
 
 export class Id extends Property {
-  constructor (item) {
-    super(item, {name, validator, setOnce: true});
+  constructor (item, {context} = {}) {
+    super(item, {name, context, validator, setOnce: true});
   }
 }

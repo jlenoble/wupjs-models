@@ -5,7 +5,7 @@ const name = 'title';
 const validator = new TextValidator(name);
 
 export class Title extends Property {
-  constructor (item) {
-    super(item, {name, validator});
+  constructor (item, {context} = {}) {
+    super(item, {name, context, validator});
   }
 }

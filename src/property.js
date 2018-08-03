@@ -1,10 +1,11 @@
 import {Item} from './item';
 
 export class Property extends Item {
-  constructor (item, {name, validator, setOnce = false} = {}) {
+  constructor (item, {name, context, validator, setOnce = false} = {}) {
     super();
 
     let value;
+    const ctx = context || this;
 
     const get = () => value;
     const set = v => {
@@ -13,9 +14,9 @@ export class Property extends Item {
       if (!errors.length) {
         const prevValue = value;
         value = v;
-        this.emit(`change:property:${name}`, this, prevValue);
+        ctx.emit(`change:property:${name}`, this, prevValue);
       } else {
-        this.emit(`error:change:property:${name}`, this, v, errors);
+        ctx.emit(`error:change:property:${name}`, this, v, errors);
       }
 
       return errors;
@@ -24,6 +25,10 @@ export class Property extends Item {
     Object.defineProperties(this, {
       name: {
         value: name,
+      },
+
+      context: {
+        value: ctx,
       },
 
       validator: {

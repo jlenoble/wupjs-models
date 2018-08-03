@@ -1,13 +1,14 @@
 /* eslint-disable no-invalid-this */
 
 import {expect} from 'chai';
+import {Property} from '../../src';
 
 export const emitsOnPropertyChange = ({
   Type,
   typeArgs = [],
   name = 'name',
 } = {}) => {
-  describe('emits on property change', function () {
+  describe(`emits on change`, function () {
     if (!typeArgs.length) {
       const validator = new Schema({[name]: String});
 
@@ -15,8 +16,9 @@ export const emitsOnPropertyChange = ({
       typeArgs = [{[name]: 'foo'}, {name, validator}];
     }
 
-    it('on success', function () {
+    it(`on ${name} change success`, function () {
       const prop = new Type(...typeArgs);
+      const value = prop instanceof Property ? 'value' : name;
       let hasEmitted = false;
 
       prop.addListener(`change:property:${name}`, (ctx, prevValue) => {
@@ -24,12 +26,14 @@ export const emitsOnPropertyChange = ({
         hasEmitted = true;
       });
 
-      prop.value = prop.value ? prop.value + 1 : 1;
+      prop[value] = prop[value] ? prop[value] + 1 : 1;
+
       expect(hasEmitted).to.be.true;
     });
 
-    it('on error', function () {
+    it(`on ${name} change error`, function () {
       const prop = new Type(...typeArgs);
+      const value = prop instanceof Property ? 'value' : name;
       let hasEmitted = false;
 
       prop.addListener(`error:change:property:${name}`,
@@ -39,7 +43,7 @@ export const emitsOnPropertyChange = ({
           hasEmitted = true;
         });
 
-      prop.value = {};
+      prop[value] = {};
       expect(hasEmitted).to.be.true;
     });
   });

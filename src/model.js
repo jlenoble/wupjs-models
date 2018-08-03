@@ -5,8 +5,8 @@ export class Model extends Item {
   constructor (item) {
     super();
 
-    const id = new Id(item);
-    const title = new Title(item);
+    const id = new Id(item, {context: this});
+    const title = new Title(item, {context: this});
 
     Object.defineProperties(this, {
       [id.name]: {
