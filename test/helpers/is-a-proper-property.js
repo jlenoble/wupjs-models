@@ -1,7 +1,7 @@
 /* eslint-disable no-invalid-this */
 
 import Schema from 'validate';
-import {isAProperItem} from '.';
+import {isAProperItem, emitsOnPropertyChange} from '.';
 
 export const isAProperProperty = (Type, typeArgs = []) => {
   describe('is a proper Property', function () {
@@ -14,5 +14,6 @@ export const isAProperProperty = (Type, typeArgs = []) => {
     }
 
     isAProperItem(Type, typeArgs);
+    emitsOnPropertyChange(Type, typeArgs);
   });
 };
