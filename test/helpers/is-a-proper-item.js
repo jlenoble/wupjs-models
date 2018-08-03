@@ -3,6 +3,8 @@
 import {isAnEventEmitter, hidesEventEmitterProperties} from '.';
 
 export const isAProperItem = (Type, typeArgs = []) => {
-  isAnEventEmitter(Type, typeArgs);
-  hidesEventEmitterProperties(Type, typeArgs);
+  describe('is a proper Item', function () {
+    isAnEventEmitter(Type, typeArgs);
+    hidesEventEmitterProperties(Type, typeArgs);
+  });
 };
