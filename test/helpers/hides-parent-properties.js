@@ -11,11 +11,11 @@ export const hidesParentProperties = ({
     const parent = new ParentType(...parentTypeArgs);
     const objKeys = Object.keys(obj);
 
-    for (let key in parent) { // eslint-disable-line guard-for-in
+    Object.keys(parent).forEach(key => { // eslint-disable-line guard-for-in
       it(`.${key}`, function () {
         expect(objKeys).not.to.include(key);
       });
-    }
+    });
   });
 };
 
