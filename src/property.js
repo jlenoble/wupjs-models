@@ -7,6 +7,14 @@ export class Property extends Item {
     let value;
 
     Object.defineProperties(this, {
+      name: {
+        value: name,
+      },
+
+      validator: {
+        value: validator,
+      },
+
       item: {
         get () {
           return {[name]: value};

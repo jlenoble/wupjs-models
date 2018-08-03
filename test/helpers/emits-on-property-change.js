@@ -16,7 +16,7 @@ export const emitsOnPropertyChange = (Type, typeArgs = []) => {
       const prop = new Type(...typeArgs);
       let hasEmitted = false;
 
-      prop.addListener(`change:property:title`, (ctx, prevValue) => {
+      prop.addListener(`change:property:${prop.name}`, (ctx, prevValue) => {
         expect(ctx.value).to.equal(prevValue + 1);
         hasEmitted = true;
       });
@@ -29,13 +29,14 @@ export const emitsOnPropertyChange = (Type, typeArgs = []) => {
       const prop = new Type(...typeArgs);
       let hasEmitted = false;
 
-      prop.addListener(`error:change:property:title`, (ctx, v, errors) => {
-        expect(errors).not.to.be.undefined;
-        expect(errors[0]).to.be.instanceof(Error);
-        hasEmitted = true;
-      });
+      prop.addListener(`error:change:property:${prop.name}`,
+        (ctx, v, errors) => {
+          expect(errors).not.to.be.undefined;
+          expect(errors[0]).to.be.instanceof(Error);
+          hasEmitted = true;
+        });
 
-      prop.value = NaN;
+      prop.value = {};
       expect(hasEmitted).to.be.true;
     });
   });
