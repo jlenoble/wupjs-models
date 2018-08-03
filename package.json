@@ -24,7 +24,10 @@
     "url": "https://github.com/jlenoble/wupjs-models/issues"
   },
   "homepage": "https://github.com/jlenoble/wupjs-models#readme",
-  "dependencies": {},
+  "dependencies": {
+    "validate": "^4.4.1",
+    "validator": "^10.5.0"
+  },
   "devDependencies": {
     "autoreload-gulp": "*",
     "babel-core": "^6.26.3",
@@ -42,7 +45,6 @@
     "gulp-sourcemaps": "*",
     "gulp-wrap": "*",
     "markdown-include": "*",
-    "muter": "*",
     "plumb-gulp": "*"
   },
   "peerDependencies": {}
