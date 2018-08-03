@@ -40,7 +40,7 @@ export class Property extends Item {
           return {[name]: value};
         },
         set (item) {
-          this.value = item[name];
+          value = item[name]; // Doesn't trigger events
         },
       },
 
