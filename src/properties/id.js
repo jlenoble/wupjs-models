@@ -1,11 +1,11 @@
 import {Property} from '../property';
-import {NumberValidator} from './validators';
+import {IdValidator} from './validators';
 
 const name = 'id';
-const validator = new NumberValidator(name);
+const validator = new IdValidator(name);
 
 export class Id extends Property {
   constructor (item) {
-    super(item, {name, validator});
+    super(item, {name, validator, setOnce: true});
   }
 }

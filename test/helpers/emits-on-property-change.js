@@ -17,11 +17,11 @@ export const emitsOnPropertyChange = (Type, typeArgs = []) => {
       let hasEmitted = false;
 
       prop.addListener(`change:property:${prop.name}`, (ctx, prevValue) => {
-        expect(ctx.value).to.equal(prevValue + 1);
+        expect(ctx.value).to.equal(prevValue ? prevValue + 1 : 1);
         hasEmitted = true;
       });
 
-      prop.value = prop.value + 1;
+      prop.value = prop.value ? prop.value + 1 : 1;
       expect(hasEmitted).to.be.true;
     });
 
