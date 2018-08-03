@@ -3,10 +3,13 @@
 import Schema from 'validate';
 import {isAProperItem, emitsOnPropertyChange} from '.';
 
-export const isAProperProperty = (Type, typeArgs = []) => {
+export const isAProperProperty = ({
+  Type,
+  typeArgs = [],
+  name = 'name',
+} = {}) => {
   describe('is a proper Property', function () {
     if (!typeArgs.length) {
-      const name = 'title';
       const validator = new Schema({[name]: String});
 
       // eslint-disable-next-line no-param-reassign
@@ -14,6 +17,6 @@ export const isAProperProperty = (Type, typeArgs = []) => {
     }
 
     isAProperItem(Type, typeArgs);
-    emitsOnPropertyChange(Type, typeArgs);
+    emitsOnPropertyChange({Type, typeArgs, name});
   });
 };

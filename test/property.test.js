@@ -2,5 +2,5 @@ import {Property} from '../src';
 import {isAProperProperty} from './helpers';
 
 describe('class Property', function () {
-  isAProperProperty(Property);
+  isAProperProperty({Type: Property});
 });

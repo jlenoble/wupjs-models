@@ -2,10 +2,13 @@
 
 import {expect} from 'chai';
 
-export const emitsOnPropertyChange = (Type, typeArgs = []) => {
+export const emitsOnPropertyChange = ({
+  Type,
+  typeArgs = [],
+  name = 'name',
+} = {}) => {
   describe('emits on property change', function () {
     if (!typeArgs.length) {
-      const name = 'title';
       const validator = new Schema({[name]: String});
 
       // eslint-disable-next-line no-param-reassign
@@ -16,7 +19,7 @@ export const emitsOnPropertyChange = (Type, typeArgs = []) => {
       const prop = new Type(...typeArgs);
       let hasEmitted = false;
 
-      prop.addListener(`change:property:${prop.name}`, (ctx, prevValue) => {
+      prop.addListener(`change:property:${name}`, (ctx, prevValue) => {
         expect(ctx.value).to.equal(prevValue ? prevValue + 1 : 1);
         hasEmitted = true;
       });
@@ -29,7 +32,7 @@ export const emitsOnPropertyChange = (Type, typeArgs = []) => {
       const prop = new Type(...typeArgs);
       let hasEmitted = false;
 
-      prop.addListener(`error:change:property:${prop.name}`,
+      prop.addListener(`error:change:property:${name}`,
         (ctx, v, errors) => {
           expect(errors).not.to.be.undefined;
           expect(errors[0]).to.be.instanceof(Error);
