@@ -1,6 +1,7 @@
 /* eslint-disable no-invalid-this */
 
 import {expect} from 'chai';
+import EventEmitter from 'events';
 
 export const hidesParentProperties = ({
   Type, ParentType, typeArgs = [], parentTypeArgs = [],
@@ -16,4 +17,8 @@ export const hidesParentProperties = ({
       });
     }
   });
+};
+
+export const hidesEventEmitterProperties = Type => {
+  return hidesParentProperties({Type, ParentType: EventEmitter});
 };

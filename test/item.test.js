@@ -1,8 +1,7 @@
 import {Item} from '../src';
-import EventEmitter from 'events';
-import {isAnEventEmitter, hidesParentProperties} from './helpers';
+import {isAnEventEmitter, hidesEventEmitterProperties} from './helpers';
 
 describe('class Item', function () {
   isAnEventEmitter(Item);
-  hidesParentProperties({Type: Item, ParentType: EventEmitter});
+  hidesEventEmitterProperties(Item);
 });
