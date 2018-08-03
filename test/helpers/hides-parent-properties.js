@@ -19,6 +19,6 @@ export const hidesParentProperties = ({
   });
 };
 
-export const hidesEventEmitterProperties = Type => {
-  return hidesParentProperties({Type, ParentType: EventEmitter});
+export const hidesEventEmitterProperties = (Type, typeArgs = []) => {
+  return hidesParentProperties({Type, ParentType: EventEmitter, typeArgs});
 };
