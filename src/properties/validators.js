@@ -1,6 +1,6 @@
 import Schema from 'validate';
 import schemas from '../schemas';
-import {className, instanceName} from '../helpers';
+import {validatorClassName, reverseValidatorClassName} from '../helpers';
 
 const validators = Object.entries(schemas).map(([name, schema]) => {
   const Class = class extends Schema {
@@ -10,12 +10,12 @@ const validators = Object.entries(schemas).map(([name, schema]) => {
   };
 
   Object.defineProperty(Class, 'name', {
-    value: className(name) + 'Validator',
+    value: validatorClassName(name),
   });
 
   return Class;
 }).reduce((validators, Class) => {
-  validators[instanceName(Class.name)] = new Class();
+  validators[reverseValidatorClassName(Class.name)] = new Class();
   return validators;
 }, {});
 

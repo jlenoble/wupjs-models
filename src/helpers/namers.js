@@ -8,3 +8,7 @@ const namer = method => function fn (name) {
 
 export const className = namer('toUpperCase');
 export const instanceName = namer('toLowerCase');
+
+export const validatorClassName = name => className(name) + 'Validator';
+export const reverseValidatorClassName = name => instanceName(
+  name.substring(0, name.length - 'Validator'.length));
