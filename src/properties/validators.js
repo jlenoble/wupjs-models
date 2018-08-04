@@ -29,4 +29,6 @@ validators.forEach(validator => {
   Validators[validator.name] = validator;
 });
 
+Object.freeze(Validators);
+
 export default Validators;
