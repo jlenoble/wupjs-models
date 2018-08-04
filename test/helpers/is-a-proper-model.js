@@ -5,7 +5,7 @@ import {isAProperItem, emitsOnPropertyChange} from '.';
 export const isAProperModel = ({
   Type,
   typeArgs,
-  names = ['id', 'title'],
+  names = ['_id', 'title'],
 }) => {
   describe('is a proper Model', function () {
     isAProperItem(Type, typeArgs);
