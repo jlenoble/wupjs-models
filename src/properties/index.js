@@ -1,2 +1,2 @@
-export * from './id';
+export * from './_id';
 export * from './title';
