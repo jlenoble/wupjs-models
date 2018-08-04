@@ -1,8 +1,7 @@
 import {Property} from '../property';
-import {_IdValidator} from './validators';
+import {_IdValidator as validator} from './validators';
 
 const name = '_id';
-const validator = new _IdValidator(name);
 
 export class _Id extends Property {
   constructor (item, {context} = {}) {

@@ -21,14 +21,11 @@ const validators = Object.entries(schemas).map(([name, schema]) => {
   });
 
   return Class;
-});
+}).reduce((validators, Class) => {
+  validators[Class.name] = new Class();
+  return validators;
+}, {});
 
-const Validators = {};
+Object.freeze(validators);
 
-validators.forEach(validator => {
-  Validators[validator.name] = validator;
-});
-
-Object.freeze(Validators);
-
-export default Validators;
+export default validators;
