@@ -1,2 +1,2 @@
-export * from './_id';
-export * from './title';
+export * from './properties';
+export * from './validators';
