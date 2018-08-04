@@ -1,9 +1,9 @@
-import {Id} from '../src';
+import {_Id} from '../src';
 import {isAProperProperty} from './helpers';
 
-describe('class Id', function () {
+describe('class _Id', function () {
   isAProperProperty({
-    Type: Id,
+    Type: _Id,
     typeArgs: [{}], // Id must be set once, so pass an empty object
     name: '_id',
   });

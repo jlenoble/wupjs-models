@@ -1,11 +1,11 @@
 import {Item} from './item';
-import {Id, Title} from './properties';
+import {_Id, Title} from './properties';
 
 export class Model extends Item {
   constructor (item) {
     super();
 
-    const id = new Id(item, {context: this});
+    const id = new _Id(item, {context: this});
     const title = new Title(item, {context: this});
 
     Object.defineProperties(this, {
