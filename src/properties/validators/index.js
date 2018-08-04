@@ -1,2 +1,2 @@
-export * from './id-validator';
+export * from './_id-validator';
 export * from './title-validator';
