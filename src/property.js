@@ -1,3 +1,4 @@
+import EventEmitter from 'events';
 import {Item} from './item';
 
 export class Property extends Item {
@@ -5,7 +6,6 @@ export class Property extends Item {
     super();
 
     let value;
-    const ctx = context || this;
 
     const get = () => value;
     const set = v => {
@@ -14,9 +14,9 @@ export class Property extends Item {
       if (!errors.length) {
         const prevValue = value;
         value = v;
-        ctx.emit(`change:property:${name}`, this, prevValue);
+        context.emit(`change:property:${name}`, this, prevValue);
       } else {
-        ctx.emit(`error:change:property:${name}`, this, v, errors);
+        context.emit(`error:change:property:${name}`, this, v, errors);
       }
 
       return errors;
@@ -28,7 +28,7 @@ export class Property extends Item {
       },
 
       context: {
-        value: ctx,
+        value: context,
       },
 
       validator: {
@@ -62,5 +62,14 @@ export class Property extends Item {
     });
 
     this.item = item;
+  }
+}
+
+const proto = Property.prototype;
+for (let [name, fn] of Object.entries(EventEmitter.prototype)) {
+  if (typeof fn == 'function') {
+    proto[name] = (fn => function (...args) {
+      return fn.apply(this.context, args);
+    })(fn);
   }
 }

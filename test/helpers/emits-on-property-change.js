@@ -3,19 +3,8 @@
 import {expect} from 'chai';
 import {Property} from '../../src';
 
-export const emitsOnPropertyChange = ({
-  Type,
-  typeArgs = [],
-  name = 'name',
-} = {}) => {
+export const emitsOnPropertyChange = ({Type, typeArgs, name}) => {
   describe(`emits on change`, function () {
-    if (!typeArgs.length) {
-      const validator = new Schema({[name]: String});
-
-      // eslint-disable-next-line no-param-reassign
-      typeArgs = [{[name]: 'foo'}, {name, validator}];
-    }
-
     it(`on ${name} change success`, function () {
       const prop = new Type(...typeArgs);
       const value = prop instanceof Property ? 'value' : name;

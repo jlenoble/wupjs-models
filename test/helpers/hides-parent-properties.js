@@ -4,7 +4,7 @@ import {expect} from 'chai';
 import EventEmitter from 'events';
 
 export const hidesParentProperties = ({
-  Type, ParentType, typeArgs = [], parentTypeArgs = [],
+  Type, ParentType, typeArgs, parentTypeArgs = [],
 }) => {
   describe(`hides parent properties`, function () {
     const obj = new Type(...typeArgs);
@@ -19,6 +19,6 @@ export const hidesParentProperties = ({
   });
 };
 
-export const hidesEventEmitterProperties = (Type, typeArgs = []) => {
+export const hidesEventEmitterProperties = (Type, typeArgs) => {
   return hidesParentProperties({Type, ParentType: EventEmitter, typeArgs});
 };

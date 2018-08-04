@@ -2,8 +2,14 @@
 
 import {expect} from 'chai';
 
-export const isAnEventEmitter = (Type, typeArgs = []) => {
+export const isAnEventEmitter = (Type, typeArgs) => {
   describe(`is an EventEmitter`, function () {
+    beforeEach(function () {
+      if (typeArgs[1] && typeArgs[1].context) {
+        typeArgs[1].context.removeAllListeners();
+      }
+    });
+
     it(`addListener() & emit()`, function () {
       const emit = new Type(...typeArgs);
       const o1 = {title: 'a'};
