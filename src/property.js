@@ -1,10 +1,7 @@
 import EventEmitter from 'events';
-import {Item} from './item';
 
-export class Property extends Item {
+export class Property {
   constructor (item, {name, context, validator, setOnce = false} = {}) {
-    super();
-
     let value;
 
     const get = () => value;
