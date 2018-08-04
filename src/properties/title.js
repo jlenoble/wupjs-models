@@ -1,5 +1,5 @@
 import {Property} from '../property';
-import {TitleValidator as validator} from './validators';
+import {titleValidator as validator} from './validators';
 
 const name = 'title';
 

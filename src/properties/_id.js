@@ -1,5 +1,5 @@
 import {Property} from '../property';
-import {_IdValidator as validator} from './validators';
+import {_idValidator as validator} from './validators';
 
 const name = '_id';
 

@@ -1,13 +1,16 @@
 import Schema from 'validate';
 import schemas from '../schemas';
 
-const className = name => {
+const namer = method => function fn (name) {
   if (name[0] == '_') {
-    return '_' + className(name.substring(1));
+    return '_' + fn(name.substring(1));
   }
 
-  return name[0].toUpperCase() + name.substring(1);
+  return name[0][method]() + name.substring(1);
 };
+
+const className = namer('toUpperCase');
+const instanceName = namer('toLowerCase');
 
 const validators = Object.entries(schemas).map(([name, schema]) => {
   const Class = class extends Schema {
@@ -22,7 +25,7 @@ const validators = Object.entries(schemas).map(([name, schema]) => {
 
   return Class;
 }).reduce((validators, Class) => {
-  validators[Class.name] = new Class();
+  validators[instanceName(Class.name)] = new Class();
   return validators;
 }, {});
 
