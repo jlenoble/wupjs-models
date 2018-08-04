@@ -1,16 +1,10 @@
 import Schema from 'validate';
-import {validatorClassName} from '../helpers';
+import {validatorClassName, makeClassFactory} from '../helpers';
 
-export const makeValidator = ([name, schema]) => {
-  const Class = class extends Schema {
-    constructor () {
-      super({[name]: schema});
-    }
-  };
-
-  Object.defineProperty(Class, 'name', {
-    value: validatorClassName(name),
-  });
-
-  return Class;
+const classImpl = (name, schema) => class extends Schema {
+  constructor () {
+    super({[name]: schema});
+  }
 };
+
+export const makeValidator = makeClassFactory(validatorClassName, classImpl);

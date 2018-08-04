@@ -1,16 +1,10 @@
 import {Property} from '../property';
-import {className} from '../helpers';
+import {className, makeClassFactory} from '../helpers';
 
-export const makeProperty = ([name, validator]) => {
-  const Class = class extends Property {
-    constructor (item, {context} = {}) {
-      super(item, {name, context, validator});
-    }
+const classImpl = (name, validator) => class extends Property {
+  constructor (item, {context} = {}) {
+    super(item, {name, context, validator});
   }
-
-  Object.defineProperty(Class, 'name', {
-    value: className(name),
-  });
-
-  return Class;
 };
+
+export const makeProperty = makeClassFactory(className, classImpl);
