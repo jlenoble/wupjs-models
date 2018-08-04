@@ -1,8 +1,8 @@
 import {Property} from '../property';
-import {TextValidator} from './validators';
+import {TitleValidator} from './validators';
 
 const name = 'title';
-const validator = new TextValidator(name);
+const validator = new TitleValidator(name);
 
 export class Title extends Property {
   constructor (item, {context} = {}) {
