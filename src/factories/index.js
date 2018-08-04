@@ -1,2 +1,2 @@
-export * from './properties';
-export * from './validators';
+export * from './make-property';
+export * from './make-validator';
