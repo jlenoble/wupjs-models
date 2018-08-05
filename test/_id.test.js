@@ -1,5 +1,6 @@
-import {_Id, Item} from '../src';
-import {_id as validator} from '../src/validators';
+import {Item} from '../src';
+import {_Id} from '../src/properties';
+import {_idValidator as validator} from '../src/validators';
 import {isAProperProperty, isSetOnce} from './helpers';
 
 describe('class _Id', function () {

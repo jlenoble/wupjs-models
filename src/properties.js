@@ -1,10 +1,11 @@
 import {makeProperty} from './factories';
 import {propertyValidators as validators} from './validators';
-import {makeDefaultExport} from './helpers';
+import {makeDefaultExport, instanceName} from './helpers';
 
 export default makeDefaultExport(
-  validators,
+  validators.byName,
   makeProperty,
   Class => Class.name,
-  Class => Class
+  Class => Class,
+  instanceName
 );

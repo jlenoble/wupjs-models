@@ -1,5 +1,6 @@
-import {Title, Item} from '../src';
-import {title as validator} from '../src/validators';
+import {Item} from '../src';
+import {Title} from '../src/properties';
+import {titleValidator as validator} from '../src/validators';
 import {isAProperProperty} from './helpers';
 
 describe('class Title', function () {
