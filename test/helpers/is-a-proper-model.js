@@ -1,6 +1,7 @@
 /* eslint-disable no-invalid-this */
 
-import {isAProperItem, emitsOnPropertyChange, isSetOnce} from '.';
+import {isAProperItem, emitsOnPropertyChange, isSetOnce, hasAnItemAccessor}
+  from '.';
 
 export const isAProperModel = ({Type, typeArgs, names}) => {
   describe('is a proper Model', function () {
@@ -11,5 +12,7 @@ export const isAProperModel = ({Type, typeArgs, names}) => {
     });
 
     isSetOnce({Type, typeArgs, name: '_id'});
+
+    hasAnItemAccessor({Type, typeArgs, names});
   });
 };

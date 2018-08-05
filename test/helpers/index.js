@@ -1,4 +1,5 @@
 export * from './emits-on-property-change';
+export * from './has-an-item-accessor';
 export * from './hides-parent-properties';
 export * from './is-a-proper-item';
 export * from './is-a-proper-model';

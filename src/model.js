@@ -12,6 +12,8 @@ export class Model extends Item {
       props.add('_id');
     }
 
+    Object.defineProperty(this, 'props', {value: new Map()});
+
     props.forEach(name => {
       const Property = properties.byName[name];
       const validator = validators.byName[name];
@@ -26,6 +28,25 @@ export class Model extends Item {
         },
         enumerable: true,
       });
+
+      this.props.set(name, prop);
+    });
+
+    Object.defineProperties(this, {
+      validator: {
+        value: validator,
+      },
+
+      item: {
+        get () {
+          return {...this};
+        },
+        set (item) {
+          for (let prop of this.props.values()) {
+            prop.item = item;
+          };
+        },
+      },
     });
   }
 }
