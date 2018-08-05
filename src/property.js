@@ -44,7 +44,9 @@ export class Property {
       value: {
         get,
         set: setOnce ? v => {
-          if (!set.call(this, v).length) {
+          const errors = set.call(this, v);
+
+          if (!errors.length) {
             Object.defineProperty(this, 'value', {
               value: value,
               writable: false,
@@ -52,6 +54,8 @@ export class Property {
               configurable: false,
             });
           }
+
+          return errors;
         } : set,
         enumerable: true,
         configurable: setOnce,
@@ -59,6 +63,10 @@ export class Property {
     });
 
     this.item = item;
+
+    if (setOnce && value != undefined) {
+      this.value = value; // Replace setter
+    }
   }
 }
 

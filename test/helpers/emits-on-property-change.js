@@ -5,19 +5,29 @@ import {Property} from '../../src';
 
 export const emitsOnPropertyChange = ({Type, typeArgs, name}) => {
   describe(`emits on change`, function () {
+    beforeEach(function () {
+      this.context = (typeArgs[1] || {}).context;
+      if (this.context) {
+        this.context.removeAllListeners();
+      }
+    });
+
     it(`on ${name} change success`, function () {
       const prop = new Type(...typeArgs);
       const value = prop instanceof Property ? 'value' : name;
       let hasEmitted = false;
 
-      prop.addListener(`change:property:${name}`, (ctx, prevValue) => {
-        expect(ctx.value).to.equal(prevValue ? prevValue + 1 : 1);
-        hasEmitted = true;
-      });
+      const descriptor = Object.getOwnPropertyDescriptor(prop, value);
 
-      prop[value] = prop[value] ? prop[value] + 1 : 1;
+      if (descriptor.writable || descriptor.writable === undefined) {
+        prop.addListener(`change:property:${name}`, (ctx, prevValue) => {
+          expect(ctx.value).to.equal(prevValue ? prevValue + 1 : 1);
+          hasEmitted = true;
+        });
 
-      expect(hasEmitted).to.be.true;
+        prop[value] = prop[value] ? prop[value] + 1 : 1;
+        expect(hasEmitted).to.be.true;
+      }
     });
 
     it(`on ${name} change error`, function () {
@@ -32,8 +42,12 @@ export const emitsOnPropertyChange = ({Type, typeArgs, name}) => {
           hasEmitted = true;
         });
 
-      prop[value] = {};
-      expect(hasEmitted).to.be.true;
+      const descriptor = Object.getOwnPropertyDescriptor(prop, value);
+
+      if (descriptor.writable || descriptor.writable === undefined) {
+        prop[value] = {};
+        expect(hasEmitted).to.be.true;
+      }
     });
   });
 };

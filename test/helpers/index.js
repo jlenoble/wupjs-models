@@ -4,3 +4,4 @@ export * from './is-a-proper-item';
 export * from './is-a-proper-model';
 export * from './is-a-proper-property';
 export * from './is-an-event-emitter';
+export * from './is-set-once';
