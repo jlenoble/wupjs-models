@@ -1,33 +1,31 @@
 import {Item} from './item';
-import {_Id, Title} from './properties';
+import properties from './properties';
+import validators from './validators';
 
 export class Model extends Item {
-  constructor (item) {
+  constructor (item, {validator = {props: {}}} = {}) {
     super();
 
-    const id = new _Id(item, {context: this});
-    const title = new Title(item, {context: this});
+    const props = new Set(Object.keys(validator.props));
 
-    Object.defineProperties(this, {
-      [id.name]: {
+    if (!props.has('_id')) {
+      props.add('_id');
+    }
+
+    props.forEach(name => {
+      const Property = properties.byName[name];
+      const validator = validators.byName[name];
+      const prop = new Property(item, {context: this, validator});
+
+      Object.defineProperty(this, name, {
         get () {
-          return id.value;
+          return prop.value;
         },
         set (i) {
-          id.value = i;
+          return prop.value = i;
         },
         enumerable: true,
-      },
-
-      [title.name]: {
-        get () {
-          return title.value;
-        },
-        set (t) {
-          title.value = t;
-        },
-        enumerable: true,
-      },
+      });
     });
   }
 }

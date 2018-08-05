@@ -1,7 +1,8 @@
 import {_id} from './_id';
+import {idea} from './idea';
 import {title} from './title';
 
-const schemas = {_id, title};
+const schemas = {_id, idea, title};
 
 Object.values(schemas).forEach(schema => Object.freeze(schema));
 Object.freeze(schemas);
