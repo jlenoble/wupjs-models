@@ -38,7 +38,9 @@ export const hasAnItemAccessor = ({Type, typeArgs, names, updates}) => {
         });
 
         expect(() => prop.item = {...input}).not.to.throw();
-        expect(prop.item).to.eql(output);
+        if (ok) {
+          expect(prop.item).to.eql(output);
+        }
       });
     });
   });
