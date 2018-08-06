@@ -6,7 +6,7 @@ describe('class Model', function () {
     Type: Model,
     typeArgs: [{_id: 1}],
     names: ['title'],
-    updates: [
+    updateProperties: [
       [{title: 'Bert'}, false],
       [{title: ''}, false],
       [{title: 10}, false],

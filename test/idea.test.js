@@ -6,7 +6,7 @@ describe('class Idea', function () {
     Type: Idea,
     typeArgs: [{_id: 1, title: 'foo'}],
     names: ['title', 'name'],
-    updates: [
+    updateProperties: [
       [{title: 'Bert'}, true],
       [{title: ''}, false],
       [{title: 10}, false],
@@ -15,6 +15,16 @@ describe('class Idea', function () {
       [{name: ''}, false],
       [{name: 10}, false],
       [{name: {}}, false],
+    ],
+    updateItem: [
+      [{title: 'Bert', name: 'Karl'}, true],
+      [{title: '', name: 'Karl'}, false],
+      [{title: 10, name: 'Karl'}, false],
+      [{title: {}, name: 'Karl'}, false],
+      [{title: 'Karl', name: 'Bert'}, true],
+      [{title: 'Karl', name: ''}, true],
+      [{title: 'Karl', name: 10}, true],
+      [{title: 'Karl', name: {}}, true],
     ],
   });
 });
