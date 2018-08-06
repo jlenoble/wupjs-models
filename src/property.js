@@ -1,18 +1,29 @@
 import EventEmitter from 'events';
 
+const lock = (name, value, ctx) => {
+  Object.defineProperty(ctx, name, {
+    value,
+    writable: false,
+    configurable: false,
+  });
+  Object.freeze(ctx[name]);
+};
+
 export class Property {
-  constructor (item, {name, context, validator, setOnce = false} = {}) {
+  constructor (item, {name, context, validator} = {}) {
     let value;
+    const setOnce = !!validator.props[name].registry.setOnce;
 
     const get = () => value;
     const set = v => {
-      const errors = validator.validate({[name]: v});
+      const errors = validator.validate({[name]: v, lhs: value});
 
       if (!errors.length) {
         const prevValue = value;
         value = v;
         context.emit(`change:property:${name}`, this, prevValue);
       } else {
+        // console.log('property', errors.map(error => error.message), v);
         context.emit(`error:change:property:${name}`, this, v, errors);
       }
 
@@ -36,9 +47,12 @@ export class Property {
         get () {
           return {[name]: value};
         },
-        set (item) {
-          value = item[name]; // Doesn't trigger events
+        set: item => {
+          if (!validator.validate({...item, lhs: value}).length) {
+            value = item[name];
+          }
         },
+        configurable: setOnce,
       },
 
       value: {
@@ -46,13 +60,9 @@ export class Property {
         set: setOnce ? v => {
           const errors = set.call(this, v);
 
-          if (!errors.length) {
-            Object.defineProperty(this, 'value', {
-              value: value,
-              writable: false,
-              enumerable: true,
-              configurable: false,
-            });
+          if (!errors.length || errors[0].message.match(/already set/)) {
+            lock('value', value, this);
+            lock('item', this.item, this);
           }
 
           return errors;
@@ -64,8 +74,9 @@ export class Property {
 
     this.item = item;
 
-    if (setOnce && value != undefined) {
-      this.value = value; // Replace setter
+    if (setOnce && value !== undefined) {
+      lock('value', value, this);
+      lock('item', this.item, this);
     }
   }
 }

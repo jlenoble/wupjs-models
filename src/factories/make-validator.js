@@ -1,5 +1,45 @@
+/* eslint-disable no-param-reassign */
+
 import Schema from 'validate';
+import {propertySchemas} from '../schemas';
 import {validatorClassName, makeClassFactory} from '../helpers';
+
+const schemaOptionKeys = ['message', 'schema', 'use', 'required',
+  'type', 'length', 'enum', 'match', 'each', 'elements', 'path',
+  'typecast', 'validate'];
+
+const customOptionKeys = ['setOnce'];
+
+const getOptions = (schema, keys) => {
+  const options = {};
+  keys.forEach(key => {
+    if (schema[key] !== undefined) {
+      options[key] = schema[key];
+    }
+  });
+  return options;
+};
+
+const getSchemaOptions = schema => getOptions(schema, schemaOptionKeys);
+const getCustomOptions = schema => getOptions(schema, customOptionKeys);
+
+const handleSetOnce = (name, schemaOptions, customOptions) => {
+  if (customOptions.setOnce) {
+    const setOnce = (val, ctx) => {
+      return ctx.lhs === undefined && val !== undefined;
+    };
+
+    if (!schemaOptions.use) {
+      schemaOptions.use = {};
+    }
+    schemaOptions.use.setOnce = setOnce;
+
+    if (!schemaOptions.message) {
+      schemaOptions.message = {};
+    }
+    schemaOptions.message.setOnce = path => `${name} already set.`;
+  }
+};
 
 const Validators = new Map();
 
@@ -8,48 +48,42 @@ const classImpl = (name, schema) => {
     return Validators.get(name);
   }
 
-  const Class = class extends Schema {
-    constructor () {
-      if (typeof schema == 'function') {
-        super({[name]: schema});
-        return;
+  let Class;
+
+  if (propertySchemas[name]) {
+    const schemaOptions = getSchemaOptions(schema);
+    const customOptions = getCustomOptions(schema);
+
+    handleSetOnce(name, schemaOptions, customOptions);
+
+    Class = class extends Schema {
+      constructor () {
+        // lhs makes sure some info used by custom Validators
+        // won't be lost by stripping
+        super({[name]: schemaOptions, lhs: {}});
       }
+    };
 
-      const validateProps = new Set(['message', 'schema', 'use', 'required',
-        'type', 'length', 'enum', 'match', 'each', 'elements', 'path',
-        'typecast', 'validate']);
-      const knownOptions = new Set(['setOnce']);
+    Object.assign(Class, {schemaOptions, customOptions});
+  } else {
+    const schemaOptions = Object.keys(schema).reduce((schema, key) => {
+      const {schemaOptions, customOptions} = classImpl(key, schema);
 
-      const validateSchema = {};
-      const opts = {};
-      const subSchemas = {};
+      handleSetOnce(key, schemaOptions, customOptions);
+      schema[key] = schemaOptions;
 
-      Object.entries(schema).forEach(([key, value]) => {
-        if (validateProps.has(key)) {
-          validateSchema[key] = value;
-        } else if (knownOptions.has(key)) {
-          opts[key] = value;
-        } else {
-          subSchemas[key] = value;
-        }
-      });
+      return schema;
+    }, {});
+    const customOptions = getCustomOptions(schema);
 
-      const subs = Object.keys(subSchemas);
-      if (subs.length) {
-        const schema = {};
-
-        subs.forEach(name => {
-          schema[name] = classImpl(name, subSchemas[name]);
-        });
-
-        super(schema);
-      } else {
-        super({[name]: validateSchema});
+    Class = class extends Schema {
+      constructor () {
+        super(schemaOptions);
       }
+    };
 
-      Object.assign(this.opts, opts);
-    }
-  };
+    Object.assign(Class, {schemaOptions, customOptions});
+  }
 
   Validators.set(name, Class);
 

@@ -1,12 +1,14 @@
 import {Item} from './item';
 import properties from './properties';
-import validators from './validators';
+import validators, {modelValidators} from './validators';
+
+const modelValidator = modelValidators.byName['model'];
 
 export class Model extends Item {
-  constructor (item, {validator = {props: {}}} = {}) {
+  constructor (item, {validator = modelValidator} = {}) {
     super();
 
-    const props = new Set(Object.keys(validator.props));
+    const props = new Set(Object.keys(validator.constructor.schemaOptions));
 
     if (!props.has('_id')) {
       props.add('_id');
@@ -42,9 +44,23 @@ export class Model extends Item {
           return {...this};
         },
         set (item) {
-          for (let prop of this.props.values()) {
-            prop.item = item;
-          };
+          const literal = {...item};
+          const prevValue = this.item;
+          const errors = validator.validate(literal);
+
+          if (!errors.length) {
+            for (let prop of this.props.values()) {
+              if (Object.getOwnPropertyDescriptor(prop, 'item').writable !==
+                false) { // Must distinguish explicit false from undefined
+                // as most likely .item is a set() accessor
+                prop.item = literal;
+              }
+            };
+            this.emit('change:item', this, prevValue);
+          } else {
+            // console.log('model', errors.map(error => error.message), item);
+            this.emit('error:change:item', this, item, errors);
+          }
         },
       },
     });
