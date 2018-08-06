@@ -2,8 +2,8 @@
 
 import {expect} from 'chai';
 
-export const isAMap = Type => {
-  describe(`is a Map`, function () {
+export const isAProperMap = Type => {
+  describe(`is a proper Map`, function () {
     beforeEach(function () {
       const o1 = {title: 'a'};
       const o2 = {title: 'b'};
