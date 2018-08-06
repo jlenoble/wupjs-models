@@ -1,7 +1,6 @@
 import {Collection} from '../src';
-import {isAMap, isAProperItem} from './helpers';
+import {isAProperCollection} from './helpers';
 
 describe('class Collection', function () {
-  isAMap(Collection, []);
-  isAProperItem(Collection, []);
+  isAProperCollection(Collection, []);
 });
