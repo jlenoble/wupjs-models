@@ -6,12 +6,14 @@ import {Property} from '../../src';
 export const isSetOnce = ({Type, typeArgs, name, updates}) => {
   describe(`${name} is set once`, function () {
     it(`${name} provided to ctor`, function () {
-      updates.filter(([input, ok]) => input[name] !== undefined)
+      updates.filter(([input, ok]) => input[name] !== undefined && ok)
         .forEach(([input, ok]) => {
           const prop = new Type(...typeArgs);
           const value = prop instanceof Property ? 'value' : name;
 
           expect(() => (prop[value] = input[name])).to.throw();
+          expect(() => (prop[value] = typeArgs[0][name])).to.throw();
+          expect(() => (prop[value] = undefined)).to.throw();
           expect(prop[value]).to.equal(typeArgs[0][name]);
         });
     });
