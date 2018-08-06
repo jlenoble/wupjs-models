@@ -9,6 +9,10 @@ const makeName = method => function fn (name) {
 export const className = makeName('toUpperCase');
 export const instanceName = makeName('toLowerCase');
 
+export const collectionClassName = name => className(name) + 'Collection';
+export const reverseCollectionClassName = name => instanceName(
+  name.substring(0, name.length - 'Collection'.length));
+
 export const validatorClassName = name => className(name) + 'Validator';
 export const reverseValidatorClassName = name => instanceName(
   name.substring(0, name.length - 'Validator'.length));
