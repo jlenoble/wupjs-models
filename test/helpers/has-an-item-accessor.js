@@ -2,7 +2,7 @@
 
 import {expect} from 'chai';
 
-export const hasAnItemAccessor = ({Type, typeArgs, names}) => {
+export const hasAnItemAccessor = ({Type, typeArgs, names, updates}) => {
   describe(`has an item accessor`, function () {
     beforeEach(function () {
       this.context = (typeArgs[1] || {}).context;
@@ -25,10 +25,21 @@ export const hasAnItemAccessor = ({Type, typeArgs, names}) => {
     });
 
     it(`has an item setter`, function () {
-      const prop = new Type(...typeArgs);
-      expect(() => prop.item = {title: 'hello'}).not.to.throw();
-      expect(prop.item).to.eql(names.includes('title') ?
-        {...this.item, title: 'hello'} : this.item);
+      updates.forEach(([input, ok]) => {
+        const prop = new Type(...typeArgs);
+        const output = {...prop};
+
+        Object.keys(input).forEach(key => {
+          if (prop.props && prop.props.has(key)) {
+            if (input[key] !== undefined) {
+              output[key] = input[key];
+            }
+          }
+        });
+
+        expect(() => prop.item = {...input}).not.to.throw();
+        expect(prop.item).to.eql(output);
+      });
     });
   });
 };

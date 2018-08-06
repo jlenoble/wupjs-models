@@ -11,5 +11,11 @@ describe('class Property', function () {
       validator: new Schema({name: String}),
     }],
     name: 'name',
+    updates: [
+      [{name: 'Bert'}, true],
+      [{name: ''}, true],
+      [{name: 10}, false],
+      [{name: {}}, false],
+    ],
   });
 });

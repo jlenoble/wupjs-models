@@ -8,11 +8,18 @@ describe('class _Id', function () {
     Type: _Id,
     typeArgs: [{_id: 42}, {name: '_id', context: new Item(), validator}],
     name: '_id',
+    updates: [],
   });
 
   isSetOnce({
     Type: _Id,
     typeArgs: [{_id: 42}, {name: '_id', context: new Item(), validator}],
     name: '_id',
+    updates: [
+      [{_id: 'Bert'}, false],
+      [{_id: ''}, false],
+      [{_id: 10}, true],
+      [{_id: {}}, false],
+    ],
   });
 });

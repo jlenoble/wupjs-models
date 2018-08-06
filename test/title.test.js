@@ -8,5 +8,11 @@ describe('class Title', function () {
     Type: Title,
     typeArgs: [{title: 'foo'}, {name: 'title', context: new Item(), validator}],
     name: 'title',
+    updates: [
+      [{title: 'Bert'}, true],
+      [{title: ''}, false],
+      [{title: 10}, false],
+      [{title: {}}, false],
+    ],
   });
 });

@@ -5,6 +5,12 @@ describe('class Model', function () {
   isAProperModel({
     Type: Model,
     typeArgs: [{_id: 1}],
-    names: [],
+    names: ['title'],
+    updates: [
+      [{title: 'Bert'}, false],
+      [{title: ''}, false],
+      [{title: 10}, false],
+      [{title: {}}, false],
+    ],
   });
 });
