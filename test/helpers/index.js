@@ -1,4 +1,5 @@
 export * from './emits-on-property-change';
+export * from './has-a-collection-crud-api';
 export * from './has-an-item-accessor';
 export * from './hides-parent-properties';
 export * from './is-a-proper-collection';

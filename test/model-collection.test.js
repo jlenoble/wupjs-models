@@ -1,7 +1,6 @@
 import {Model} from '../src/models';
 import {ModelCollection} from '../src/collections';
-import {isAProperCollection} from './helpers';
-import {expect} from 'chai';
+import {isAProperCollection, hasACollectionCrudApi} from './helpers';
 
 describe('class ModelCollection', function () {
   isAProperCollection({
@@ -19,16 +18,24 @@ describe('class ModelCollection', function () {
     ],
   });
 
-  describe('has a Collection Crud Api', function () {
-    it('creates Models when not found', function () {
-      const col = new ModelCollection();
-      expect(col.get(1)).to.be.undefined;
-
-      col.set(1, {_id: 10});
-      const model = col.get(1);
-
-      expect(model).to.be.instanceof(Model);
-      expect(model._id).to.equal(1);
-    });
+  hasACollectionCrudApi({
+    Type: ModelCollection,
+    ElementType: Model,
+    typeArgs: [
+      [
+        [1, {_id: 1, title: 'a'}],
+        [2, {_id: 2, title: 'b'}],
+        [3, {_id: 3, title: 'c'}],
+      ],
+    ],
+    names: ['_id'],
+    setOnce: ['_id'],
+    updates: [
+      [1, {title: 'd', name: 'D'}],
+      [1, {_id: 10, title: 'e', name: 'E'}],
+      [4, {title: 'f', name: 'F'}],
+      [5, {_id: 50, title: 'g', name: 'G'}],
+      [6, {_id: 6, title: 'h', name: 'H'}],
+    ],
   });
 });
