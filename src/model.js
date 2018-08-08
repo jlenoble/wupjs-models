@@ -5,7 +5,7 @@ import validators, {modelValidators} from './validators';
 const modelValidator = modelValidators.byName['model'];
 
 export class Model extends Item {
-  constructor (item, {validator = modelValidator} = {}) {
+  constructor (item, {validator = modelValidator, context} = {}) {
     super();
 
     const props = new Set(Object.keys(validator.constructor.schemaOptions));
@@ -14,7 +14,15 @@ export class Model extends Item {
       props.add('_id');
     }
 
-    Object.defineProperty(this, 'props', {value: new Map()});
+    Object.defineProperties(this, {
+      props: {
+        value: new Map(),
+      },
+
+      context: {
+        value: context,
+      },
+    });
 
     props.forEach(name => {
       const Property = properties.byName[name];
