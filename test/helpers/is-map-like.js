@@ -2,7 +2,7 @@
 
 import {expect} from 'chai';
 
-export const isAProperMap = ({Type, typeArgs, names, updates}) => {
+export const isMapLike = ({Type, typeArgs, names, updates}) => {
   describe(`is a proper Map`, function () {
     beforeEach(function () {
       const input = typeArgs[0];
