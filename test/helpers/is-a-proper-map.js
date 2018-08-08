@@ -2,15 +2,29 @@
 
 import {expect} from 'chai';
 
-export const isAProperMap = Type => {
+export const isAProperMap = ({Type, typeArgs, names, updates}) => {
   describe(`is a proper Map`, function () {
     beforeEach(function () {
-      const o1 = {title: 'a'};
-      const o2 = {title: 'b'};
-      const o3 = {title: 'c'};
-      const map = new Type([[o1.title, o1], [o2.title, o2]]);
+      const input = typeArgs[0];
+      const map = new Type(...typeArgs);
 
-      Object.assign(this, {map, o1, o2, o3});
+      const keys = map => Array.from(map.keys());
+      const values = map => Array.from(map.values()).map(value => ({...value}));
+      const entries = map => Array.from(map.entries()).map(([key, value]) =>
+        [key, {...value}]);
+
+      const strip = value => {
+        const val = {};
+        names.forEach(name => val[name] = value[name]);
+        return val;
+      };
+
+      const outputKeys = input.map(([key, value]) => key);
+      const outputValues = input.map(([key, value]) => strip(value));
+      const outputEntries = outputKeys.map((key, i) => [key, outputValues[i]]);
+
+      Object.assign(this, {map, input, strip, keys, entries, values, outputKeys,
+        outputValues, outputEntries});
     });
 
     it(`ctor(), .size, .values()`, function () {
@@ -18,55 +32,66 @@ export const isAProperMap = Type => {
       expect(map0.size).to.equal(0);
       expect(Array.from(map0.values())).to.eql([]);
 
-      const {map, o1, o2} = this;
-      expect(map.size).to.equal(2);
-      expect(Array.from(map.values())).to.eql([o1, o2]);
+      const {map, values, outputValues} = this;
+      expect(map.size).to.equal(outputValues.length);
+      expect(values(map)).to.eql(outputValues);
     });
 
     it(`.keys()`, function () {
       const map0 = new Type();
       expect(Array.from(map0.keys())).to.eql([]);
 
-      const {map, o1, o2} = this;
-      expect(Array.from(map.keys())).to.eql([o1.title, o2.title]);
+      const {map, keys, outputKeys} = this;
+      expect(keys(map)).to.eql(outputKeys);
     });
 
     it(`.entries()`, function () {
       const map0 = new Type();
       expect(Array.from(map0.entries())).to.eql([]);
 
-      const {map, o1, o2} = this;
-      expect(Array.from(map.entries())).to.eql(
-        [[o1.title, o1], [o2.title, o2]]);
+      const {map, entries, outputEntries} = this;
+      expect(entries(map)).to.eql(outputEntries);
     });
 
     it(`.set()`, function () {
-      const {map, o1, o2, o3} = this;
-      expect(map.set(o1.title, o1)).to.equal(map);
-      expect(Array.from(map.values())).to.eql([o1, o2]);
+      const {map, values, outputKeys, outputValues, strip} = this;
+      expect(map.set(outputKeys[0], outputValues[0])).to.equal(map);
+      expect(values(map)).to.eql(outputValues);
 
-      expect(map.set(o2.title, o2).set(o3.title, o3)).to.equal(map);
-      expect(Array.from(map.values())).to.eql([o1, o2, o3]);
+      updates.forEach(([key, value]) => {
+        expect(map.set(outputKeys[1], outputValues[1])
+          .set(key, value)).to.equal(map);
+        outputValues.push(strip(value));
+        expect(values(map)).to.eql(outputValues);
+      });
     });
 
     it(`.delete()`, function () {
-      const {map, o1, o2, o3} = this;
-      expect(map.delete(o1.title)).to.be.true;
-      expect(map.delete(o2.title)).to.be.true;
-      expect(Array.from(map.values())).to.eql([]);
-      expect(map.delete(o3.title)).to.be.false;
+      const {map, keys, values} = this;
+      keys(map).forEach(key => {
+        expect(map.delete(key)).to.be.true;
+      });
+      expect(values(map)).to.eql([]);
+
+      updates.forEach(([key, value]) => {
+        expect(map.delete(key)).to.be.false;
+        expect(values(map)).to.eql([]);
+      });
     });
 
     it(`.has()`, function () {
-      const {map, o1, o3} = this;
-      expect(map.has(o1.title)).to.be.true;
-      expect(map.has(o3.title)).to.be.false;
+      const {map, keys} = this;
+      expect(map.has(keys(map)[0])).to.be.true;
+
+      updates.forEach(([key, value]) => {
+        expect(map.has(key)).to.be.false;
+      });
     });
 
     it(`.clear()`, function () {
-      const {map} = this;
+      const {map, values} = this;
       expect(map.clear()).to.be.undefined;
-      expect(Array.from(map.values())).to.eql([]);
+      expect(values(map)).to.eql([]);
     });
 
     it(`.forEach()`, function () {
@@ -77,8 +102,8 @@ export const isAProperMap = Type => {
       });
       expect(hasLooped).to.be.false;
 
-      const {map, o1, o2} = this;
-      const arr = [o1, o2];
+      const {map} = this;
+      const arr = Array.from(map.values());
       map.forEach((obj, key, mp) => {
         hasLooped = true;
         const o = arr.shift();
@@ -102,8 +127,8 @@ export const isAProperMap = Type => {
       }
       expect(hasLooped).to.be.false;
 
-      const {map, o1, o2} = this;
-      const arr = [o1, o2];
+      const {map} = this;
+      const arr = Array.from(map.values());
       const it = map[Symbol.iterator]();
       for (let [key, obj] of map) {
         hasLooped = true;

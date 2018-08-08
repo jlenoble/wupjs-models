@@ -2,9 +2,9 @@
 
 import {isAProperMap, isAProperItem} from '.';
 
-export const isAProperCollection = (Type, typeArgs = []) => {
+export const isAProperCollection = ({Type, typeArgs, names, updates}) => {
   describe('is a proper Collection', function () {
-    isAProperMap(Type, typeArgs);
+    isAProperMap({Type, typeArgs, names, updates});
     isAProperItem(Type, typeArgs);
   });
 };
