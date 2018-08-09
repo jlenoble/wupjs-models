@@ -25,7 +25,5 @@ export const makeEvents = (Model, name) => {
     });
   });
 
-  console.log(events);
-
   return events;
 };
