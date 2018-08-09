@@ -13,6 +13,7 @@ export class Property {
   constructor (item, {name, context, validator} = {}) {
     let value;
     const setOnce = !!validator.props[name].registry.setOnce;
+    const {request, error} = context.constructor.events.validate[name];
 
     const get = () => value;
     const set = v => {
@@ -21,10 +22,10 @@ export class Property {
       if (!errors.length) {
         const prevValue = value;
         value = v;
-        context.emit(`change:property:${name}`, this, prevValue);
+        context.emit(request, this, prevValue);
       } else {
         // console.log('property', errors.map(error => error.message), v);
-        context.emit(`error:change:property:${name}`, this, v, errors);
+        context.emit(error, this, v, errors);
       }
 
       return errors;

@@ -1,5 +1,5 @@
 import {Model} from '../model';
-import {className, makeClassFactory} from '../helpers';
+import {className, makeClassFactory, makeEvents} from '../helpers';
 
 const classImpl = (name, validator) => {
   const Class = class extends Model {
@@ -15,6 +15,7 @@ const classImpl = (name, validator) => {
   }
 
   Class.props = props;
+  Class.events = makeEvents(Class, name);
 
   return Class;
 };

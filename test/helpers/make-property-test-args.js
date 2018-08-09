@@ -5,7 +5,8 @@ export const makePropertyTestArgs = ({
 }) => {
   class Name extends Item {}
   Name.props = new Set([name]);
-  const {request, error} = makeEvents(Name, Name.name).validate[name];
+  Name.events = makeEvents(Name, Name.name);
+  const {request, error} = Name.events.validate[name];
 
   return {
     Type, name, requestEvent: request, errorEvent: error,

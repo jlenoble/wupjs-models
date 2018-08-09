@@ -9,12 +9,15 @@ export const isAProperModel = ({
     isAProperItem(Type, typeArgs);
 
     names.forEach(name => {
-      const requestEvent = `change:property:${name}`;
-      const errorEvent = `error:change:property:${name}`;
+      const {request, error} = Type.events.validate[name] || {};
+      const requestEvent = request;
+      const errorEvent = error;
 
-      emitsOnPropertyChange({Type, typeArgs, name, requestEvent, errorEvent,
-        updates: updateProperties.filter(([input, ok]) => input[name] !==
-          undefined)});
+      if (requestEvent) {
+        emitsOnPropertyChange({Type, typeArgs, name, requestEvent, errorEvent,
+          updates: updateProperties.filter(([input, ok]) => input[name] !==
+            undefined)});
+      }
     });
 
     const updates = updateProperties.concat(updateItem);

@@ -1,6 +1,7 @@
 import {Item} from './item';
 import properties from './properties';
 import validators, {modelValidators} from './validators';
+import {makeEvents} from './helpers';
 
 const modelValidator = modelValidators.byName['model'];
 
@@ -72,3 +73,4 @@ export class Model extends Item {
 }
 
 Model.props = new Set(['_id']);
+Model.events = makeEvents(Model, 'model');
