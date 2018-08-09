@@ -37,7 +37,7 @@ const handleSetOnce = (name, schemaOptions, customOptions) => {
     if (!schemaOptions.message) {
       schemaOptions.message = {};
     }
-    schemaOptions.message.setOnce = path => `${name} already set.`;
+    schemaOptions.message.setOnce = path => `${path} already set.`;
   }
 };
 
@@ -62,6 +62,10 @@ const classImpl = (name, schema) => {
         // won't be lost by stripping
         super({[name]: schemaOptions, lhs: {}});
       }
+
+      getOption (propName, optName) {
+        return !!this.props[propName].registry[optName];
+      }
     };
 
     Object.assign(Class, {schemaOptions, customOptions});
@@ -79,6 +83,10 @@ const classImpl = (name, schema) => {
     Class = class extends Schema {
       constructor () {
         super(schemaOptions);
+      }
+
+      getOption (name) {
+        return !!this.props[propName].registry[optName];
       }
     };
 

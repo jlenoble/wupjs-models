@@ -10,9 +10,9 @@ const lock = (name, value, ctx) => {
 };
 
 export class Property {
-  constructor (item, {name, context, validator, events} = {}) {
+  constructor (item, {name, context, validator, events, options = {}} = {}) {
     let value;
-    const setOnce = !!validator.props[name].registry.setOnce;
+    const setOnce = options.setOnce;//
     const {request, error} = events;
 
     const get = () => value;

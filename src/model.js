@@ -25,7 +25,10 @@ export class Model extends Item {
     Class.props.forEach(name => {
       const Property = properties.byName[name];
       const validator = validators.byName[name];
-      const prop = new Property(item, {context: this, validator,
+      const options = {
+        setOnce: validator.getOption(name, 'setOnce'),
+      };
+      const prop = new Property(item, {context: this, validator, options,
         events: validateEvents[name]});
 
       Object.defineProperty(this, name, {

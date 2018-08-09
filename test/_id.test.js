@@ -16,7 +16,7 @@ describe('class _Id', function () {
 
   isSetOnce({
     ...makePropertyTestArgs({
-      name, Item, Type, item: {[name]: 42}, validator,
+      name, Item, Type, item: {[name]: 42}, validator, setOnce: true,
     }),
 
     updates: [

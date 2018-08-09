@@ -1,7 +1,7 @@
 import {makeEvents} from '../../src/helpers';
 
 export const makePropertyTestArgs = ({
-  name, Item, Type, item, validator,
+  name, Item, Type, item, validator, setOnce,
 }) => {
   class Name extends Item {}
   Name.props = new Set([name]);
@@ -11,6 +11,6 @@ export const makePropertyTestArgs = ({
   return {
     Type, name, requestEvent: request, errorEvent: error,
     typeArgs: [item, {name, context: new Name(), validator, events: {
-      request, error}}],
+      request, error}, options: {setOnce}}],
   };
 };
