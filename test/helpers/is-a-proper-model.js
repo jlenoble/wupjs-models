@@ -9,7 +9,10 @@ export const isAProperModel = ({
     isAProperItem(Type, typeArgs);
 
     names.forEach(name => {
-      emitsOnPropertyChange({Type, typeArgs, name,
+      const requestEvent = `change:property:${name}`;
+      const errorEvent = `error:change:property:${name}`;
+
+      emitsOnPropertyChange({Type, typeArgs, name, requestEvent, errorEvent,
         updates: updateProperties.filter(([input, ok]) => input[name] !==
           undefined)});
     });

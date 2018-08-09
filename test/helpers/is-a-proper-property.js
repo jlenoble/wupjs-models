@@ -3,7 +3,8 @@
 import Schema from 'validate';
 import {isAProperItem, emitsOnPropertyChange} from '.';
 
-export const isAProperProperty = ({Type, typeArgs, name, updates}) => {
+export const isAProperProperty = ({Type, typeArgs, name, updates,
+  requestEvent, errorEvent}) => {
   describe('is a proper Property', function () {
     if (!typeArgs.length) {
       const validator = new Schema({[name]: String});
@@ -13,6 +14,7 @@ export const isAProperProperty = ({Type, typeArgs, name, updates}) => {
     }
 
     isAProperItem(Type, typeArgs);
-    emitsOnPropertyChange({Type, typeArgs, name, updates});
+    emitsOnPropertyChange({Type, typeArgs, name, updates,
+      requestEvent, errorEvent});
   });
 };

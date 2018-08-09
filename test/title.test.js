@@ -4,15 +4,19 @@ import {titleValidator as validator} from '../src/validators';
 import {isAProperProperty} from './helpers';
 
 describe('class Title', function () {
+  const name = 'title';
+  const requestEvent = `change:property:${name}`;
+  const errorEvent = `error:change:property:${name}`;
+
   isAProperProperty({
     Type: Title,
-    typeArgs: [{title: 'foo'}, {name: 'title', context: new Item(), validator}],
-    name: 'title',
+    typeArgs: [{[name]: 'foo'}, {name, context: new Item(), validator}],
+    name, requestEvent, errorEvent,
     updates: [
-      [{title: 'Bert'}, true],
-      [{title: ''}, false],
-      [{title: 10}, false],
-      [{title: {}}, false],
+      [{[name]: 'Bert'}, true],
+      [{[name]: ''}, false],
+      [{[name]: 10}, false],
+      [{[name]: {}}, false],
     ],
   });
 });

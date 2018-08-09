@@ -4,22 +4,26 @@ import {_idValidator as validator} from '../src/validators';
 import {isAProperProperty, isSetOnce} from './helpers';
 
 describe('class _Id', function () {
+  const name = '_id';
+  const requestEvent = `change:property:${name}`;
+  const errorEvent = `error:change:property:${name}`;
+
   isAProperProperty({
     Type: _Id,
-    typeArgs: [{_id: 42}, {name: '_id', context: new Item(), validator}],
-    name: '_id',
+    typeArgs: [{[name]: 42}, {name, context: new Item(), validator}],
+    name, requestEvent, errorEvent,
     updates: [],
   });
 
   isSetOnce({
     Type: _Id,
-    typeArgs: [{_id: 42}, {name: '_id', context: new Item(), validator}],
-    name: '_id',
+    typeArgs: [{[name]: 42}, {name, context: new Item(), validator}],
+    name,
     updates: [
-      [{_id: 'Bert'}, false],
-      [{_id: ''}, false],
-      [{_id: 10}, true],
-      [{_id: {}}, false],
+      [{[name]: 'Bert'}, false],
+      [{[name]: ''}, false],
+      [{[name]: 10}, true],
+      [{[name]: {}}, false],
     ],
   });
 });

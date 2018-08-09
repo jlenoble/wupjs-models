@@ -3,7 +3,8 @@
 import {expect} from 'chai';
 import {Property} from '../../src';
 
-export const emitsOnPropertyChange = ({Type, typeArgs, name, updates}) => {
+export const emitsOnPropertyChange = ({Type, typeArgs, name, updates,
+  requestEvent, errorEvent}) => {
   describe(`emits on change`, function () {
     beforeEach(function () {
       this.context = (typeArgs[1] || {}).context;
@@ -20,17 +21,17 @@ export const emitsOnPropertyChange = ({Type, typeArgs, name, updates}) => {
       const success = updates.filter(([input, ok]) => ok)
         .map(([input, ok]) => input);
 
-      expect(prop.listeners(`change:property:${name}`)).to.be.empty;
-      expect(prop.listeners(`error:change:property:${name}`)).to.be.empty;
+      expect(prop.listeners(requestEvent)).to.be.empty;
+      expect(prop.listeners(errorEvent)).to.be.empty;
 
-      prop.addListener(`change:property:${name}`, (ctx, prevValue) => {
+      prop.addListener(requestEvent, (ctx, prevValue) => {
         expect(ctx.value).to.equal(result);
         hasEmitted = true;
         result = undefined;
       });
 
-      expect(prop.listeners(`change:property:${name}`)).not.to.be.empty;
-      expect(prop.listeners(`error:change:property:${name}`)).to.be.empty;
+      expect(prop.listeners(requestEvent)).not.to.be.empty;
+      expect(prop.listeners(errorEvent)).to.be.empty;
 
       success.forEach(input => {
         prop[value] = result = input[name];
@@ -47,18 +48,18 @@ export const emitsOnPropertyChange = ({Type, typeArgs, name, updates}) => {
       const failure = updates.filter(([input, ok]) => !ok)
         .map(([input, ok]) => input);
 
-      expect(prop.listeners(`change:property:${name}`)).to.be.empty;
-      expect(prop.listeners(`error:change:property:${name}`)).to.be.empty;
+      expect(prop.listeners(requestEvent)).to.be.empty;
+      expect(prop.listeners(errorEvent)).to.be.empty;
 
-      prop.addListener(`error:change:property:${name}`,
+      prop.addListener(errorEvent,
         (ctx, v, errors) => {
           expect(errors).not.to.be.undefined;
           expect(errors[0]).to.be.instanceof(Error);
           hasEmitted = true;
         });
 
-      expect(prop.listeners(`change:property:${name}`)).to.be.empty;
-      expect(prop.listeners(`error:change:property:${name}`)).not.to.be.empty;
+      expect(prop.listeners(requestEvent)).to.be.empty;
+      expect(prop.listeners(errorEvent)).not.to.be.empty;
 
       failure.forEach(input => {
         prop[value] = input[name];
