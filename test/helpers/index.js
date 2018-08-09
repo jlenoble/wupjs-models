@@ -9,3 +9,4 @@ export * from './is-a-proper-property';
 export * from './is-an-event-emitter';
 export * from './is-map-like';
 export * from './is-set-once';
+export * from './make-property-test-args';

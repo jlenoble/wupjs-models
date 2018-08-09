@@ -1,26 +1,24 @@
 import {Item} from '../src';
-import {_Id} from '../src/properties';
+import {_Id as Type} from '../src/properties';
 import {_idValidator as validator} from '../src/validators';
-import {isAProperProperty, isSetOnce} from './helpers';
-import {makeEvents} from '../src/helpers';
+import {isAProperProperty, isSetOnce, makePropertyTestArgs} from './helpers';
 
 describe('class _Id', function () {
   const name = '_id';
-  class Name extends Item {}
-  Name.props = new Set([name]);
-  const {request, error} = makeEvents(Name, Name.name).validate[name];
 
   isAProperProperty({
-    Type: _Id,
-    typeArgs: [{[name]: 42}, {name, context: new Name(), validator}],
-    name, requestEvent: request, errorEvent: error,
+    ...makePropertyTestArgs({
+      name, Item, Type, item: {[name]: 42}, validator,
+    }),
+
     updates: [],
   });
 
   isSetOnce({
-    Type: _Id,
-    typeArgs: [{[name]: 42}, {name, context: new Name(), validator}],
-    name,
+    ...makePropertyTestArgs({
+      name, Item, Type, item: {[name]: 42}, validator,
+    }),
+
     updates: [
       [{[name]: 'Bert'}, false],
       [{[name]: ''}, false],
