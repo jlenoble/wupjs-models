@@ -8,12 +8,6 @@ export class Model extends Item {
   constructor (item, {validator = modelValidator, context} = {}) {
     super();
 
-    const props = new Set(Object.keys(validator.constructor.schemaOptions));
-
-    if (!props.has('_id')) {
-      props.add('_id');
-    }
-
     Object.defineProperties(this, {
       props: {
         value: new Map(),
@@ -24,7 +18,9 @@ export class Model extends Item {
       },
     });
 
-    props.forEach(name => {
+    const Class = this.constructor;
+
+    Class.props.forEach(name => {
       const Property = properties.byName[name];
       const validator = validators.byName[name];
       const prop = new Property(item, {context: this, validator});
@@ -74,3 +70,5 @@ export class Model extends Item {
     });
   }
 }
+
+Model.props = new Set(['_id']);
