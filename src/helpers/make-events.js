@@ -5,18 +5,16 @@ export const makeEvents = (Model, name) => {
   const events = {validate: {}};
   const props = Model.props;
 
+  // Property validation events
   props.forEach(prop => {
-    // const property =
-    events.validate[prop] = {
-      request: `change:property:${prop}`,
-      error: `error:change:property:${prop}`,
-    };
+    const property = events.validate[prop] = {};
 
-    // stages.forEach(stage => {
-    //   property[stage] = `${stage}:validate:${name}:${prop}`;
-    // });
+    stages.forEach(stage => {
+      property[stage] = `${stage}:validate:${name}:${prop}`;
+    });
   });
 
+  // Model CRUD events
   actions.forEach(action => {
     const eventAction = events[action] = {};
 
