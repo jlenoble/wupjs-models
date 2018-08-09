@@ -10,6 +10,7 @@ export const makePropertyTestArgs = ({
 
   return {
     Type, name, requestEvent: request, errorEvent: error,
-    typeArgs: [item, {name, context: new Name(), validator}],
+    typeArgs: [item, {name, context: new Name(), validator, events: {
+      request, error}}],
   };
 };

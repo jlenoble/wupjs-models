@@ -20,11 +20,13 @@ export class Model extends Item {
     });
 
     const Class = this.constructor;
+    const validateEvents = Class.events.validate;
 
     Class.props.forEach(name => {
       const Property = properties.byName[name];
       const validator = validators.byName[name];
-      const prop = new Property(item, {context: this, validator});
+      const prop = new Property(item, {context: this, validator,
+        events: validateEvents[name]});
 
       Object.defineProperty(this, name, {
         get () {
