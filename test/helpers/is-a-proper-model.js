@@ -2,7 +2,7 @@
 
 import {Item} from '../../src';
 import {isAProperItem, emitsOnPropertyChange, isSetOnce, hasAnItemAccessor,
-  emitsOnCreation} from '.';
+  emitsOnCreation, emitsOnDeletion} from '.';
 
 export const isAProperModel = ({
   Type, typeArgs, createNames, updateNames, updateProperties, createItem = [],
@@ -28,6 +28,13 @@ export const isAProperModel = ({
     hasAnItemAccessor({Type, typeArgs, names: updateNames, updates});
 
     emitsOnCreation({
+      Type,
+      options: typeArgs[1] || {context: new Item()},
+      names: createNames,
+      creates: createItem,
+    });
+
+    emitsOnDeletion({
       Type,
       options: typeArgs[1] || {context: new Item()},
       names: createNames,

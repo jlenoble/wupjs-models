@@ -8,10 +8,10 @@ describe('class Model', function () {
     createNames: ['_id'],
     updateNames: ['title'],
     createItem: [
-      [{title: 'Bert'}, true],
-      [{title: ''}, true],
-      [{title: 10}, true],
-      [{title: {}}, true],
+      [{_id: 1, title: 'Bert'}, true],
+      [{_id: 2, title: ''}, true],
+      [{_id: 3, title: 10}, true],
+      [{_id: 4, title: {}}, true],
     ],
     updateProperties: [
       [{title: 'Bert'}, false],

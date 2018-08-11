@@ -1,4 +1,5 @@
 export * from './emits-on-creation';
+export * from './emits-on-deletion';
 export * from './emits-on-property-change';
 export * from './has-a-collection-crud-api';
 export * from './has-an-item-accessor';

@@ -2,14 +2,14 @@
 
 import {expect} from 'chai';
 
-export const emitsOnCreation = ({Type, options, names, creates}) => {
-  describe(`emits on creation`, function () {
+export const emitsOnDeletion = ({Type, options, names, creates}) => {
+  describe(`emits on deletion`, function () {
     beforeEach(function () {
       this.context = options.context;
       this.opts = {...options};
     });
 
-    it(`emits on creation (proper init)`, function () {
+    it(`emits on deletion (proper init)`, function () {
       creates.forEach(([item, ok]) => {
         if (!ok) {
           return;
@@ -23,18 +23,19 @@ export const emitsOnCreation = ({Type, options, names, creates}) => {
         let hasEmitted = false;
 
         this.context.removeAllListeners();
-        this.context.on(Type.events.create.request, model => {
+        this.context.on(Type.events.delete.request, model => {
           expect(model.item).to.eql(this.item);
           hasEmitted = true;
         });
 
-        new Type(item, this.opts);
+        const model = new Type(item, this.opts);
+        model.delete();
 
         expect(hasEmitted).to.be.true;
       });
     });
 
-    it(`emits on creation (improper init)`, function () {
+    it(`emits on deletion (improper init)`, function () {
       creates.forEach(([item, ok]) => {
         if (ok) {
           return;
@@ -48,12 +49,13 @@ export const emitsOnCreation = ({Type, options, names, creates}) => {
         let hasEmitted = false;
 
         this.context.removeAllListeners();
-        this.context.on(Type.events.create.request, model => {
+        this.context.on(Type.events.delete.request, model => {
           expect(model.item).not.to.eql(this.item);
           hasEmitted = true;
         });
 
-        new Type(item, this.opts);
+        const model = new Type(item, this.opts);
+        model.delete();
 
         expect(hasEmitted).to.be.true;
       });
