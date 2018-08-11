@@ -7,6 +7,12 @@ describe('class Model', function () {
     typeArgs: [{_id: 1}],
     createNames: ['_id'],
     updateNames: ['title'],
+    createItem: [
+      [{title: 'Bert'}, true],
+      [{title: ''}, true],
+      [{title: 10}, true],
+      [{title: {}}, true],
+    ],
     updateProperties: [
       [{title: 'Bert'}, false],
       [{title: ''}, false],

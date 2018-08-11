@@ -1,10 +1,12 @@
 /* eslint-disable no-invalid-this */
 
-import {isAProperItem, emitsOnPropertyChange, isSetOnce, hasAnItemAccessor}
-  from '.';
+import {Item} from '../../src';
+import {isAProperItem, emitsOnPropertyChange, isSetOnce, hasAnItemAccessor,
+  emitsOnCreation} from '.';
 
 export const isAProperModel = ({
-  Type, typeArgs, updateNames, updateProperties, updateItem = []}) => {
+  Type, typeArgs, createNames, updateNames, updateProperties, createItem = [],
+  updateItem = []}) => {
   describe('is a proper Model', function () {
     isAProperItem(Type, typeArgs);
 
@@ -24,5 +26,12 @@ export const isAProperModel = ({
 
     isSetOnce({Type, typeArgs, name: '_id', updates});
     hasAnItemAccessor({Type, typeArgs, names: updateNames, updates});
+
+    emitsOnCreation({
+      Type,
+      options: typeArgs[1] || {context: new Item()},
+      names: createNames,
+      creates: createItem,
+    });
   });
 };
