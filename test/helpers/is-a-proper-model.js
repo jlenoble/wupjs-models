@@ -4,11 +4,11 @@ import {isAProperItem, emitsOnPropertyChange, isSetOnce, hasAnItemAccessor}
   from '.';
 
 export const isAProperModel = ({
-  Type, typeArgs, names, updateProperties, updateItem = []}) => {
+  Type, typeArgs, updateNames, updateProperties, updateItem = []}) => {
   describe('is a proper Model', function () {
     isAProperItem(Type, typeArgs);
 
-    names.forEach(name => {
+    updateNames.forEach(name => {
       const {request, error} = Type.events.validate[name] || {};
       const requestEvent = request;
       const errorEvent = error;
@@ -23,6 +23,6 @@ export const isAProperModel = ({
     const updates = updateProperties.concat(updateItem);
 
     isSetOnce({Type, typeArgs, name: '_id', updates});
-    hasAnItemAccessor({Type, typeArgs, names, updates});
+    hasAnItemAccessor({Type, typeArgs, names: updateNames, updates});
   });
 };

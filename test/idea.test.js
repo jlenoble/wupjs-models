@@ -5,7 +5,7 @@ describe('class Idea', function () {
   isAProperModel({
     Type: Idea,
     typeArgs: [{_id: 1, title: 'foo'}],
-    names: ['title', 'name'],
+    updateNames: ['title', 'name'],
     updateProperties: [
       [{title: 'Bert'}, true],
       [{title: ''}, false],

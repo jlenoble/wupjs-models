@@ -5,7 +5,8 @@ describe('class Model', function () {
   isAProperModel({
     Type: Model,
     typeArgs: [{_id: 1}],
-    names: ['title'],
+    createNames: ['_id'],
+    updateNames: ['title'],
     updateProperties: [
       [{title: 'Bert'}, false],
       [{title: ''}, false],
