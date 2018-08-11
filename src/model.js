@@ -55,7 +55,7 @@ export class Model extends Item {
         },
         set (item) {
           const literal = {...item};
-          const prevValue = this.item;
+          const prevItem = this.item;
           const errors = validator.validate(literal);
 
           if (!errors.length) {
@@ -66,14 +66,20 @@ export class Model extends Item {
                 prop.item = literal;
               }
             };
-            this.emit('change:item', this, prevValue);
+            this.emit(Class.events.update.request, this, prevItem);
           } else {
             // console.log('model', errors.map(error => error.message), item);
-            this.emit('error:change:item', this, item, errors);
+            this.emit(Class.events.update.error, this, item, errors);
           }
         },
       },
     });
+
+    this.emit(Class.events.create.request, this);
+  }
+
+  delete () {
+    this.emit(this.constructor.events.delete.request, this);
   }
 }
 
