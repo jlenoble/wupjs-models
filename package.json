@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/jlenoble/wupjs-models#readme",
   "dependencies": {
+    "terminal-kit": "^1.26.1",
     "validate": "^4.4.1",
     "validator": "^10.5.0"
   },
