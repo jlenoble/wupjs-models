@@ -1,4 +1,4 @@
-import {makeCollection} from './factories';
+import {makeCollection} from './factories/make-collection';
 import models from './models';
 import {makeDefaultExport, instanceName} from './helpers';
 

@@ -1,4 +1,4 @@
-import {makeProperty} from './factories';
+import {makeProperty} from './factories/make-property';
 import {propertyValidators as validators} from './validators';
 import {makeDefaultExport, instanceName} from './helpers';
 

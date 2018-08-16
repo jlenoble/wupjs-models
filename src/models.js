@@ -1,4 +1,4 @@
-import {makeModel} from './factories';
+import {makeModel} from './factories/make-model';
 import {modelValidators as validators} from './validators';
 import {makeDefaultExport, instanceName} from './helpers';
 
