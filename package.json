@@ -25,9 +25,7 @@
   },
   "homepage": "https://github.com/jlenoble/wupjs-models#readme",
   "dependencies": {
-    "terminal-kit": "^1.26.1",
-    "validate": "^4.4.1",
-    "validator": "^10.5.0"
+    "validate": "^4.4.1"
   },
   "devDependencies": {
     "autoreload-gulp": "*",
@@ -48,7 +46,8 @@
     "gulp-wrap": "*",
     "markdown-include": "*",
     "node-localstorage": "^1.3.1",
-    "plumb-gulp": "*"
+    "plumb-gulp": "*",
+    "terminal-kit": "^1.26.2"
   },
   "peerDependencies": {}
 }
