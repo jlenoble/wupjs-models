@@ -16,59 +16,104 @@ export class UI {
     });
   }
 
-  exit (code) {
-    setTimeout(() => {
-      this.term.processExit(code);
-    });
+  async menu () {
+    this.term.fullscreen();
+    this.term.saveCursor();
+    return this._menu();
   }
 
-  create () {
-    this.term.fullscreen();
+  async _menu () {
+    const items = ['Create', 'Read', 'Update', 'Delete', 'Exit'];
 
-    this.term.bold.cyan('Type anything on the keyboard...\n');
-    this.term.moveTo(1, 5);
-    this.term.saveCursor();
-    this.term.moveTo(1, 3);
-    this.term('>');
-    this.term.moveTo(3, 3);
-
-    const create = () => {
-      return this.term.inputField({cancelable: true}).promise.then(input => {
-        if (!input) {
-          this.term.restoreCursor();
-          return this.exit();
-        }
-
-        const uuid = uuidv5(new Date().toISOString(), WUP_NAMESPACE);
-
-        this.term.restoreCursor();
-        console.log(input);
-        this.term.saveCursor();
-
-        this.term.moveTo(3, 3);
-        this.term.eraseLineAfter();
-
-        this.storage.setItem(uuid, input);
-
-        return create();
-      }, err => {
-        if (err) {
-          console.log(err.message);
-        }
-        this.exit();
-      }).catch(err => {
-        if (err) {
-          console.log(err.message);
-        }
-        this.exit();
-      });
+    const options = {
+      y: 1, // the menu will be on the top of the terminal
+      style: this.term.inverse,
+      selectedStyle: this.term.dim.blue.bgGreen,
     };
 
-    return create();
+    try {
+      const response = await this.term.singleLineMenu(items, options).promise;
+
+      switch (response.selectedText) {
+      case 'Create':
+        return this.create();
+
+      case 'Read':
+        return this.read();
+
+      case 'Update':
+        return this.update();
+
+      case 'Delete':
+        return this.delete();
+
+      case 'Exit': default:
+        return this.exit('Exiting...');
+      }
+    } catch (error) {
+      this.exit(error);
+    }
   }
 
-  read () {
-    this.term.fullscreen();
+  async exit (error) {
+    this.term.restoreCursor();
+
+    if (error instanceof Error) {
+      this.term.nextLine().red(error);
+    } else {
+      this.term.nextLine().cyan('Exiting...');
+    }
+
+    this.term.processExit();
+  }
+
+  async create () {
+    try {
+      // Creation header
+      this.term.fullscreen();
+
+      this.term.bold.cyan('Type anything on the keyboard\n');
+      this.term.bold.green('Press ESC to return to menu\n');
+      this.term.moveTo(1, 6);
+      this.term.saveCursor();
+      this.term.moveTo(1, 4);
+      this.term('>');
+      this.term.moveTo(3, 4);
+
+      // Creation loop
+      return this._create();
+    } catch (error) {
+      this.exit(error);
+    }
+  }
+
+  async _create () {
+    try {
+      const input = await this.term.inputField({cancelable: true}).promise;
+
+      if (!input) {
+        return this.menu();
+      }
+
+      const uuid = uuidv5(new Date().toISOString(), WUP_NAMESPACE);
+
+      this.term.restoreCursor();
+      console.log(input);
+      this.term.saveCursor();
+
+      this.term.moveTo(3, 4);
+      this.term.eraseLineAfter();
+
+      this.storage.setItem(uuid, input);
+
+      return this._create();
+    } catch (error) {
+      this.exit(error);
+    }
+  }
+
+  async read () {
+    this.term.nextLine();
 
     const len = this.storage.length;
 
@@ -76,7 +121,7 @@ export class UI {
       this.term.bold.cyan('Reading all items\n\n');
     } else {
       this.term.bold.cyan('Empty storage\n');
-      return;
+      return this._menu();
     }
 
     for (let i = 0; i < len; i++) {
@@ -84,64 +129,34 @@ export class UI {
       console.log(this.storage.getItem(key));
     }
 
-    this.exit();
+    this.term.saveCursor();
+
+    return this._menu();
   }
 
-  update () {
-    const read = () => {
-      const items = {};
-      const len = this.storage.length;
+  async _read () {
+    const len = this.storage.length;
+    const map = {};
 
-      for (let i = 0; i < len; i++) {
-        const key = this.storage.key(i);
-        items[key] = this.storage.getItem(key);
-      }
+    for (let i = 0; i < len; i++) {
+      const key = this.storage.key(i);
+      map[key] = this.storage.getItem(key);
+    }
 
-      return items;
-    };
+    return map;
+  }
 
-    const map = read();
+  async update () {
+    const map = await this._read();
     const keys = Object.keys(map);
     const items = Object.values(map);
     let selectedIndex = 0;
-    let selectedText = '';
 
-    const selectItem = () => {
-      this.term.fullscreen();
+    return this._select(keys, items, selectedIndex);
+  }
 
-      if (!keys.length) {
-        this.term.bold.cyan('Nothing to update\n');
-        return this.exit();
-      } else {
-        this.term.bold.cyan('Select an item to update\n');
-      }
-
-      return this.term.singleColumnMenu(items, {
-        selectedIndex,
-        exitOnUnexpectedKey: true,
-      }).promise.then(response => {
-        if (response.selectedIndex === undefined) {
-          return this.exit();
-        }
-
-        selectedIndex = response.selectedIndex;
-        selectedText = response.selectedText;
-
-        return updateItem();
-      }, err => {
-        if (err) {
-          console.log(err.message);
-        }
-        this.exit();
-      }).catch(err => {
-        if (err) {
-          console.log(err.message);
-        }
-        this.exit();
-      });
-    };
-
-    const updateItem = () => {
+  async _update (keys, items, selectedIndex, selectedText) {
+    try {
       this.term.fullscreen();
       this.term.bold.cyan('Editing\n');
 
@@ -149,100 +164,102 @@ export class UI {
       this.term('>');
       this.term.moveTo(3, 3);
 
-      return this.term.inputField({
+      const input = await this.term.inputField({
         cancelable: true,
         default: selectedText,
-      }).promise.then(input => {
-        if (!input) {
-          return this.exit();
-        }
+      }).promise;
 
-        const key = keys[selectedIndex];
-        this.storage.setItem(key, input);
-        items[selectedIndex] = input;
-
-        return selectItem();
-      }, err => {
-        if (err) {
-          console.log(err.message);
-        }
-        this.exit();
-      }).catch(err => {
-        if (err) {
-          console.log(err.message);
-        }
-        this.exit();
-      });
-    };
-
-    selectItem();
-  }
-
-  delete () {
-    const read = () => {
-      const items = {};
-      const len = this.storage.length;
-
-      for (let i = 0; i < len; i++) {
-        const key = this.storage.key(i);
-        items[key] = this.storage.getItem(key);
+      if (!input) {
+        return this.menu();
       }
 
-      return items;
-    };
+      const key = keys[selectedIndex];
+      this.storage.setItem(key, input);
+      items[selectedIndex] = input; // eslint-disable-line no-param-reassign
 
-    const map = read();
+      return this._select(keys, items, selectedIndex);
+    } catch (error) {
+      this.exit(error);
+    }
+  }
+
+  async delete () {
+    const map = await this._read();
     const keys = Object.keys(map);
     const items = Object.values(map);
     let selectedIndex = 0;
 
-    const deleteItem = () => {
+    return this._delete(keys, items, selectedIndex);
+  }
+
+  async _delete (keys, items, selectedIndex) {
+    try {
       this.term.fullscreen();
 
       if (!keys.length) {
-        this.term.bold.cyan('Nothing left to delete\n');
-        return terminate();
+        this.term.bold.cyan('\nNothing left to delete');
+        this.term.saveCursor();
+        return this._menu();
       } else {
         this.term.bold.cyan('Select an item to delete\n');
+        this.term.bold.green('Press ESC to return to menu\n');
       }
 
-      return this.term.singleColumnMenu(items, {
+      const response = await this.term.singleColumnMenu(items, {
         selectedIndex,
         exitOnUnexpectedKey: true,
-      }).promise.then(response => {
-        if (response.selectedIndex === undefined) {
-          return this.exit();
-        }
+      }).promise;
 
-        selectedIndex = response.selectedIndex;
+      if (response.selectedIndex === undefined) {
+        return this.menu();
+      }
 
-        const key = keys[selectedIndex];
-        this.storage.removeItem(key);
+      let _selectedIndex = response.selectedIndex;
 
-        keys.splice(selectedIndex, 1);
-        items.splice(selectedIndex, 1);
+      const key = keys[_selectedIndex];
+      this.storage.removeItem(key);
 
-        if (selectedIndex >= keys.length) {
-          selectedIndex = keys.length - 1;
-        }
+      keys.splice(_selectedIndex, 1);
+      items.splice(_selectedIndex, 1);
 
-        return deleteItem();
-      }, err => {
-        if (err) {
-          console.log(err.message);
-        }
-        this.exit();
-      }).catch(err => {
-        if (err) {
-          console.log(err.message);
-        }
-        this.exit();
-      });
-    };
+      if (_selectedIndex >= keys.length) {
+        _selectedIndex = keys.length - 1;
+      }
 
-    deleteItem();
+      return this._delete(keys, items, _selectedIndex);
+    } catch (error) {
+      this.exit(error);
+    }
+  }
+
+  async _select (keys, items, selectedIndex) {
+    try {
+      this.term.fullscreen();
+
+      if (!keys.length) {
+        this.term.bold.cyan('\nNothing to update');
+        return this._menu();
+      } else {
+        this.term.bold.cyan('Select an item to update and press ENTER\n');
+        this.term.bold.green('Press ESC to return to menu\n');
+      }
+
+      const response = await this.term.singleColumnMenu(items, {
+        selectedIndex,
+        exitOnUnexpectedKey: true,
+      }).promise;
+
+      if (response.selectedIndex === undefined) {
+        return this.menu();
+      }
+
+      return this._update(keys, items, response.selectedIndex,
+        response.selectedText);
+    } catch (error) {
+      this.exit(error);
+    }
   }
 }
 
 const ui = new UI();
-ui.delete();
+ui.menu();
