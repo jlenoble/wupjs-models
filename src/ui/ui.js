@@ -14,6 +14,20 @@ export class UI {
         value: terminal,
       },
     });
+
+    const uuid = uuidv5('ideas', WUP_NAMESPACE);
+    let items = JSON.parse(this.storage.getItem(uuid));
+
+    if (!items) {
+      items = [];
+      this.storage.setItem(uuid, JSON.stringify(items));
+    }
+
+    Object.defineProperties(this, {
+      items: {
+        value: items,
+      },
+    });
   }
 
   async menu () {
@@ -61,7 +75,7 @@ export class UI {
     if (error instanceof Error) {
       this.term.nextLine().red(error);
     } else {
-      this.term.nextLine().cyan('Exiting...');
+      this.term.nextLine().cyan('Exiting...').eraseLineAfter();
     }
 
     this.term.processExit();
@@ -105,6 +119,9 @@ export class UI {
       this.term.eraseLineAfter();
 
       this.storage.setItem(uuid, input);
+      this.items.push(uuid);
+      this.storage.setItem(uuidv5('ideas', WUP_NAMESPACE),
+        JSON.stringify(this.items));
 
       return this._create();
     } catch (error) {
@@ -115,7 +132,7 @@ export class UI {
   async read () {
     this.term.nextLine();
 
-    const len = this.storage.length;
+    const len = this.items.length;
 
     if (len) {
       this.term.bold.cyan('Reading all items\n\n');
@@ -125,7 +142,7 @@ export class UI {
     }
 
     for (let i = 0; i < len; i++) {
-      const key = this.storage.key(i);
+      const key = this.items[i];
       console.log(this.storage.getItem(key));
     }
 
@@ -135,11 +152,11 @@ export class UI {
   }
 
   async _read () {
-    const len = this.storage.length;
+    const len = this.items.length;
     const map = {};
 
     for (let i = 0; i < len; i++) {
-      const key = this.storage.key(i);
+      const key = this.items[i];
       map[key] = this.storage.getItem(key);
     }
 
@@ -221,6 +238,9 @@ export class UI {
 
       keys.splice(_selectedIndex, 1);
       items.splice(_selectedIndex, 1);
+      this.items.splice(_selectedIndex, 1);
+      this.storage.setItem(uuidv5('ideas', WUP_NAMESPACE),
+        JSON.stringify(this.items));
 
       if (_selectedIndex >= keys.length) {
         _selectedIndex = keys.length - 1;
