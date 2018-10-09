@@ -3,7 +3,7 @@ import mocha from 'gulp-mocha';
 import './build';
 
 const testGlob = [
-  'build/test/**/*.test.js'
+  'build/**/*.test.js',
 ];
 
 export const test = () => {
