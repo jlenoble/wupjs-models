@@ -41,7 +41,7 @@ export const examples = () => {
   .pipe(replace(/describe.*\n  it.*\n    /, ''))
   .pipe(replace(/\n  }\);\n}\);\n/, '\n'))
   .pipe(replace(/\n    /g, '\n'))
-  .pipe(replace(/\.\.\/\.\.\/src\//g, ''))
+  .pipe(replace(/\.\.\/\.\.\/src/gm, 'wupjs-models'))
   .pipe(replace(/import \{expect\} from 'chai';\n/g, ''))
   .pipe(replace(/expect\((.*)\).to.equal\((.*)\)/gm, '$1 === $2'))
   .pipe(replace(/expect\((.*)\).not.to.equal\((.*)\)/gm, '$1 !== $2'))
