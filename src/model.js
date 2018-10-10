@@ -1,7 +1,7 @@
 import {Item} from './item';
 import properties from './properties';
 import validators, {modelValidators} from './validators';
-import {makeEvents} from './helpers';
+import {makeEvents} from './helpers/make-events';
 
 const modelValidator = modelValidators.byName['model'];
 

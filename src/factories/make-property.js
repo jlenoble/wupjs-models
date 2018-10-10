@@ -1,5 +1,6 @@
 import {Property} from '../property';
-import {className, makeClassFactory} from '../helpers';
+import {className} from '../helpers/make-name';
+import {makeClassFactory} from '../helpers/make-class-factory';
 
 const classImpl = (name, validator) => class extends Property {
   constructor (item, {context, events, options} = {}) {

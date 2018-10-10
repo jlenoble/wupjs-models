@@ -1,5 +1,6 @@
 import {Collection} from '../collection';
-import {collectionClassName, makeClassFactory} from '../helpers';
+import {collectionClassName} from '../helpers/make-name';
+import {makeClassFactory} from '../helpers/make-class-factory';
 
 const classImpl = (name, Model) => {
   const Class = class extends Collection {

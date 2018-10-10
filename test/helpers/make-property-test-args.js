@@ -1,4 +1,4 @@
-import {makeEvents} from '../../src/helpers';
+import {makeEvents} from '../../src/helpers/make-events';
 
 export const makePropertyTestArgs = ({
   name, Item, Type, item, validator, setOnce,

@@ -2,7 +2,8 @@
 
 import Schema from 'validate';
 import {propertySchemas} from '../schemas';
-import {validatorClassName, makeClassFactory} from '../helpers';
+import {validatorClassName} from '../helpers/make-name';
+import {makeClassFactory} from '../helpers/make-class-factory';
 
 const schemaOptionKeys = ['message', 'schema', 'use', 'required',
   'type', 'length', 'enum', 'match', 'each', 'elements', 'path',

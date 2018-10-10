@@ -1,5 +1,7 @@
 import {Model} from '../model';
-import {className, makeClassFactory, makeEvents} from '../helpers';
+import {className} from '../helpers/make-name';
+import {makeClassFactory} from '../helpers/make-class-factory';
+import {makeEvents} from '../helpers/make-events';
 
 const classImpl = (name, validator) => {
   const Class = class extends Model {

@@ -1,4 +1,4 @@
-import {aggregation} from './helpers';
+import aggregation from './helpers/aggregation';
 import {Item} from './item';
 import {Model as Class} from './model';
 
