@@ -1,11 +1,4 @@
-import {makeModel} from './factories/make-model';
-import {modelValidators as validators} from './validators';
-import {makeDefaultExport, instanceName} from './helpers';
+import {modelValidators} from './validators';
+import {makeModels} from './helpers/make-models';
 
-export default makeDefaultExport(
-  validators.byName,
-  makeModel,
-  Class => Class.name,
-  Class => Class,
-  instanceName
-);
+export default makeModels(modelValidators);

@@ -1,15 +1,5 @@
 import {propertySchemas, modelSchemas, addSchemas} from './schemas';
-import {makeDefaultExport, instanceName, reverseValidatorClassName}
-  from './helpers';
-import {makeValidator} from './factories/make-validator';
-
-const makeValidators = schemas => makeDefaultExport(
-  schemas,
-  makeValidator,
-  Class => instanceName(Class.name),
-  Class => new Class(),
-  reverseValidatorClassName
-);
+import {makeValidators} from './helpers/make-validators';
 
 // Must be created first, because of caching in makeValidator
 const propertyValidators = makeValidators(propertySchemas);
