@@ -1,26 +1,22 @@
-import {propertySchemas, modelSchemas} from './schemas';
+import {propertySchemas, modelSchemas, addSchemas} from './schemas';
 import {makeDefaultExport, instanceName, reverseValidatorClassName}
   from './helpers';
 import {makeValidator} from './factories/make-validator';
 
-// Must be created first, because of caching in makeValidator
-const propertyValidators = makeDefaultExport(
-  propertySchemas,
+const makeValidators = schemas => makeDefaultExport(
+  schemas,
   makeValidator,
   Class => instanceName(Class.name),
   Class => new Class(),
   reverseValidatorClassName
 );
 
+// Must be created first, because of caching in makeValidator
+const propertyValidators = makeValidators(propertySchemas);
+
 // Must be created after propertyValidators is created, because of caching
 // in makeValidator
-const modelValidators = makeDefaultExport(
-  modelSchemas,
-  makeValidator,
-  Class => instanceName(Class.name),
-  Class => new Class(),
-  reverseValidatorClassName
-);
+const modelValidators = makeValidators(modelSchemas);
 
 [propertyValidators, modelValidators].forEach(validators => {
   Object.defineProperty(validators, 'byName', {enumerable: false});
@@ -29,7 +25,17 @@ const modelValidators = makeDefaultExport(
 });
 
 const validators = {...propertyValidators, ...modelValidators};
-validators.byName = {...propertyValidators.byName, ...modelValidators.byName};
+Object.defineProperty(validators, 'byName', {value: {
+  ...propertyValidators.byName, ...modelValidators.byName,
+}});
 
 export default validators;
 export {propertyValidators, modelValidators};
+
+export const addValidators = schemas => {
+  addSchemas(schemas); // Must be set first or makeValidators will ignore them
+  const vals = makeValidators(schemas);
+  Object.assign(validators, vals);
+  Object.assign(validators.byName, vals.byName);
+  return vals;
+};
