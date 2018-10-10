@@ -5,11 +5,13 @@ import {test} from './test';
 const allSrcGlob = [
   'src/**/*.js',
   'test/**/*.js',
-  '!src/static/antlr4/parsers/**/*.js'
+  'docs/**/*.js',
+  '!src/static/antlr4/parsers/**/*.js',
 ];
 const allBuildGlob = [
   'build/src/**/*.js',
-  'build/test/**/*.js'
+  'build/test/**/*.js',
+  'build/docs/**/*.js',
 ];
 
 export const watch = done => {
