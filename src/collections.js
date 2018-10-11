@@ -1,3 +1,4 @@
+import EventEmitter from 'events';
 import {Collection} from './collection';
 import models from './models';
 import {makeDefaultExport} from './helpers/make-default-export';
@@ -26,4 +27,17 @@ const makeCollections = models => makeDefaultExport(
   instanceName
 );
 
-export default makeCollections(models);
+class Collections extends EventEmitter {
+  constructor (_models = models) {
+    super();
+
+    Object.defineProperty(this, 'byName', {value: {}});
+
+    const collections = makeCollections(_models);
+
+    Object.assign(this, collections);
+    Object.assign(this.byName, collections.byName);
+  }
+}
+
+export default new Collections();
