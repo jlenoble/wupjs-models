@@ -1,3 +1,5 @@
+import EventEmitter from 'events';
+
 import {_id} from './_id';
 import {idea} from './idea';
 import {model} from './model';
@@ -5,30 +7,75 @@ import {title} from './title';
 
 const schemas = {_id, idea, model, title};
 
-const propertySchemas = {};
-const modelSchemas = {};
+class Schemas extends EventEmitter {
+  constructor (schemas) {
+    super();
 
-const addSchema = ([name, schema]) => {
-  if (propertySchemas[name] || modelSchemas[name]) {
-    console.warn(`Adding already defined schemas is forbidden.
-To redefine schema '${name}', call redefineSchema('${name}', schema)`);
-    return; // Don't overwrite implicitly
+    Object.defineProperties(this, {
+      propertySchemas: {
+        value: {},
+        enumerable: true,
+      },
+
+      modelSchemas: {
+        value: {},
+        enumerable: true,
+      },
+    });
+
+    this.add(schemas);
   }
 
-  const type = schema.type ? schema.type : schema;
-
-  switch (type) {
-  case String: case Number:
-    propertySchemas[name] = schema.type ? schema : {type};
-    break;
-
-  default:
-    modelSchemas[name] = schema;
+  has (name) {
+    return !!(this.propertySchemas[name] || this.modelSchemas[name]);
   }
-};
 
-export const addSchemas = schemas => Object.entries(schemas).forEach(addSchema);
+  hasPropertySchema (name) {
+    return !!this.propertySchemas[name];
+  }
 
-addSchemas(schemas);
+  hasModelSchema (name) {
+    return !!this.modelSchemas[name];
+  }
 
-export {propertySchemas, modelSchemas};
+  addSingle (name, schema) {
+    if (this.has(name)) {
+      console.warn('To redefine a schema, call schemas.reset(schemas) or ' +
+        'schemas.resetSingle(name, schema)');
+      return;
+    }
+
+    this._setSingle(name, schema);
+    this.emit('add:schema', this, name);
+  }
+
+  resetSingle (name, schema) {
+    this._setSingle(name, schema);
+    this.emit('reset:schema', this, name);
+  }
+
+  add (schemas) {
+    Object.entries(schemas).forEach(([name, schema]) => this.addSingle(name,
+      schema));
+  }
+
+  reset (schemas) {
+    Object.entries(schemas).forEach(([name, schema]) => this.resetSingle(name,
+      schema));
+  }
+
+  _setSingle (name, schema) {
+    const type = schema.type ? schema.type : schema;
+
+    switch (type) {
+    case String: case Number:
+      this.propertySchemas[name] = schema.type ? schema : {type};
+      break;
+
+    default:
+      this.modelSchemas[name] = schema;
+    }
+  }
+}
+
+export default new Schemas(schemas);
