@@ -46,4 +46,41 @@ describe(`Schemas`, function () {
     expect(muter.getLogs()).to.match(
       /To redefine the schema for 'age', call schemas.reset/);
   }));
+
+  it(`Redefining a schema`, muted(muter, function () {
+    const schemas = new Schemas(defaultSchemas);
+
+    const title = {type: String, length: {min: 3}};
+    const age = Number;
+    const city = String;
+    const person = {title, age, city};
+
+    expect(schemas.has('title')).to.be.true;
+    expect(schemas.has('age')).to.be.false;
+    expect(schemas.has('city')).to.be.false;
+    expect(schemas.has('person')).to.be.false;
+    expect(muter.getLogs()).to.equal('');
+
+    // May be redefined one by one
+    schemas.resetSingle('title', title);
+
+    expect(schemas.has('title')).to.be.true;
+    expect(schemas.has('age')).to.be.false;
+    expect(schemas.has('city')).to.be.false;
+    expect(schemas.has('person')).to.be.false;
+    expect(muter.getLogs()).to.equal('');
+
+    // May be redefined all in one go
+    schemas.reset({age, city, person});
+
+    expect(schemas.has('title')).to.be.true;
+    expect(schemas.has('age')).to.be.true;
+    expect(schemas.has('city')).to.be.true;
+    expect(schemas.has('person')).to.be.true;
+    expect(muter.getLogs()).to.equal('');
+
+    // Can be redefined more than once
+    schemas.reset({person, age});
+    expect(muter.getLogs()).to.equal('');
+  }));
 });
