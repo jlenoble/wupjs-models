@@ -45,64 +45,6 @@ const handleSetOnce = (name, schemaOptions, customOptions) => {
 
 const validators = new Map();
 
-const classImpl = (name, schema) => {
-  if (validators.has(name)) {
-    return validators.get(name);
-  }
-
-  let Class;
-
-  if (propertySchemas[name]) {
-    const schemaOptions = getSchemaOptions(schema);
-    const customOptions = getCustomOptions(schema);
-
-    handleSetOnce(name, schemaOptions, customOptions);
-
-    Class = class extends Schema {
-      constructor () {
-        // lhs makes sure some info used by custom Validators
-        // won't be lost by stripping
-        super({[name]: schemaOptions, lhs: {}});
-      }
-
-      getOption (propName, optName) {
-        return !!this.props[propName].registry[optName];
-      }
-    };
-
-    Object.assign(Class, {schemaOptions, customOptions});
-  } else {
-    const schemaOptions = Object.keys(schema).reduce((schema, key) => {
-      const {schemaOptions, customOptions} = classImpl(key, schema);
-
-      handleSetOnce(key, schemaOptions, customOptions);
-      schema[key] = schemaOptions;
-
-      return schema;
-    }, {});
-    const customOptions = getCustomOptions(schema);
-
-    Class = class extends Schema {
-      constructor () {
-        super(schemaOptions);
-      }
-
-      getOption (name) {
-        return !!this.props[propName].registry[optName];
-      }
-    };
-
-    Object.assign(Class, {schemaOptions, customOptions});
-  }
-
-  validators.set(name, Class);
-
-  return Class;
-};
-
-const makeValidator = (name, schema) => new (makeClassFactory(
-  validatorClassName, classImpl)(name, schema))();
-
 class Validators extends EventEmitter {
   constructor () {
     super();
@@ -184,7 +126,63 @@ class Validators extends EventEmitter {
   }
 
   _makeValidator (name, schema) {
-    return makeValidator([name, schema]);
+    return new (makeClassFactory(
+      validatorClassName, this._classImpl.bind(this))([name, schema]))();
+  }
+
+  _classImpl (name, schema) {
+    if (validators.has(name)) {
+      return validators.get(name);
+    }
+
+    let Class;
+
+    if (propertySchemas[name]) {
+      const schemaOptions = getSchemaOptions(schema);
+      const customOptions = getCustomOptions(schema);
+
+      handleSetOnce(name, schemaOptions, customOptions);
+
+      Class = class extends Schema {
+        constructor () {
+          // lhs makes sure some info used by custom Validators
+          // won't be lost by stripping
+          super({[name]: schemaOptions, lhs: {}});
+        }
+
+        getOption (propName, optName) {
+          return !!this.props[propName].registry[optName];
+        }
+      };
+
+      Object.assign(Class, {schemaOptions, customOptions});
+    } else {
+      const schemaOptions = Object.keys(schema).reduce((schema, key) => {
+        const {schemaOptions, customOptions} = this._classImpl(key, schema);
+
+        handleSetOnce(key, schemaOptions, customOptions);
+        schema[key] = schemaOptions;
+
+        return schema;
+      }, {});
+      const customOptions = getCustomOptions(schema);
+
+      Class = class extends Schema {
+        constructor () {
+          super(schemaOptions);
+        }
+
+        getOption (name) {
+          return !!this.props[propName].registry[optName];
+        }
+      };
+
+      Object.assign(Class, {schemaOptions, customOptions});
+    }
+
+    validators.set(name, Class);
+
+    return Class;
   }
 }
 
