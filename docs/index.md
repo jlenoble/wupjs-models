@@ -1,3 +1,4 @@
+#include "docs/schema.md"
 #include "docs/validator.md"
 #include "docs/property.md"
 #include "docs/model.md"
