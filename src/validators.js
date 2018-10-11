@@ -86,8 +86,9 @@ class Validators extends EventEmitter {
 
   addSingle (name, schema) {
     if (this.has(name)) {
-      console.warn('To redefine a validator, call validators.reset(schemas) ' +
-        'or validators.resetSingle(name, schema)');
+      console.warn(`To redefine the validator for '${
+        name}', call validators.reset({'${
+        name}': schema}) or validators.resetSingle('${name}', schema)`);
       return;
     }
 
