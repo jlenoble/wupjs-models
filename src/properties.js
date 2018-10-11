@@ -39,6 +39,51 @@ class Properties extends EventEmitter {
 
     Object.assign(this, properties);
     Object.assign(this.byName, properties.byName);
+
+    this.validators.on('reset:validator:property', name => {
+      this._setSingle(name);
+    });
+  }
+
+  has (name) {
+    return !!this.byName[name];
+  }
+
+  addSingle (name, schema) {
+    if (this.has(name)) {
+      console.warn(`To redefine the property for '${
+        name}', call properties.reset({'${
+        name}': schema}) or properties.resetSingle('${name}', schema)`);
+      return;
+    }
+
+    if (!this.schemas.has(name)) {
+      this.schemas._setSingle(name, schema);
+      this.validators._setSingle(name);
+    }
+
+    this._setSingle(name);
+  }
+
+  resetSingle (name, schema) {
+    this.schemas.resetSingle(name, schema);
+  }
+
+  add (schemas) {
+    Object.entries(schemas).forEach(([name, schema]) => this.addSingle(name,
+      schema));
+  }
+
+  reset (schemas) {
+    this.schemas.reset(schemas);
+  }
+
+  _setSingle (name) {
+    if (this.validators.hasPropertyValidator(name)) {
+      const Class = makeProperty(name, this.validators.byName[name]);
+      this[Class.name] = Class;
+      this.byName[name] = Class;
+    }
   }
 }
 

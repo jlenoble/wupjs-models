@@ -60,14 +60,10 @@ class Validators extends EventEmitter {
     Object.defineProperty(this.propertyValidators, 'byName', {value: {}});
     Object.defineProperty(this.modelValidators, 'byName', {value: {}});
 
-    this.schemas.on('add:schema', name => {
-      this._setSingle(name);
-      this.emit('add:validator', name);
-    });
-
     this.schemas.on('reset:schema', name => {
       this._setSingle(name);
-      this.emit('reset:validator', name);
+      this.emit(`reset:validator:${this.hasPropertyValidator(name)
+        ? 'property' : 'model'}`, name);
     });
 
     this.add(this.schemas.propertySchemas);
