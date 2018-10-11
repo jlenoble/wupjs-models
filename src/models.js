@@ -35,7 +35,7 @@ const makeModels = validators => makeDefaultExport(
   instanceName
 );
 
-class Models extends EventEmitter {
+export default class Models extends EventEmitter {
   constructor (validators = defaultValidators.modelValidators) {
     super();
 
@@ -48,4 +48,4 @@ class Models extends EventEmitter {
   }
 }
 
-export default new Models();
+export const defaultModels = new Models();

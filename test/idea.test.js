@@ -1,7 +1,9 @@
-import {Idea} from '../src/models';
+import {defaultModels} from '../src/models';
 import {isAProperModel} from './helpers';
 
 describe('class Idea', function () {
+  const Idea = defaultModels.Idea;
+
   isAProperModel({
     Type: Idea,
     typeArgs: [{_id: 1, title: 'foo'}],
