@@ -14,5 +14,3 @@ export const reverseCollectionClassName = name => instanceName(
   name.substring(0, name.length - 'Collection'.length));
 
 export const validatorClassName = name => className(name) + 'Validator';
-export const reverseValidatorClassName = name => instanceName(
-  name.substring(0, name.length - 'Validator'.length));
