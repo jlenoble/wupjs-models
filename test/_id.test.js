@@ -1,10 +1,11 @@
 import {Item} from '../src';
-import {_Id as Type} from '../src/properties';
+import {defaultProperties} from '../src/properties';
 import {_idValidator as validator} from '../src/validators';
 import {isAProperProperty, isSetOnce, makePropertyTestArgs} from './helpers';
 
 describe('class _Id', function () {
   const name = '_id';
+  const Type = defaultProperties._Id;
 
   isAProperProperty({
     ...makePropertyTestArgs({

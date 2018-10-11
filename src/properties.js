@@ -34,4 +34,5 @@ class Properties extends EventEmitter {
   }
 }
 
-export default new Properties();
+export default Properties;
+export const defaultProperties = new Properties();

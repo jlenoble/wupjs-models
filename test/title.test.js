@@ -1,10 +1,11 @@
 import {Item} from '../src';
-import {Title as Type} from '../src/properties';
+import {defaultProperties} from '../src/properties';
 import {titleValidator as validator} from '../src/validators';
 import {isAProperProperty, makePropertyTestArgs} from './helpers';
 
 describe('class Title', function () {
   const name = 'title';
+  const Type = defaultProperties.Title;
 
   isAProperProperty({
     ...makePropertyTestArgs({

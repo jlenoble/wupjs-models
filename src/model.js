@@ -1,5 +1,5 @@
 import {Item} from './item';
-import properties from './properties';
+import {defaultProperties} from './properties';
 import {defaultValidators} from './validators';
 import {makeEvents} from './helpers/make-events';
 
@@ -7,6 +7,7 @@ export class Model extends Item {
   constructor (item, {
     validator = defaultValidators.modelValidators.byName['model'],
     validators = defaultValidators,
+    properties = defaultProperties,
     context,
   } = {}) {
     super();
