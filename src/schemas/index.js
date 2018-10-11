@@ -47,7 +47,6 @@ export default class Schemas extends EventEmitter {
     }
 
     this._setSingle(name, schema);
-    this.emit('add:schema', name);
   }
 
   resetSingle (name, schema) {
