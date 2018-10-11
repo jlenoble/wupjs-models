@@ -80,7 +80,7 @@ class Properties extends EventEmitter {
 
   _setSingle (name) {
     if (this.validators.hasPropertyValidator(name)) {
-      const Class = makeProperty(name, this.validators.byName[name]);
+      const Class = makeProperty([name, this.validators.byName[name]]);
       this[Class.name] = Class;
       this.byName[name] = Class;
     }
