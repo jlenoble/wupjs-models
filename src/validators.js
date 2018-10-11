@@ -6,8 +6,6 @@ import {instanceName, validatorClassName} from './helpers/make-name';
 import Schema from 'validate';
 import {makeClassFactory} from './helpers/make-class-factory';
 
-const schemas = new Schemas(defaultSchemas);
-
 const schemaOptionKeys = ['message', 'schema', 'use', 'required',
   'type', 'length', 'enum', 'match', 'each', 'elements', 'path',
   'typecast', 'validate'];
@@ -48,10 +46,11 @@ const handleSetOnce = (name, schemaOptions, customOptions) => {
 const validators = new Map();
 
 class Validators extends EventEmitter {
-  constructor () {
+  constructor (schemas = defaultSchemas) {
     super();
 
     Object.defineProperties(this, {
+      schemas: {value: new Schemas(schemas)},
       propertyValidators: {value: {}},
       modelValidators: {value: {}},
       byName: {value: {}},
@@ -60,18 +59,18 @@ class Validators extends EventEmitter {
     Object.defineProperty(this.propertyValidators, 'byName', {value: {}});
     Object.defineProperty(this.modelValidators, 'byName', {value: {}});
 
-    schemas.on('add:schema', name => {
+    this.schemas.on('add:schema', name => {
       this._setSingle(name);
       this.emit('add:validator', name);
     });
 
-    schemas.on('reset:schema', name => {
+    this.schemas.on('reset:schema', name => {
       this._setSingle(name);
       this.emit('reset:validator', name);
     });
 
-    this.add(schemas.propertySchemas);
-    this.add(schemas.modelSchemas);
+    this.add(this.schemas.propertySchemas);
+    this.add(this.schemas.modelSchemas);
   }
 
   has (name) {
@@ -93,15 +92,15 @@ class Validators extends EventEmitter {
       return;
     }
 
-    if (!schemas.has(name)) {
-      schemas._setSingle(name, schema);
+    if (!this.schemas.has(name)) {
+      this.schemas._setSingle(name, schema);
     }
 
     this._setSingle(name);
   }
 
   resetSingle (name, schema) {
-    schemas.resetSingle(name, schemas);
+    this.schemas.resetSingle(name, schema);
   }
 
   add (schemas) {
@@ -110,15 +109,15 @@ class Validators extends EventEmitter {
   }
 
   reset (schemas) {
-    schemas.reset(schemas);
+    this.schemas.reset(schemas);
   }
 
   _setSingle (name) {
-    const stem = schemas.hasPropertySchema(name) ? 'property' : 'model';
+    const stem = this.schemas.hasPropertySchema(name) ? 'property' : 'model';
     const sname = stem + 'Schemas';
     const vname = stem + 'Validators';
 
-    const instance = this._makeValidator(name, schemas[sname][name]);
+    const instance = this._makeValidator(name, this.schemas[sname][name]);
     const iname = instanceName(validatorClassName(name));
 
     this[vname][iname] = instance;
@@ -139,7 +138,7 @@ class Validators extends EventEmitter {
 
     let Class;
 
-    if (schemas.propertySchemas[name]) {
+    if (this.schemas.propertySchemas[name]) {
       const schemaOptions = getSchemaOptions(schema);
       const customOptions = getCustomOptions(schema);
 
