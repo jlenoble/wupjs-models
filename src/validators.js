@@ -43,14 +43,13 @@ const handleSetOnce = (name, schemaOptions, customOptions) => {
   }
 };
 
-const validators = new Map();
-
 class Validators extends EventEmitter {
   constructor (schemas = defaultSchemas) {
     super();
 
     Object.defineProperties(this, {
       schemas: {value: new Schemas(schemas)},
+      validators: {value: new Map()},
       propertyValidators: {value: {}},
       modelValidators: {value: {}},
       byName: {value: {}},
@@ -132,8 +131,8 @@ class Validators extends EventEmitter {
   }
 
   _classImpl (name, schema) {
-    if (validators.has(name)) {
-      return validators.get(name);
+    if (this.validators.has(name)) {
+      return this.validators.get(name);
     }
 
     let Class;
@@ -181,7 +180,7 @@ class Validators extends EventEmitter {
       Object.assign(Class, {schemaOptions, customOptions});
     }
 
-    validators.set(name, Class);
+    this.validators.set(name, Class);
 
     return Class;
   }
