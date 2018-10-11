@@ -1,31 +1,38 @@
-import {propertySchemas, modelSchemas, addSchemas} from './schemas';
-import {makeValidators} from './helpers/make-validators';
+import schemas from './schemas';
+import {makeDefaultExport} from './helpers/make-default-export';
+import {instanceName, reverseValidatorClassName} from './helpers/make-name';
+import {makeValidator} from './factories/make-validator';
 
-// Must be created first, because of caching in makeValidator
-const propertyValidators = makeValidators(propertySchemas);
+const makeValidators = schemas => makeDefaultExport(
+  schemas,
+  makeValidator,
+  Class => instanceName(Class.name),
+  Class => new Class(),
+  reverseValidatorClassName
+);
 
-// Must be created after propertyValidators is created, because of caching
-// in makeValidator
-const modelValidators = makeValidators(modelSchemas);
+class Validators {
+  constructor () {
+    Object.defineProperties(this, {
+      propertyValidators: {
+        value: makeValidators(schemas.propertySchemas),
+      },
+      modelValidators: {
+        value: makeValidators(schemas.modelSchemas),
+      },
+    });
 
-[propertyValidators, modelValidators].forEach(validators => {
-  Object.defineProperty(validators, 'byName', {enumerable: false});
-  Object.freeze(validators.byName);
-  Object.freeze(validators);
-});
+    [this.propertyValidators, this.modelValidators].forEach(validators => {
+      Object.defineProperty(validators, 'byName', {enumerable: false});
+      Object.freeze(validators.byName);
+      Object.freeze(validators);
+    });
 
-const validators = {...propertyValidators, ...modelValidators};
-Object.defineProperty(validators, 'byName', {value: {
-  ...propertyValidators.byName, ...modelValidators.byName,
-}});
+    Object.assign(this, this.propertyValidators, this.modelValidators);
+    Object.defineProperty(this, 'byName', {value: {
+      ...this.propertyValidators.byName, ...this.modelValidators.byName,
+    }});
+  }
+}
 
-export default validators;
-export {propertyValidators, modelValidators};
-
-export const addValidators = schemas => {
-  addSchemas(schemas); // Must be set first or makeValidators will ignore them
-  const vals = makeValidators(schemas);
-  Object.assign(validators, vals);
-  Object.assign(validators.byName, vals.byName);
-  return vals;
-};
+export default new Validators();
