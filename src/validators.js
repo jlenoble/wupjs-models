@@ -186,4 +186,5 @@ class Validators extends EventEmitter {
   }
 }
 
-export default new Validators();
+export default Validators;
+export const defaultValidators = new Validators();

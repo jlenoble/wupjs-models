@@ -1,12 +1,14 @@
 import {Item} from './item';
 import properties from './properties';
-import validators, {modelValidators} from './validators';
+import {defaultValidators} from './validators';
 import {makeEvents} from './helpers/make-events';
 
-const modelValidator = modelValidators.byName['model'];
-
 export class Model extends Item {
-  constructor (item, {validator = modelValidator, context} = {}) {
+  constructor (item, {
+    validator = defaultValidators.modelValidators.byName['model'],
+    validators = defaultValidators,
+    context,
+  } = {}) {
     super();
 
     Object.defineProperties(this, {

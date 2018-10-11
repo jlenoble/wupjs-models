@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 import {Model} from './model';
-import {modelValidators} from './validators';
+import {defaultValidators} from './validators';
 import {makeDefaultExport} from './helpers/make-default-export';
 import {instanceName, className} from './helpers/make-name';
 import {makeClassFactory} from './helpers/make-class-factory';
@@ -36,7 +36,7 @@ const makeModels = validators => makeDefaultExport(
 );
 
 class Models extends EventEmitter {
-  constructor (validators = modelValidators) {
+  constructor (validators = defaultValidators.modelValidators) {
     super();
 
     Object.defineProperty(this, 'byName', {value: {}});
