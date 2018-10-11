@@ -44,11 +44,13 @@ const handleSetOnce = (name, schemaOptions, customOptions) => {
 };
 
 class Validators extends EventEmitter {
-  constructor (schemas = defaultSchemas) {
+  constructor (input = defaultSchemas) {
     super();
 
+    const schemas = input instanceof Schemas ? input : new Schemas(input);
+
     Object.defineProperties(this, {
-      schemas: {value: new Schemas(schemas)},
+      schemas: {value: schemas},
       validators: {value: new Map()},
       propertyValidators: {value: {}},
       modelValidators: {value: {}},
