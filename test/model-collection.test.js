@@ -1,9 +1,10 @@
 import {defaultModels} from '../src/models';
-import {ModelCollection} from '../src/collections';
+import {defaultCollections} from '../src/collections';
 import {isAProperCollection, hasACollectionCrudApi} from './helpers';
 
 describe('class ModelCollection', function () {
   const Model = defaultModels.Model;
+  const ModelCollection = defaultCollections.ModelCollection;
 
   isAProperCollection({
     Type: ModelCollection,

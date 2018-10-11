@@ -27,7 +27,7 @@ const makeCollections = models => makeDefaultExport(
   instanceName
 );
 
-class Collections extends EventEmitter {
+export default class Collections extends EventEmitter {
   constructor (models = defaultModels) {
     super();
 
@@ -40,4 +40,4 @@ class Collections extends EventEmitter {
   }
 }
 
-export default new Collections();
+export const defaultCollections = new Collections();
