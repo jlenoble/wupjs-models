@@ -1,4 +1,4 @@
-import schemas from '../src/schemas';
+import Schemas, {defaultSchemas} from '../src/schemas';
 import Muter, {muted} from 'muter';
 import {expect} from 'chai';
 
@@ -6,6 +6,8 @@ describe(`Schemas`, function () {
   const muter = Muter(console, 'warn'); // eslint-disable-line new-cap
 
   it(`Adding a new schema`, muted(muter, function () {
+    const schemas = new Schemas(defaultSchemas);
+
     const name = {type: String, length: {min: 3}};
     const age = Number;
     const city = String;

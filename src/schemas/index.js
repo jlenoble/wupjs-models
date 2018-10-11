@@ -5,7 +5,7 @@ import {idea} from './idea';
 import {model} from './model';
 import {title} from './title';
 
-const schemas = {_id, idea, model, title};
+const defaultSchemas = {_id, idea, model, title};
 
 class Schemas extends EventEmitter {
   constructor (schemas) {
@@ -79,4 +79,5 @@ class Schemas extends EventEmitter {
   }
 }
 
-export default new Schemas(schemas);
+export default Schemas;
+export {defaultSchemas};

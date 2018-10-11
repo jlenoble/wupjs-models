@@ -1,10 +1,12 @@
 /* eslint-disable no-param-reassign */
 
 import EventEmitter from 'events';
-import schemas, {propertySchemas} from './schemas';
+import Schemas, {defaultSchemas} from './schemas';
 import {instanceName, validatorClassName} from './helpers/make-name';
 import Schema from 'validate';
 import {makeClassFactory} from './helpers/make-class-factory';
+
+const schemas = new Schemas(defaultSchemas);
 
 const schemaOptionKeys = ['message', 'schema', 'use', 'required',
   'type', 'length', 'enum', 'match', 'each', 'elements', 'path',
@@ -137,7 +139,7 @@ class Validators extends EventEmitter {
 
     let Class;
 
-    if (propertySchemas[name]) {
+    if (schemas.propertySchemas[name]) {
       const schemaOptions = getSchemaOptions(schema);
       const customOptions = getCustomOptions(schema);
 
