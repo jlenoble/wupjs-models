@@ -40,18 +40,19 @@ class Schemas extends EventEmitter {
 
   addSingle (name, schema) {
     if (this.has(name)) {
-      console.warn('To redefine a schema, call schemas.reset(schemas) or ' +
-        'schemas.resetSingle(name, schema)');
+      console.warn(`To redefine the schema for '${
+        name}', call schemas.reset({'${
+        name}': schema}) or schemas.resetSingle('${name}', schema)`);
       return;
     }
 
     this._setSingle(name, schema);
-    this.emit('add:schema', this, name);
+    this.emit('add:schema', name);
   }
 
   resetSingle (name, schema) {
     this._setSingle(name, schema);
-    this.emit('reset:schema', this, name);
+    this.emit('reset:schema', name);
   }
 
   add (schemas) {
