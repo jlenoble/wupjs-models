@@ -39,10 +39,6 @@ class Properties extends EventEmitter {
 
     Object.assign(this, properties);
     Object.assign(this.byName, properties.byName);
-
-    this.validators.on('reset:validator:property', name => {
-      this._setSingle(name);
-    });
   }
 
   has (name) {
@@ -51,9 +47,10 @@ class Properties extends EventEmitter {
 
   addSingle (name, schema) {
     if (this.has(name)) {
-      console.warn(`To redefine the property for '${
-        name}', call properties.reset({'${
-        name}': schema}) or properties.resetSingle('${name}', schema)`);
+      console.warn(`Resetting ${this.constructor.name} is not implemented`);
+      // console.warn(`To redefine the property for '${
+      //   name}', call properties.reset({'${
+      //   name}': schema}) or properties.resetSingle('${name}', schema)`);
       return;
     }
 
@@ -65,17 +62,9 @@ class Properties extends EventEmitter {
     this._setSingle(name);
   }
 
-  resetSingle (name, schema) {
-    this.schemas.resetSingle(name, schema);
-  }
-
   add (schemas) {
     Object.entries(schemas).forEach(([name, schema]) => this.addSingle(name,
       schema));
-  }
-
-  reset (schemas) {
-    this.schemas.reset(schemas);
   }
 
   _setSingle (name) {

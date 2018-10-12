@@ -48,10 +48,6 @@ export default class Collections extends EventEmitter {
 
     Object.assign(this, collections);
     Object.assign(this.byName, collections.byName);
-
-    this.models.on('reset:model', name => {
-      this._setSingle(name);
-    });
   }
 
   has (name) {
@@ -60,9 +56,10 @@ export default class Collections extends EventEmitter {
 
   addSingle (name, schema) {
     if (this.has(name)) {
-      console.warn(`To redefine the collection for '${
-        name}', call collections.reset({'${
-        name}': schema}) or collections.resetSingle('${name}', schema)`);
+      console.warn(`Resetting ${this.constructor.name} is not implemented`);
+      // console.warn(`To redefine the collection for '${
+      //   name}', call collections.reset({'${
+      //   name}': schema}) or collections.resetSingle('${name}', schema)`);
       return;
     }
 
@@ -75,17 +72,9 @@ export default class Collections extends EventEmitter {
     this._setSingle(name);
   }
 
-  resetSingle (name, schema) {
-    this.schemas.resetSingle(name, schema);
-  }
-
   add (schemas) {
     Object.entries(schemas).forEach(([name, schema]) => this.addSingle(name,
       schema));
-  }
-
-  reset (schemas) {
-    this.schemas.reset(schemas);
   }
 
   _setSingle (name) {

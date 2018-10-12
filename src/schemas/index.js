@@ -40,27 +40,18 @@ export default class Schemas extends EventEmitter {
 
   addSingle (name, schema) {
     if (this.has(name)) {
-      console.warn(`To redefine the schema for '${
-        name}', call schemas.reset({'${
-        name}': schema}) or schemas.resetSingle('${name}', schema)`);
+      console.warn(`Resetting ${this.constructor.name} is not implemented`);
+      // console.warn(`To redefine the schema for '${
+      //   name}', call schemas.reset({'${
+      //   name}': schema}) or schemas.resetSingle('${name}', schema)`);
       return;
     }
 
     this._setSingle(name, schema);
   }
 
-  resetSingle (name, schema) {
-    this._setSingle(name, schema);
-    this.emit('reset:schema', name);
-  }
-
   add (schemas) {
     Object.entries(schemas).forEach(([name, schema]) => this.addSingle(name,
-      schema));
-  }
-
-  reset (schemas) {
-    Object.entries(schemas).forEach(([name, schema]) => this.resetSingle(name,
       schema));
   }
 

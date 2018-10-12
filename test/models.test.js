@@ -42,50 +42,13 @@ describe(`Models`, function () {
     // Can only be added once
     models.addSingle('person', {city});
     expect(muter.getLogs()).to.match(
-      /To redefine the model for 'person', call models.reset/);
+      /Resetting Models is not implemented/);
     muter.forget();
 
     models.add({person, person2});
     expect(muter.getLogs()).to.match(
-      /To redefine the model for 'person', call models.reset/);
+      /Resetting Models is not implemented/);
     expect(muter.getLogs()).to.match(
-      /To redefine the model for 'person2', call models.reset/);
-  }));
-
-  it(`Redefining a model`, muted(muter, function () {
-    const models = new Models(defaultSchemas);
-
-    const title = {type: String, length: {min: 3}};
-    const age = Number;
-    const city = String;
-    const person = {title, age, city};
-
-    expect(models.has('title')).to.be.false;
-    expect(models.has('age')).to.be.false;
-    expect(models.has('city')).to.be.false;
-    expect(models.has('person')).to.be.false;
-    expect(muter.getLogs()).to.equal('');
-
-    // May be redefined one by one
-    models.resetSingle('person', person);
-
-    expect(models.has('title')).to.be.false;
-    expect(models.has('age')).to.be.false;
-    expect(models.has('city')).to.be.false;
-    expect(models.has('person')).to.be.true;
-    expect(muter.getLogs()).to.equal('');
-
-    // May be redefined all in one go
-    models.reset({age, city, person});
-
-    expect(models.has('title')).to.be.false;
-    expect(models.has('age')).to.be.false;
-    expect(models.has('city')).to.be.false;
-    expect(models.has('person')).to.be.true;
-    expect(muter.getLogs()).to.equal('');
-
-    // Can be redefined more than once
-    models.reset({person, age});
-    expect(muter.getLogs()).to.equal('');
+      /Resetting Models is not implemented/);
   }));
 });

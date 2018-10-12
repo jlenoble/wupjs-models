@@ -38,50 +38,13 @@ describe(`Validators`, function () {
     // Can only be added once
     validators.addSingle('name', {type: String, length: {min: 10}});
     expect(muter.getLogs()).to.match(
-      /To redefine the validator for 'name', call validators.reset/);
+      /Resetting Validators is not implemented/);
     muter.forget();
 
     validators.add({name, age});
     expect(muter.getLogs()).to.match(
-      /To redefine the validator for 'name', call validators.reset/);
+      /Resetting Validators is not implemented/);
     expect(muter.getLogs()).to.match(
-      /To redefine the validator for 'age', call validators.reset/);
-  }));
-
-  it(`Redefining a validator`, muted(muter, function () {
-    const validators = new Validators(defaultSchemas);
-
-    const title = {type: String, length: {min: 3}};
-    const age = Number;
-    const city = String;
-    const person = {title, age, city};
-
-    expect(validators.has('title')).to.be.true;
-    expect(validators.has('age')).to.be.false;
-    expect(validators.has('city')).to.be.false;
-    expect(validators.has('person')).to.be.false;
-    expect(muter.getLogs()).to.equal('');
-
-    // May be redefined one by one
-    validators.resetSingle('title', title);
-
-    expect(validators.has('title')).to.be.true;
-    expect(validators.has('age')).to.be.false;
-    expect(validators.has('city')).to.be.false;
-    expect(validators.has('person')).to.be.false;
-    expect(muter.getLogs()).to.equal('');
-
-    // May be redefined all in one go
-    validators.reset({age, city, person});
-
-    expect(validators.has('title')).to.be.true;
-    expect(validators.has('age')).to.be.true;
-    expect(validators.has('city')).to.be.true;
-    expect(validators.has('person')).to.be.true;
-    expect(muter.getLogs()).to.equal('');
-
-    // Can be redefined more than once
-    validators.reset({person, age});
-    expect(muter.getLogs()).to.equal('');
+      /Resetting Validators is not implemented/);
   }));
 });

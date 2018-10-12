@@ -61,11 +61,6 @@ export default class Models extends EventEmitter {
 
     Object.assign(this, models);
     Object.assign(this.byName, models.byName);
-
-    this.validators.on('reset:validator:model', name => {
-      this._setSingle(name);
-      this.emit('reset:model', name);
-    });
   }
 
   has (name) {
@@ -74,9 +69,10 @@ export default class Models extends EventEmitter {
 
   addSingle (name, schema) {
     if (this.has(name)) {
-      console.warn(`To redefine the model for '${
-        name}', call models.reset({'${
-        name}': schema}) or models.resetSingle('${name}', schema)`);
+      console.warn(`Resetting ${this.constructor.name} is not implemented`);
+      // console.warn(`To redefine the model for '${
+      //   name}', call models.reset({'${
+      //   name}': schema}) or models.resetSingle('${name}', schema)`);
       return;
     }
 
@@ -88,17 +84,9 @@ export default class Models extends EventEmitter {
     this._setSingle(name);
   }
 
-  resetSingle (name, schema) {
-    this.schemas.resetSingle(name, schema);
-  }
-
   add (schemas) {
     Object.entries(schemas).forEach(([name, schema]) => this.addSingle(name,
       schema));
-  }
-
-  reset (schemas) {
-    this.schemas.reset(schemas);
   }
 
   _setSingle (name) {

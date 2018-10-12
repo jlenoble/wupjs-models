@@ -38,50 +38,13 @@ describe(`Properties`, function () {
     // Can only be added once
     properties.addSingle('name', {type: String, length: {min: 10}});
     expect(muter.getLogs()).to.match(
-      /To redefine the property for 'name', call properties.reset/);
+      /Resetting Properties is not implemented/);
     muter.forget();
 
     properties.add({name, age});
     expect(muter.getLogs()).to.match(
-      /To redefine the property for 'name', call properties.reset/);
+      /Resetting Properties is not implemented/);
     expect(muter.getLogs()).to.match(
-      /To redefine the property for 'age', call properties.reset/);
-  }));
-
-  it(`Redefining a property`, muted(muter, function () {
-    const properties = new Properties(defaultSchemas);
-
-    const title = {type: String, length: {min: 3}};
-    const age = Number;
-    const city = String;
-    const person = {title, age, city};
-
-    expect(properties.has('title')).to.be.true;
-    expect(properties.has('age')).to.be.false;
-    expect(properties.has('city')).to.be.false;
-    expect(properties.has('person')).to.be.false;
-    expect(muter.getLogs()).to.equal('');
-
-    // May be redefined one by one
-    properties.resetSingle('title', title);
-
-    expect(properties.has('title')).to.be.true;
-    expect(properties.has('age')).to.be.false;
-    expect(properties.has('city')).to.be.false;
-    expect(properties.has('person')).to.be.false;
-    expect(muter.getLogs()).to.equal('');
-
-    // May be redefined all in one go
-    properties.reset({age, city, person});
-
-    expect(properties.has('title')).to.be.true;
-    expect(properties.has('age')).to.be.true;
-    expect(properties.has('city')).to.be.true;
-    expect(properties.has('person')).to.be.false; // Model, not Property
-    expect(muter.getLogs()).to.equal('');
-
-    // Can be redefined more than once
-    properties.reset({person, age});
-    expect(muter.getLogs()).to.equal('');
+      /Resetting Properties is not implemented/);
   }));
 });

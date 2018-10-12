@@ -60,12 +60,6 @@ class Validators extends EventEmitter {
     Object.defineProperty(this.propertyValidators, 'byName', {value: {}});
     Object.defineProperty(this.modelValidators, 'byName', {value: {}});
 
-    this.schemas.on('reset:schema', name => {
-      this._setSingle(name);
-      this.emit(`reset:validator:${this.hasPropertyValidator(name)
-        ? 'property' : 'model'}`, name);
-    });
-
     this.add(this.schemas.propertySchemas);
     this.add(this.schemas.modelSchemas);
   }
@@ -84,9 +78,10 @@ class Validators extends EventEmitter {
 
   addSingle (name, schema) {
     if (this.has(name)) {
-      console.warn(`To redefine the validator for '${
-        name}', call validators.reset({'${
-        name}': schema}) or validators.resetSingle('${name}', schema)`);
+      console.warn(`Resetting ${this.constructor.name} is not implemented`);
+      // console.warn(`To redefine the validator for '${
+      //   name}', call validators.reset({'${
+      //   name}': schema}) or validators.resetSingle('${name}', schema)`);
       return;
     }
 
@@ -97,17 +92,9 @@ class Validators extends EventEmitter {
     this._setSingle(name);
   }
 
-  resetSingle (name, schema) {
-    this.schemas.resetSingle(name, schema);
-  }
-
   add (schemas) {
     Object.entries(schemas).forEach(([name, schema]) => this.addSingle(name,
       schema));
-  }
-
-  reset (schemas) {
-    this.schemas.reset(schemas);
   }
 
   _setSingle (name) {
