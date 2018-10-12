@@ -12,7 +12,7 @@ const lock = (name, value, ctx) => {
 export class Property {
   constructor (item, {name, context, validator, events, options = {}} = {}) {
     let value;
-    const setOnce = options.setOnce;//
+    const setOnce = options.setOnce;
     const {request, error} = events;
 
     const get = () => value;
@@ -24,7 +24,6 @@ export class Property {
         value = v;
         context.emit(request, this, prevValue);
       } else {
-        // console.log('property', errors.map(error => error.message), v);
         context.emit(error, this, v, errors);
       }
 
