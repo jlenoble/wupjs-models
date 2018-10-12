@@ -57,6 +57,7 @@ export default class Models extends EventEmitter {
 
     this.validators.on('reset:validator:model', name => {
       this._setSingle(name);
+      this.emit('reset:model', name);
     });
   }
 

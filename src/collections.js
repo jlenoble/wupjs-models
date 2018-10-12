@@ -47,6 +47,52 @@ export default class Collections extends EventEmitter {
 
     Object.assign(this, collections);
     Object.assign(this.byName, collections.byName);
+
+    this.models.on('reset:model', name => {
+      this._setSingle(name);
+    });
+  }
+
+  has (name) {
+    return !!this.byName[name];
+  }
+
+  addSingle (name, schema) {
+    if (this.has(name)) {
+      console.warn(`To redefine the collection for '${
+        name}', call collections.reset({'${
+        name}': schema}) or collections.resetSingle('${name}', schema)`);
+      return;
+    }
+
+    if (!this.schemas.has(name)) {
+      this.schemas._setSingle(name, schema);
+      this.validators._setSingle(name);
+      this.models._setSingle(name);
+    }
+
+    this._setSingle(name);
+  }
+
+  resetSingle (name, schema) {
+    this.schemas.resetSingle(name, schema);
+  }
+
+  add (schemas) {
+    Object.entries(schemas).forEach(([name, schema]) => this.addSingle(name,
+      schema));
+  }
+
+  reset (schemas) {
+    this.schemas.reset(schemas);
+  }
+
+  _setSingle (name) {
+    if (this.validators.hasModelValidator(name)) {
+      const Class = makeCollection([name, this.models.byName[name]]);
+      this[Class.name] = Class;
+      this.byName[name] = Class;
+    }
   }
 }
 
