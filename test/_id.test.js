@@ -1,4 +1,4 @@
-import {Item} from '../src';
+import {Item} from '../src/item';
 import {defaultProperties} from '../src/properties';
 import {_idValidator as validator} from '../src/validators';
 import {isAProperProperty, isSetOnce, makePropertyTestArgs} from './helpers';

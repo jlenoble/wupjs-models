@@ -1,8 +1,12 @@
 /* eslint-disable no-invalid-this */
 
-import {Item} from '../../src';
-import {isAProperItem, emitsOnPropertyChange, isSetOnce, hasAnItemAccessor,
-  emitsOnCreation, emitsOnDeletion} from '.';
+import {Item} from '../../src/item';
+import {isAProperItem} from './is-a-proper-item';
+import {emitsOnPropertyChange} from './emits-on-property-change';
+import {isSetOnce} from './is-set-once';
+import {hasAnItemAccessor} from './has-an-item-accessor';
+import {emitsOnCreation} from './emits-on-creation';
+import {emitsOnDeletion} from './emits-on-deletion';
 
 export const isAProperModel = ({
   Type, typeArgs, createNames, updateNames, updateProperties, createItem = [],

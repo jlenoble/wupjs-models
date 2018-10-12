@@ -1,7 +1,7 @@
 /* eslint-disable no-invalid-this */
 
 import {expect} from 'chai';
-import {Property} from '../../src';
+import {Property} from '../../src/property';
 
 export const isSetOnce = ({Type, typeArgs, name, updates}) => {
   describe(`${name} is set once`, function () {

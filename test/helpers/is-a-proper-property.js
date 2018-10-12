@@ -1,7 +1,8 @@
 /* eslint-disable no-invalid-this */
 
 import Schema from 'validate';
-import {isAProperItem, emitsOnPropertyChange} from '.';
+import {isAProperItem} from './is-a-proper-item';
+import {emitsOnPropertyChange} from './emits-on-property-change';
 
 export const isAProperProperty = ({Type, typeArgs, name, updates,
   requestEvent, errorEvent}) => {

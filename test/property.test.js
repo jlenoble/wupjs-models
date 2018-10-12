@@ -1,5 +1,6 @@
 import Schema from 'validate';
-import {Property as Type, Item} from '../src';
+import {Property as Type} from '../src/property';
+import {Item} from '../src/item';
 import {isAProperProperty, makePropertyTestArgs} from './helpers';
 
 describe('class Property', function () {

@@ -1,4 +1,4 @@
-import {Collection} from '../src';
+import {Collection} from '../src/collection';
 import {isAProperCollection} from './helpers';
 
 describe('class Collection', function () {

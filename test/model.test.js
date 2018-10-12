@@ -1,4 +1,4 @@
-import {Model} from '../src';
+import {Model} from '../src/model';
 import {isAProperModel} from './helpers';
 
 describe('class Model', function () {
