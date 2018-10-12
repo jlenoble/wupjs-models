@@ -2,7 +2,8 @@ import EventEmitter from 'events';
 import {Collection} from './collection';
 import Models, {defaultModels} from './models';
 import {makeDefaultExport} from './helpers/make-default-export';
-import {instanceName, collectionClassName} from './helpers/make-name';
+import {reverseCollectionClassName, collectionClassName}
+  from './helpers/make-name';
 import {makeClassFactory} from './helpers/make-class-factory';
 
 const classImpl = (name, Model) => {
@@ -24,7 +25,7 @@ const makeCollections = models => makeDefaultExport(
   makeCollection,
   Class => Class.name,
   Class => Class,
-  instanceName
+  reverseCollectionClassName
 );
 
 export default class Collections extends EventEmitter {
