@@ -55,17 +55,17 @@ export default class WupModels {
     }
   }
 
-  create (schemas = {}, options) {
+  create (schemas = {}) {
     this._collections.add(schemas);
-    this._set(schemas, options);
+    this._set(schemas);
   }
 
-  reset (schemas = {}, options) {
+  reset (schemas = {}) {
     this._collections.reset(schemas);
-    this._set(schemas, options);
+    this._set(schemas);
   }
 
-  _set (schemas = {}, options) {
+  _set (schemas = {}) {
     const names = Object.keys(this._expand(schemas));
 
     [
@@ -91,10 +91,6 @@ export default class WupModels {
         this[name] = obj;
       }
     });
-
-    if (options) {
-      return this.get(schemas, options);
-    }
   }
 
   _expand (schemas) {
