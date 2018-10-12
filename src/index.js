@@ -1,11 +1,14 @@
+import EventEmitter from 'events';
 import Schemas, {defaultSchemas} from './schemas';
 import Validators from './validators';
 import Properties from './properties';
 import Models from './models';
 import Collections from './collections';
 
-export default class WupModels {
+export default class WupModels extends EventEmitter {
   constructor (schemas = {}, {useDefault = false} = {}) {
+    super();
+
     const _schemas = new Schemas(useDefault ? defaultSchemas :
       this._expand({_id: defaultSchemas._id, ...schemas}));
     const _validators = new Validators(_schemas);
@@ -18,11 +21,17 @@ export default class WupModels {
     if (schemas) {
       this._setSchemas(schemas);
     } else {
+      const Classes = Object.entries({
+        ...this._collections,
+        ...this._collections.models,
+        ...this._collections.properties,
+      }).reduce((obj, [k, o]) => {
+        return Object.assign(obj, {[k]: this._wrap(o)});
+      }, {});
+
       Object.assign(
         this,
-        this._collections,
-        this._collections.models,
-        this._collections.properties,
+        Classes,
         this._collections.validators,
         this._collections.schemas.propertySchemas,
         this._collections.schemas.modelSchemas
@@ -75,7 +84,7 @@ export default class WupModels {
     ]
       .filter(Class => !!Class)
       .forEach(Class => {
-        this[Class.name] = Class;
+        this[Class.name] = this._wrap(Class);
       });
 
     this.get(names, {type: 'validator'}).forEach(obj => {
@@ -110,5 +119,20 @@ export default class WupModels {
     return Array.from(s).reduce((obj, [k, o]) => {
       return Object.assign(obj, {[k]: o});
     }, {});
+  }
+
+  _wrap (Class) {
+    // Make sure WupModels aggregates all events
+    const that = this;
+
+    const C = class extends Class {
+      constructor (init, opt) {
+        super(init, Object.assign({}, opt, {context: that}));
+      }
+    };
+
+    Object.defineProperty(C, 'name', {value: Class.name});
+
+    return C;
   }
 }
