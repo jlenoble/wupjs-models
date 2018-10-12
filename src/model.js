@@ -10,8 +10,10 @@ export class Model extends Item {
   } = {}) {
     super();
 
-    const validators = this.constructor.validators;
-    const properties = this.constructor.properties;
+    const Class = this.constructor;
+    const validateEvents = Class.events.validate;
+    const validators = Class.validators;
+    const properties = Class.properties;
 
     Object.defineProperties(this, {
       props: {
@@ -22,9 +24,6 @@ export class Model extends Item {
         value: context,
       },
     });
-
-    const Class = this.constructor;
-    const validateEvents = Class.events.validate;
 
     Class.props.forEach(name => {
       const Property = properties.byName[name];
