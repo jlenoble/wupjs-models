@@ -16,7 +16,7 @@ export default class WupModels {
     Object.defineProperty(this, '_collections', {value: _collections});
 
     if (schemas) {
-      this._set(schemas);
+      this._setSchemas(schemas);
     } else {
       Object.assign(
         this,
@@ -55,17 +55,17 @@ export default class WupModels {
     }
   }
 
-  create (schemas = {}) {
+  addSchemas (schemas = {}) {
     this._collections.add(schemas);
-    this._set(schemas);
+    this._setSchemas(schemas);
   }
 
-  reset (schemas = {}) {
+  resetSchemas (schemas = {}) {
     this._collections.reset(schemas);
-    this._set(schemas);
+    this._setSchemas(schemas);
   }
 
-  _set (schemas = {}) {
+  _setSchemas (schemas = {}) {
     const names = Object.keys(this._expand(schemas));
 
     [
