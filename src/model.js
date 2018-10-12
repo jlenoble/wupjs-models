@@ -6,11 +6,12 @@ import {makeEvents} from './helpers/make-events';
 export class Model extends Item {
   constructor (item, {
     validator = defaultValidators.modelValidators.byName['model'],
-    validators = defaultValidators,
-    properties = defaultProperties,
     context,
   } = {}) {
     super();
+
+    const validators = this.constructor.validators;
+    const properties = this.constructor.properties;
 
     Object.defineProperties(this, {
       props: {
@@ -88,3 +89,5 @@ export class Model extends Item {
 
 Model.props = new Set(['_id']);
 Model.events = makeEvents(Model, 'model');
+Model.validators = defaultValidators;
+Model.properties = defaultProperties;

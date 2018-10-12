@@ -52,6 +52,13 @@ export default class Models extends EventEmitter {
 
     const models = makeModels(this.validators.modelValidators);
 
+    Object.values(models).forEach(Class => {
+      Object.assign(Class, {
+        validators: this.validators,
+        properties: this.properties,
+      });
+    });
+
     Object.assign(this, models);
     Object.assign(this.byName, models.byName);
 
