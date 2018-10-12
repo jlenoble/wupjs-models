@@ -7,7 +7,7 @@ import Collections from './collections';
 export default class WupModels {
   constructor (schemas = {}, {useDefault = false} = {}) {
     const _schemas = new Schemas(useDefault ? defaultSchemas :
-      this._expand(schemas));
+      this._expand({_id: defaultSchemas._id, ...schemas}));
     const _validators = new Validators(_schemas);
     const _properties = new Properties(_validators);
     const _models = new Models(_properties);
