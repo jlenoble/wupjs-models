@@ -9,7 +9,7 @@ import {makeClassFactory} from './helpers/make-class-factory';
 const classImpl = (name, Model) => {
   const Class = class extends Collection {
     constructor (item, {context} = {}) {
-      super(item, {Model, context});
+      super(item, {context});
     }
   };
 
