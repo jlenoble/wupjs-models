@@ -25,6 +25,13 @@ export class Collection extends aggregation(Map, Item) {
 
     return this;
   }
+
+  delete (_id) {
+    if (this.has(_id)) {
+      this.get(_id).delete();
+    }
+    return super.delete(_id);
+  }
 }
 
 Collection.Model = Model;
