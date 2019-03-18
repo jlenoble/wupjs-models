@@ -1,13 +1,12 @@
 export default class CollectionType {
   constructor (name) {
-    const Collection = this.makeList();
+    let Collection;
 
-    Object.defineProperties(Collection, {
-      name: {
-        value: name,
-        enumerable: true,
-      },
-    });
+    if (name) {
+
+    } else {
+      Collection = this.makeList();
+    }
 
     return Collection;
   }
@@ -58,7 +57,7 @@ export default class CollectionType {
       }
 
       getSelected () {
-        return this.currentSelection;
+        return new List(this.currentSelection);
       }
 
       clearSelected () {

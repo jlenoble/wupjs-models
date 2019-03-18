@@ -5,7 +5,7 @@ import CollectionType from '../src/collection-type';
 describe('Brainstorming', function () {
   beforeEach(function () {
     const ideas = ['lorem', 'ipsum', 'dolor', 'sit', 'amet'];
-    const List = new CollectionType('List');
+    const List = new CollectionType();
     const everything = new List();
 
     // eslint-disable-next-line no-invalid-this
