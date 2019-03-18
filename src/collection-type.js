@@ -13,7 +13,6 @@ export default class CollectionType {
 
   makeCategory (name) {
     const List = this.makeList();
-    const elements = new List();
     const fwd = new Map();
     const bck = new Map();
     const update = (li1, li2) => {
@@ -22,8 +21,6 @@ export default class CollectionType {
         bck.set(o, li2);
         fwd.delete(li1);
         fwd.set(li2, o);
-        elements.delete(li1);
-        elements.add(li2);
       }
     };
 
@@ -31,10 +28,9 @@ export default class CollectionType {
       add (obj) {
         let o;
 
-        if (elements.has(obj)) {
+        if (fwd.has(obj)) {
           o = fwd.get(obj);
         } else {
-          elements.add(obj);
           o = {};
           fwd.set(obj, o);
           bck.set(o, obj);
@@ -53,9 +49,12 @@ export default class CollectionType {
       }
 
       update (li1, li2) {
-        update(li1, li2);
+        const selected = this.isSelected(li1);
         this.unselect(li1);
-        this.select(li2);
+        update(li1, li2);
+        if (selected) {
+          this.select(li2);
+        }
       }
 
       select (li) {
@@ -70,6 +69,12 @@ export default class CollectionType {
 
       isSelected (li) {
         return this.currentSelection.has(fwd.get(li));
+      }
+
+      getSelected () {
+        return new Category(Array.from(this.currentSelection).map(o => {
+          return bck.get(o);
+        }).filter(o => o));
       }
 
       [Symbol.iterator] () {
@@ -87,34 +92,24 @@ export default class CollectionType {
       }
 
       static has (li) {
-        return elements.has(li);
+        return fwd.has(li);
       }
 
       static clear () {
-        elements.clear();
         fwd.clear();
         bck.clear();
       }
 
-      static equiv (collection) {
-        return elements.equiv(collection);
-      }
-
-      static contains (collection) {
-        return elements.contains(collection);
-      }
-
       static [Symbol.iterator] () {
-        return elements[Symbol.iterator]();
+        return fwd.keys();
       }
     }
 
     Object.defineProperties(Category, {
       name: {value: name, enumerable: true},
-      size: {
-        get: () => elements.size,
-        enumerable: true,
-      },
+      size: {get: () => fwd.size, enumerable: true},
+      contains: {value: List.prototype.contains},
+      equiv: {value: List.prototype.equiv},
     });
 
     return Category;
