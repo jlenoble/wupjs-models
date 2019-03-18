@@ -215,4 +215,42 @@ describe('Categorizing', function () {
     expect(Tokens.has(tokens[3])).to.be.true;
     expect(Tokens.has(tokens[4])).to.be.true;
   });
+
+  it('Erasing from a category', function () {
+    // eslint-disable-next-line no-invalid-this
+    const {tokens, cTokens, Tokens} = this;
+
+    cTokens.erase(tokens[2]);
+
+    expect(cTokens.has(tokens[0])).to.be.true;
+    expect(cTokens.has(tokens[1])).to.be.true;
+    expect(cTokens.has(tokens[2])).to.be.false;
+    expect(cTokens.has(tokens[3])).to.be.true;
+    expect(cTokens.has(tokens[4])).to.be.true;
+
+    expect(Tokens.has(tokens[0])).to.be.true;
+    expect(Tokens.has(tokens[1])).to.be.true;
+    expect(Tokens.has(tokens[2])).to.be.false;
+    expect(Tokens.has(tokens[3])).to.be.true;
+    expect(Tokens.has(tokens[4])).to.be.true;
+  });
+
+  it('Erasing all from a category', function () {
+    // eslint-disable-next-line no-invalid-this
+    const {tokens, cTokens, Tokens} = this;
+
+    Tokens.clear();
+
+    expect(cTokens.has(tokens[0])).to.be.false;
+    expect(cTokens.has(tokens[1])).to.be.false;
+    expect(cTokens.has(tokens[2])).to.be.false;
+    expect(cTokens.has(tokens[3])).to.be.false;
+    expect(cTokens.has(tokens[4])).to.be.false;
+
+    expect(Tokens.has(tokens[0])).to.be.false;
+    expect(Tokens.has(tokens[1])).to.be.false;
+    expect(Tokens.has(tokens[2])).to.be.false;
+    expect(Tokens.has(tokens[3])).to.be.false;
+    expect(Tokens.has(tokens[4])).to.be.false;
+  });
 });

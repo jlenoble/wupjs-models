@@ -48,6 +48,11 @@ export default class CollectionType {
         return super.delete(fwd.get(li));
       }
 
+      erase (li) {
+        this.delete(li);
+        return Category.delete(li);
+      }
+
       update (li1, li2) {
         const selected = this.isSelected(li1);
         this.unselect(li1);
@@ -93,6 +98,14 @@ export default class CollectionType {
 
       static has (li) {
         return fwd.has(li);
+      }
+
+      static delete (li) {
+        if (fwd.has(li)) {
+          const o = fwd.get(li);
+          fwd.delete(li);
+          bck.delete(o);
+        }
       }
 
       static clear () {
