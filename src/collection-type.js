@@ -14,44 +14,86 @@ export default class CollectionType {
   makeCategory (name) {
     const List = this.makeList();
     const elements = new List();
+    const fwd = new Map();
+    const bck = new Map();
+    const update = (li1, li2) => {
+      const o = fwd.get(li1);
+      if (o) {
+        bck.set(o, li2);
+        fwd.delete(li1);
+        fwd.set(li2, o);
+        elements.delete(li1);
+        elements.add(li2);
+      }
+    };
 
     class Category extends List {
-      constructor (objs) {
-        super(objs);
+      add (obj) {
+        let o;
 
-        for (const obj of objs) {
+        if (elements.has(obj)) {
+          o = fwd.get(obj);
+        } else {
           elements.add(obj);
+          o = {};
+          fwd.set(obj, o);
+          bck.set(o, obj);
+        }
+
+        return super.add(o);
+      }
+
+      has (obj) {
+        return super.has(fwd.get(obj));
+      }
+
+      delete (li) {
+        this.unselect(li);
+        return super.delete(fwd.get(li));
+      }
+
+      update (li1, li2) {
+        update(li1, li2);
+        this.unselect(li1);
+        this.select(li2);
+      }
+
+      select (li) {
+        if (this.has(li)) {
+          this.currentSelection.add(fwd.get(li));
         }
       }
-      //
-      // delete (li) {
-      //   this.unselect(li);
-      //   super.delete(li);
-      // }
-      //
-      // clear () {
-      //   this.clearSelected();
-      //   super.clear();
-      // }
-      //
-      // update (li1, li2) {
-      //   elements.update(li1, li2);
-      // }
 
-      getSelected () {
-        return new Category(this.currentSelection);
+      unselect (li) {
+        this.currentSelection.delete(fwd.get(li));
       }
 
-      // categorize (name) {
-      //   if (!categories.has(name)) {
-      //     categories.set(name, new CollectionType(name));
-      //   }
-      //   const Category = categories.get(name);
-      //   return new Category(this);
-      // }
+      isSelected (li) {
+        return this.currentSelection.has(fwd.get(li));
+      }
+
+      [Symbol.iterator] () {
+        return {
+          next: function () {
+            const {value, done} = this.iterator.next();
+            if (done) {
+              return {done};
+            }
+            const li = bck.get(value);
+            return li ? {value: li, done: false} : this.next();
+          },
+          iterator: super[Symbol.iterator](),
+        };
+      }
+
+      static has (li) {
+        return elements.has(li);
+      }
 
       static clear () {
         elements.clear();
+        fwd.clear();
+        bck.clear();
       }
 
       static equiv (collection) {
@@ -61,6 +103,10 @@ export default class CollectionType {
       static contains (collection) {
         return elements.contains(collection);
       }
+
+      static [Symbol.iterator] () {
+        return elements[Symbol.iterator]();
+      }
     }
 
     Object.defineProperties(Category, {
@@ -69,18 +115,17 @@ export default class CollectionType {
         get: () => elements.size,
         enumerable: true,
       },
-      [Symbol.iterator]: {
-        value: () => elements[Symbol.iterator](),
-      },
     });
 
     return Category;
   }
 
   makeList () {
+    const eventAggregator = new EventEmitter();
+
     return class List extends EventEmitterSet {
       constructor (objs) {
-        super(objs, {eventAggregator: new EventEmitter()});
+        super(objs, {eventAggregator});
 
         Object.defineProperties(this, {
           currentSelection: {value: new Set()},
@@ -89,12 +134,12 @@ export default class CollectionType {
 
       delete (li) {
         this.unselect(li);
-        super.delete(li);
+        return super.delete(li);
       }
 
       clear () {
         this.clearSelected();
-        super.clear();
+        return super.clear();
       }
 
       update (li1, li2) {

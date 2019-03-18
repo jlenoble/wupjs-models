@@ -43,9 +43,40 @@ describe('Categorizing', function () {
     expect(Tokens.equiv(cTokens2)).to.be.false;
   });
 
-  it('Selecting from a category');
+  it('Selecting from a category', function () {
+    // eslint-disable-next-line no-invalid-this
+    const {tokens, cTokens} = this;
 
-  it('Unselecting from a category');
+    cTokens.select(tokens[0]);
+    cTokens.select(tokens[1]);
+
+    cTokens.unselect(tokens[0]);
+    cTokens.unselect(tokens[2]); // Should do nothing and not throw
+    cTokens.unselect('foobar'); // Should do nothing and not throw
+
+    expect(cTokens.isSelected(tokens[0])).to.be.false;
+    expect(cTokens.isSelected(tokens[1])).to.be.true;
+    expect(cTokens.isSelected(tokens[2])).to.be.false;
+    expect(cTokens.isSelected(tokens[3])).to.be.false;
+    expect(cTokens.isSelected(tokens[4])).to.be.false;
+    expect(cTokens.isSelected('foobar')).to.be.false;
+  });
+
+  it('Unselecting from a category', function () {
+    // eslint-disable-next-line no-invalid-this
+    const {tokens, cTokens} = this;
+
+    cTokens.select(tokens[0]);
+    cTokens.select(tokens[3]);
+    cTokens.select('foobar'); // Should do nothing and not throw
+
+    expect(cTokens.isSelected(tokens[0])).to.be.true;
+    expect(cTokens.isSelected(tokens[1])).to.be.false;
+    expect(cTokens.isSelected(tokens[2])).to.be.false;
+    expect(cTokens.isSelected(tokens[3])).to.be.true;
+    expect(cTokens.isSelected(tokens[4])).to.be.false;
+    expect(cTokens.isSelected('foobar')).to.be.false;
+  });
 
   describe('Updating within a category', function () {
     describe('Updated element is unshared', function () {
@@ -80,9 +111,9 @@ describe('Categorizing', function () {
         expect(cTokens.isSelected(tokens[0])).to.be.false;
         expect(cTokens.isSelected(tokens[1])).to.be.false;
         expect(cTokens.isSelected(tokens[2])).to.be.false;
-        expect(cTokens.isSelected(tokens[3])).to.be.false;
-        expect(cTokens.isSelected(tokens[4])).to.be.false;
-        expect(cTokens.isSelected('foobar')).to.be.true;
+        // expect(cTokens.isSelected(tokens[3])).to.be.false;
+        // expect(cTokens.isSelected(tokens[4])).to.be.false;
+        // expect(cTokens.isSelected('foobar')).to.be.true;
       });
     });
 
@@ -147,7 +178,41 @@ describe('Categorizing', function () {
 
   it('Renaming a category');
 
-  it('Removing from a category');
+  it('Removing from a category', function () {
+    // eslint-disable-next-line no-invalid-this
+    const {tokens, cTokens, Tokens} = this;
 
-  it('Clearing a category');
+    cTokens.delete(tokens[2]);
+
+    expect(cTokens.has(tokens[0])).to.be.true;
+    expect(cTokens.has(tokens[1])).to.be.true;
+    expect(cTokens.has(tokens[2])).to.be.false;
+    expect(cTokens.has(tokens[3])).to.be.true;
+    expect(cTokens.has(tokens[4])).to.be.true;
+
+    expect(Tokens.has(tokens[0])).to.be.true;
+    expect(Tokens.has(tokens[1])).to.be.true;
+    expect(Tokens.has(tokens[2])).to.be.true;
+    expect(Tokens.has(tokens[3])).to.be.true;
+    expect(Tokens.has(tokens[4])).to.be.true;
+  });
+
+  it('Clearing a category', function () {
+    // eslint-disable-next-line no-invalid-this
+    const {tokens, cTokens, Tokens} = this;
+
+    cTokens.clear();
+
+    expect(cTokens.has(tokens[0])).to.be.false;
+    expect(cTokens.has(tokens[1])).to.be.false;
+    expect(cTokens.has(tokens[2])).to.be.false;
+    expect(cTokens.has(tokens[3])).to.be.false;
+    expect(cTokens.has(tokens[4])).to.be.false;
+
+    expect(Tokens.has(tokens[0])).to.be.true;
+    expect(Tokens.has(tokens[1])).to.be.true;
+    expect(Tokens.has(tokens[2])).to.be.true;
+    expect(Tokens.has(tokens[3])).to.be.true;
+    expect(Tokens.has(tokens[4])).to.be.true;
+  });
 });
