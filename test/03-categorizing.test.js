@@ -227,12 +227,14 @@ describe('Categorizing', function () {
     expect(cTokens.has(tokens[2])).to.be.false;
     expect(cTokens.has(tokens[3])).to.be.true;
     expect(cTokens.has(tokens[4])).to.be.true;
+    expect(cTokens.size).to.equal(4);
 
     expect(Tokens.has(tokens[0])).to.be.true;
     expect(Tokens.has(tokens[1])).to.be.true;
     expect(Tokens.has(tokens[2])).to.be.false;
     expect(Tokens.has(tokens[3])).to.be.true;
     expect(Tokens.has(tokens[4])).to.be.true;
+    expect(Tokens.size).to.equal(4);
   });
 
   it('Erasing all from a category', function () {
@@ -246,11 +248,13 @@ describe('Categorizing', function () {
     expect(cTokens.has(tokens[2])).to.be.false;
     expect(cTokens.has(tokens[3])).to.be.false;
     expect(cTokens.has(tokens[4])).to.be.false;
+    expect(cTokens.size).to.equal(0);
 
     expect(Tokens.has(tokens[0])).to.be.false;
     expect(Tokens.has(tokens[1])).to.be.false;
     expect(Tokens.has(tokens[2])).to.be.false;
     expect(Tokens.has(tokens[3])).to.be.false;
     expect(Tokens.has(tokens[4])).to.be.false;
+    expect(cTokens.size).to.equal(0);
   });
 });

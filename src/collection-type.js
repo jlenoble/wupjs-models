@@ -25,6 +25,21 @@ export default class CollectionType {
     };
 
     class Category extends List {
+      constructor (objs) {
+        super(objs);
+
+        Object.defineProperty(this, 'size', {
+          get: () => {
+            let size = 0;
+            // eslint-disable-next-line no-unused-vars
+            for (const v of this) { // Implicit garbage collection, see iterator
+              size++;
+            }
+            return size;
+          },
+        });
+      }
+
       add (obj) {
         let o;
 
@@ -45,7 +60,7 @@ export default class CollectionType {
 
       delete (li) {
         this.unselect(li);
-        return super.delete(fwd.get(li));
+        return super._delete(fwd.get(li));
       }
 
       erase (li) {
@@ -79,20 +94,44 @@ export default class CollectionType {
       getSelected () {
         return new Category(Array.from(this.currentSelection).map(o => {
           return bck.get(o);
-        }).filter(o => o));
+        }).filter(o => o)); // Don't copy erased elements
+      }
+
+      garbageCollect (collection) {
+        for (const item of collection) {
+          this.currentSelection.delete(item);
+          super._delete(item);
+        }
       }
 
       [Symbol.iterator] () {
         return {
           next: function () {
             const {value, done} = this.iterator.next();
+
             if (done) {
+              if (this.garbage) {
+                this.garbageCollect(this.garbage);
+              }
               return {done};
             }
+
             const li = bck.get(value);
-            return li ? {value: li, done: false} : this.next();
+
+            if (li) {
+              return {value: li, done: false};
+            }
+
+            if (!this.garbage) {
+              this.garbage = [];
+            }
+
+            this.garbage.push(value);
+
+            return this.next();
           },
           iterator: super[Symbol.iterator](),
+          garbageCollect: collection => this.garbageCollect(collection),
         };
       }
 
@@ -142,6 +181,10 @@ export default class CollectionType {
 
       delete (li) {
         this.unselect(li);
+        return super.delete(li);
+      }
+
+      _delete (li) {
         return super.delete(li);
       }
 
