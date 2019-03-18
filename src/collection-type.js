@@ -1,20 +1,72 @@
+import EventEmitter from 'events';
+import EventEmitterSet from './helpers/event-emitter-set';
+
+const categories = new Map();
+
 export default class CollectionType {
   constructor (name) {
-    let Collection;
-
     if (name) {
+      return this.makeCategory(name);
+    }
+    return this.makeList();
+  }
 
-    } else {
-      Collection = this.makeList();
+  makeCategory (name) {
+    const List = this.makeList();
+    const elements = new List();
+
+    class Category extends List {
+      constructor (objs) {
+        super(objs);
+
+        for (const obj of objs) {
+          elements.add(obj);
+        }
+
+        elements.addListener('update', (li1, li2) => {
+          super.update(li1, li2);
+        });
+      }
+      //
+      // delete (li) {
+      //   this.unselect(li);
+      //   super.delete(li);
+      // }
+      //
+      // clear () {
+      //   this.clearSelected();
+      //   super.clear();
+      // }
+
+      update (li1, li2) {
+        elements.update(li1, li2);
+      }
+
+      getSelected () {
+        return new Category(this.currentSelection);
+      }
+
+      // categorize (name) {
+      //   if (!categories.has(name)) {
+      //     categories.set(name, new CollectionType(name));
+      //   }
+      //   const Category = categories.get(name);
+      //   return new Category(this);
+      // }
     }
 
-    return Collection;
+    Object.defineProperties(Category, {
+      name: {value: name, enumerable: true},
+      elements: {value: elements, enumerable: true},
+    });
+
+    return Category;
   }
 
   makeList () {
-    return class List extends Set {
+    return class List extends EventEmitterSet {
       constructor (objs) {
-        super(objs);
+        super(objs, {eventAggregator: new EventEmitter()});
 
         Object.defineProperties(this, {
           currentSelection: {value: new Set()},
@@ -39,6 +91,7 @@ export default class CollectionType {
           if (selected) {
             this.select(li2);
           }
+          this.emit('update', li1, li2);
         }
       }
 
@@ -62,6 +115,30 @@ export default class CollectionType {
 
       clearSelected () {
         this.currentSelection.clear();
+      }
+
+      categorize (name) {
+        if (!categories.has(name)) {
+          categories.set(name, new CollectionType(name));
+        }
+        const Category = categories.get(name);
+        return new Category(this);
+      }
+
+      equiv (collection) {
+        return (collection.size || collection.length) == this.size &&
+          this.contains(collection);
+      }
+
+      contains (collection) {
+        if ((collection.size || collection.length) > this.size) {
+          return false;
+        }
+        let eq = true;
+        for (const item of collection) {
+          eq = eq && this.has(item);
+        }
+        return eq;
       }
     };
   }
