@@ -22,10 +22,6 @@ export default class CollectionType {
         for (const obj of objs) {
           elements.add(obj);
         }
-
-        elements.addListener('update', (li1, li2) => {
-          super.update(li1, li2);
-        });
       }
       //
       // delete (li) {
@@ -37,10 +33,10 @@ export default class CollectionType {
       //   this.clearSelected();
       //   super.clear();
       // }
-
-      update (li1, li2) {
-        elements.update(li1, li2);
-      }
+      //
+      // update (li1, li2) {
+      //   elements.update(li1, li2);
+      // }
 
       getSelected () {
         return new Category(this.currentSelection);
@@ -53,11 +49,29 @@ export default class CollectionType {
       //   const Category = categories.get(name);
       //   return new Category(this);
       // }
+
+      static clear () {
+        elements.clear();
+      }
+
+      static equiv (collection) {
+        return elements.equiv(collection);
+      }
+
+      static contains (collection) {
+        return elements.contains(collection);
+      }
     }
 
     Object.defineProperties(Category, {
       name: {value: name, enumerable: true},
-      elements: {value: elements, enumerable: true},
+      size: {
+        get: () => elements.size,
+        enumerable: true,
+      },
+      [Symbol.iterator]: {
+        value: () => elements[Symbol.iterator](),
+      },
     });
 
     return Category;
@@ -91,7 +105,6 @@ export default class CollectionType {
           if (selected) {
             this.select(li2);
           }
-          this.emit('update', li1, li2);
         }
       }
 

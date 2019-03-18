@@ -17,7 +17,7 @@ describe('Categorizing', function () {
   afterEach(function () {
     // eslint-disable-next-line no-invalid-this
     const {Tokens} = this;
-    Tokens.elements.clear();
+    Tokens.clear();
   });
 
   it('Creating a category', function () {
@@ -27,7 +27,7 @@ describe('Categorizing', function () {
     expect(Tokens.name).to.equal('Tokens');
     expect(cTokens.equiv(tokens)).to.be.true;
     expect(cTokens.equiv(lTokens)).to.be.true;
-    expect(cTokens.equiv(Tokens.elements)).to.be.true;
+    expect(cTokens.equiv(Tokens)).to.be.true;
   });
 
   it('Adding to a category', function () {
@@ -38,9 +38,9 @@ describe('Categorizing', function () {
     const cTokens2 = new Tokens(tokens);
 
     expect(cTokens2.equiv(tokens)).to.be.true;
-    expect(Tokens.elements.contains(cTokens)).to.be.true;
-    expect(Tokens.elements.contains(cTokens2)).to.be.true;
-    expect(Tokens.elements.equiv(cTokens2)).to.be.false;
+    expect(Tokens.contains(cTokens)).to.be.true;
+    expect(Tokens.contains(cTokens2)).to.be.true;
+    expect(Tokens.equiv(cTokens2)).to.be.false;
   });
 
   it('Selecting from a category');
