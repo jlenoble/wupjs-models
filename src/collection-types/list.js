@@ -1,9 +1,9 @@
 import EventEmitter from 'events';
 import EventEmitterSet from '../helpers/event-emitter-set';
 
-export default function makeListType () {
-  const eventAggregator = new EventEmitter();
-
+export default function makeListType ({
+  eventAggregator = new EventEmitter(),
+} = {}) {
   return class List extends EventEmitterSet {
     constructor (objs) {
       super(objs, {eventAggregator});

@@ -1,7 +1,11 @@
+import EventEmitter from 'events';
 import makeListType from './list';
 
-export default function makeCategoryType ({name}) {
-  const List = makeListType();
+export default function makeCategoryType ({
+  name,
+  eventAggregator = new EventEmitter(),
+}) {
+  const List = makeListType({eventAggregator});
   const fwd = new Map();
   const bck = new Map();
   const update = (li1, li2) => {
