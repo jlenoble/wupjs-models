@@ -176,7 +176,27 @@ describe('Categorizing', function () {
     });
   });
 
-  it('Renaming a category');
+  it('Renaming a category', function () {
+    // eslint-disable-next-line no-invalid-this
+    const {Tokens} = this;
+    const name1 = Tokens.name;
+    const name2 = 'Lorem Ipsum';
+
+    expect(name1).not.to.equal(name2);
+    expect(new CollectionType({name: name1})).to.equal(Tokens);
+
+    Tokens.rename(name2);
+
+    expect(Tokens.name).to.equal(name2);
+    expect(new CollectionType({name: name2})).to.equal(Tokens);
+    expect(new CollectionType({name: name1})).not.to.equal(Tokens);
+
+    Tokens.rename(name1); // Must fail silently, because already redefined above
+
+    expect(Tokens.name).to.equal(name2);
+    expect(new CollectionType({name: name2})).to.equal(Tokens);
+    expect(new CollectionType({name: name1})).not.to.equal(Tokens);
+  });
 
   it('Removing from a category', function () {
     // eslint-disable-next-line no-invalid-this

@@ -62,11 +62,7 @@ export default function makeListType ({
     }
 
     categorize (name) {
-      if (!categories.has(name)) {
-        categories.set(name, new categories.CollectionType({
-          name, eventAggregator}));
-      }
-      const Category = categories.get(name);
+      const Category = new categories.CollectionType({name, eventAggregator});
       return new Category(this);
     }
 

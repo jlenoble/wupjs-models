@@ -1,10 +1,15 @@
-import EventEmitter from 'events';
+import {categories, eventAggregator as aggregator} from '../globals';
+
 import makeListType from './list';
 
 export default function makeCategoryType ({
   name,
-  eventAggregator = new EventEmitter(),
+  eventAggregator = aggregator,
 }) {
+  if (categories.has(name)) {
+    return categories.get(name);
+  }
+
   const List = makeListType({eventAggregator});
   const fwd = new Map();
   const bck = new Map();
@@ -145,6 +150,15 @@ export default function makeCategoryType ({
       bck.clear();
     }
 
+    static rename (name) {
+      if (categories.has(name) || categories.get(this.name) !== this) {
+        return;
+      }
+      categories.delete(this.name);
+      categories.set(name, this);
+      Object.defineProperty(this, 'name', {value: name});
+    }
+
     static [Symbol.iterator] () {
       return fwd.keys();
     }
@@ -156,6 +170,8 @@ export default function makeCategoryType ({
     contains: {value: List.prototype.contains},
     equiv: {value: List.prototype.equiv},
   });
+
+  categories.set(name, Category);
 
   return Category;
 }
