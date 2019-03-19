@@ -1,6 +1,6 @@
 import makeListType from './list';
 
-export default function makeCategoryType (name) {
+export default function makeCategoryType ({name}) {
   const List = makeListType();
   const fwd = new Map();
   const bck = new Map();
