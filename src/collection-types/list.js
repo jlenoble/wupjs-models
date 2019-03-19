@@ -1,8 +1,9 @@
-import EventEmitter from 'events';
+import {categories, eventAggregator as aggregator} from '../globals';
+
 import EventEmitterSet from '../helpers/event-emitter-set';
 
 export default function makeListType ({
-  eventAggregator = new EventEmitter(),
+  eventAggregator = aggregator,
 } = {}) {
   return class List extends EventEmitterSet {
     constructor (objs) {
@@ -58,6 +59,15 @@ export default function makeListType ({
 
     clearSelected () {
       this.currentSelection.clear();
+    }
+
+    categorize (name) {
+      if (!categories.has(name)) {
+        categories.set(name, new categories.CollectionType({
+          name, eventAggregator}));
+      }
+      const Category = categories.get(name);
+      return new Category(this);
     }
 
     equiv (collection) {
