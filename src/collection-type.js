@@ -1,9 +1,10 @@
-import EventEmitter from 'events';
+import {
+  categories,
+  eventAggregator as aggregator,
+} from './globals';
+
 import makeListType from './collection-types/list';
 import makeCategoryType from './collection-types/category';
-
-const aggregator = new EventEmitter();
-const categories = new Map();
 
 export default class CollectionType {
   constructor ({name, eventAggregator = aggregator} = {}) {
